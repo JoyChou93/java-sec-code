@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="java-code-sec" />
+        <module name="java-sec-code" />
+        <module name="JavaCodeSec" />
+        <module name="sectest" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="java-code-sec" target="1.6" />
+      <module name="java-sec-code" target="1.6" />
+      <module name="JavaCodeSec" target="1.6" />
+      <module name="sectest" target="1.6" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
