@@ -3,5 +3,6 @@
 
 - XMLInject
 - SSRF
+- URLRedirect
 
 
