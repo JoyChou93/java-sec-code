@@ -23,9 +23,9 @@ import java.net.HttpURLConnection;
 
 /**
  * author: JoyChou (joychou@joychou.org)
- * date: 2017.12.28
- * desc: java ssrf vuls code
- * fix: https://github.com/JoyChou93/trident/blob/master/src/main/java/SSRF.java
+ * date:   2017.12.28
+ * desc:   java ssrf vuls code
+ * fix:    https://github.com/JoyChou93/trident/blob/master/src/main/java/SSRF.java
  */
 
 
