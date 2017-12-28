@@ -56,8 +56,7 @@ public class SSRF {
         }
     }
 
-
-
+    
     @RequestMapping("/HttpURLConnection")
     @ResponseBody
     public static String ssrf_httpURLConnection(HttpServletRequest request)
@@ -97,8 +96,6 @@ public class SSRF {
     }
 
 
-
-
     @RequestMapping("/openStream")
     @ResponseBody
     public static void ssrf_openStream (HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -133,8 +130,6 @@ public class SSRF {
     }
 
 
-
-
     @RequestMapping("/ImageIO")
     @ResponseBody
     public static void ssrf_ImageIO(HttpServletRequest request) {
@@ -147,8 +142,6 @@ public class SSRF {
     }
 
 
-
-
     @RequestMapping("/okhttp")
     @ResponseBody
     public static void ssrf_okhttp(HttpServletRequest request) throws IOException {
@@ -157,8 +150,6 @@ public class SSRF {
         com.squareup.okhttp.Request ok_http = new com.squareup.okhttp.Request.Builder().url(url).build();
         client.newCall(ok_http).execute();
     }
-
-
 
 
     @RequestMapping("/HttpClient")
