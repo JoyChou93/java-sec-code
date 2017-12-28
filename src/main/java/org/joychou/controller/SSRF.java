@@ -56,7 +56,7 @@ public class SSRF {
         }
     }
 
-    
+
     @RequestMapping("/HttpURLConnection")
     @ResponseBody
     public static String ssrf_httpURLConnection(HttpServletRequest request)
