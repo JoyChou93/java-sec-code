@@ -90,9 +90,9 @@ public class XMLInjection {
             String xml_con = request.getParameter("xml").toString();
             System.out.println(xml_con);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-            dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-            dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            //dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            //dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            //dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             DocumentBuilder db = dbf.newDocumentBuilder();
             StringReader sr = new StringReader(xml_con);
             InputSource is = new InputSource(sr);
