@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Viarus on 18/1/2.
+ * author: JoyChou (joychou@joychou.org)
+ * date:   2018.01.02
+ * desc:   xss encode
  */
+
 @Controller
 @RequestMapping("/xss")
 public class XSS {
