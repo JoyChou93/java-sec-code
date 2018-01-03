@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * author: JoyChou (joychou@joychou.org)
  * date:   2018.01.03
- * desc:   Java no http response splitting vuls
+ * desc:   Java no http response splitting vuls (test in Java 1.7/1.8)
  */
 
 @Controller
