@@ -11,10 +11,18 @@
 
 ### Usage
 
-代码和配置做了对Tomcat的适配。生成WAR包，放到Tomcat的Webapps目录即可。
 
-生成WAR包命令：
+1. 生成war包 `mvn clean package`
+2. 将target目录的war包，cp到Tomcat的webapps目录
+3. 重启Tomcat应用
+
 
 ```
-mvn clean package
+http://localhost:8080/java-sec-code-1.0.0/rce/exec?cmd=whoami
+```
+ 
+返回
+
+``` 
+Viarus
 ```
