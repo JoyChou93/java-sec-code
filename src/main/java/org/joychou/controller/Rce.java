@@ -25,24 +25,31 @@ public class Rce {
     public String CommandExec(HttpServletRequest request){
         String cmd = request.getParameter("cmd").toString();
         Runtime run = Runtime.getRuntime();
+        String lineStr = "";
+
         try {
             Process p = run.exec(cmd);
             BufferedInputStream in = new BufferedInputStream(p.getInputStream());
             BufferedReader inBr = new BufferedReader(new InputStreamReader(in));
-            String lineStr;
-            while ((lineStr = inBr.readLine()) != null)
-                return lineStr;
+            String tmpStr;
+
+            while ((tmpStr = inBr.readLine()) != null) {
+                lineStr += tmpStr + "\n";
+                System.out.println(tmpStr);
+            }
+
             if (p.waitFor() != 0) {
                 if (p.exitValue() == 1)
                     return "command exec failed";
             }
+
             inBr.close();
             in.close();
         } catch (Exception e) {
             e.printStackTrace();
             return "Except";
         }
-        return "Cmd exec success.";
+        return lineStr;
     }
 }
 
