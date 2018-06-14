@@ -22,7 +22,7 @@ public class Rce {
 
     @RequestMapping("/exec")
     @ResponseBody
-    public String CommandExec(HttpServletRequest request){
+    public String CommandExec(HttpServletRequest request) {
         String cmd = request.getParameter("cmd").toString();
         Runtime run = Runtime.getRuntime();
         String lineStr = "";

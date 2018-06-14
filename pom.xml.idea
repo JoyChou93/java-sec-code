@@ -7,7 +7,8 @@
     <groupId>sec</groupId>
     <artifactId>java-sec-code</artifactId>
     <version>1.0.0</version>
-    <packaging>war</packaging>
+
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -19,33 +20,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <!-- 移除嵌入式tomcat插件 -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- 添加tomcat servlet api -->
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-servlet-api</artifactId>
-            <version>8.0.36</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>21.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>3.1</version>
         </dependency>
 
         <dependency>
@@ -77,6 +57,11 @@
             <version>2.5.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.1</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
