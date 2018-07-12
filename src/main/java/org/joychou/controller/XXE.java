@@ -41,7 +41,6 @@ public class XXE {
 
             //fix code end
 
-
             xmlReader.parse( new InputSource(new StringReader(xml_con)) );  // parse xml
             return "ok";
         } catch (Exception e) {

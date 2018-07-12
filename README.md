@@ -47,6 +47,7 @@ Viarus
 Run -> Edit Configurations -> 添加TomcatServer(Local) -> Server中配置Tomcat路径 -> Deployment中添加Artifact选择java-sec-code:war exploded
 ```
 
+![tomcat](https://github.com/JoyChou93/java-sec-code/raw/master/idea-tomcat.png)
 
 配置完成后，右上角直接点击run，即可运行。
 
