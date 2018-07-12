@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 /**
- * author: JoyChou (joychou@joychou.org)
- * date:   2018.05.28
- * desc:   Index Page
+ * @author: JoyChou (joychou@joychou.org)
+ * @date:   2018.05.28
+ * @desc:   Index Page
  */
 
 @Controller

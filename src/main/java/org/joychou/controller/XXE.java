@@ -16,14 +16,14 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.apache.commons.digester3.Digester;
 
 /**
- * author: JoyChou (joychou@joychou.org)
- * date:   2017.12.22
- * desc:   java xxe vuls fix code
+ * @author: JoyChou (joychou@joychou.org)
+ * @date:   2017.12.22
+ * @desc:   Java XXE 漏洞代码，修复代码在注释里
  */
 
 @Controller
 @RequestMapping("/xxe")
-public class XMLInjection {
+public class XXE {
 
     @RequestMapping("/xmlReader")
     @ResponseBody
@@ -32,10 +32,17 @@ public class XMLInjection {
             String xml_con = request.getParameter("xml").toString();
             System.out.println(xml_con);
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
-            xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-            xmlReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
-            xmlReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-            xmlReader.parse( new InputSource(new StringReader(xml_con)) );
+
+            // fix code start
+
+//            xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+//            xmlReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+//            xmlReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
+            //fix code end
+
+
+            xmlReader.parse( new InputSource(new StringReader(xml_con)) );  // parse xml
             return "ok";
         } catch (Exception e) {
             System.out.println(e);
@@ -51,12 +58,16 @@ public class XMLInjection {
             String xml_con = request.getParameter("xml").toString();
             System.out.println(xml_con);
             SAXParserFactory spf = SAXParserFactory.newInstance();
-            spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-            spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-            spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
+            // fix code start
+
+//            spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+//            spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+//            spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
+            // fix code end
             SAXParser parser = spf.newSAXParser();
-            // parse xml
-            parser.parse(new InputSource(new StringReader(xml_con)), new DefaultHandler());
+            parser.parse(new InputSource(new StringReader(xml_con)), new DefaultHandler());  // parse xml
             return "test";
         } catch (Exception e) {
             System.out.println(e);
@@ -71,10 +82,16 @@ public class XMLInjection {
             String xml_con = request.getParameter("xml").toString();
             System.out.println(xml_con);
             Digester digester = new Digester();
-            digester.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-            digester.setFeature("http://xml.org/sax/features/external-general-entities", false);
-            digester.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-            digester.parse(new StringReader(xml_con));
+
+            // fix code start
+
+//            digester.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+//            digester.setFeature("http://xml.org/sax/features/external-general-entities", false);
+//            digester.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
+            // fix code end
+
+            digester.parse(new StringReader(xml_con));  // parse xml
             return "test";
         } catch (Exception e) {
             System.out.println(e);
@@ -90,13 +107,19 @@ public class XMLInjection {
             String xml_con = request.getParameter("xml").toString();
             System.out.println(xml_con);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-            dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-            dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
+            // fix code start
+
+//            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+//            dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+//            dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
+            // fix code end
+
             DocumentBuilder db = dbf.newDocumentBuilder();
             StringReader sr = new StringReader(xml_con);
             InputSource is = new InputSource(sr);
-            Document document = db.parse(is);
+            Document document = db.parse(is);  // parse xml
             sr.close();
             return "test";
         } catch (Exception e) {

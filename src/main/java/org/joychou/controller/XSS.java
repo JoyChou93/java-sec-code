@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * author: JoyChou (joychou@joychou.org)
- * date:   2018.01.02
- * desc:   xss encode
+ * @author: JoyChou (joychou@joychou.org)
+ * @date:   2018.01.02
+ * @desc:   xss vuls code
  */
 
 @Controller
@@ -21,7 +21,10 @@ public class XSS {
     public static String ssrf_URLConnection(HttpServletRequest request)
     {
         String con = request.getParameter("con");
-        return encode(con);
+        return con;
+
+        // fix code
+        // return encode(con);
     }
 
     public static String encode(String origin) {

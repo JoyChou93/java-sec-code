@@ -10,10 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * author: JoyChou (joychou@joychou.org)
- * date:   2017.12.28
- * desc:   Java url redirect vuls code
- * fix:    Add url white list (https://github.com/JoyChou93/trident/blob/master/src/main/java/CheckURL.java)
+ * @author: JoyChou (joychou@joychou.org)
+ * @date:   2017.12.28
+ * @desc:   Java url redirect
  */
 
 
@@ -21,6 +20,10 @@ import java.io.IOException;
 @RequestMapping("/urlRedirect")
 public class URLRedirect {
 
+    /**
+     * @disc: 存在URL重定向漏洞
+     * @fix: 添加URL白名单 https://github.com/JoyChou93/trident/blob/master/src/main/java/CheckURL.java
+     */
     @RequestMapping("/setHeader")
     @ResponseBody
     public static void setHeader(HttpServletRequest request, HttpServletResponse response){
@@ -29,6 +32,10 @@ public class URLRedirect {
         response.setHeader("Location", url);
     }
 
+    /**
+     * @disc: 存在URL重定向漏洞
+     * @fix: 添加URL白名单 https://github.com/JoyChou93/trident/blob/master/src/main/java/CheckURL.java
+     */
     @RequestMapping("/sendRedirect")
     @ResponseBody
     public static void sendRedirect(HttpServletRequest request, HttpServletResponse response) throws IOException{
@@ -38,8 +45,8 @@ public class URLRedirect {
 
 
     /**
-     * usage: http://localhost:8080/urlRedirect/forward?url=/urlRedirect/test
-     * disc: safe code, no url redirect vul
+     * @usage: http://localhost:8080/urlRedirect/forward?url=/urlRedirect/test
+     * @disc: 安全代码，没有URL重定向漏洞。
      */
     @RequestMapping("/forward")
     @ResponseBody

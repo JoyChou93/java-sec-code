@@ -1,7 +1,16 @@
 # Java Security Code
 
+## 介绍
 
-- [XMLInject](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XMLInjection.java)
+该项目也可以叫做Java Vulnerability Code(Java漏洞代码)。
+
+每个漏洞类型代码默认存在安全漏洞（除非本身不存在漏洞），相关修复代码在注释里。
+
+详情可查看每个漏洞代码和注释。
+
+## 漏洞代码
+
+- [XXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XXE.java)
 - [SSRF](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SSRF.java)
 - [URLRedirect](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/URLRedirect.java)
 - [IPForge](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/IPForge.java)
@@ -10,7 +19,7 @@
 - [RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Rce.java)
 - [Deserialize](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Deserialize.java)
 
-## Usage
+## 如何运行
 
 
 ### Tomcat
@@ -32,7 +41,21 @@ Viarus
 
 ### IDEA
 
-如果想在IDEA中直接运运行，需要进行两个操作:
+如果想在IDEA中直接运行，需要在IDEA中添加Tomcat配置，步骤如下：
 
-1. 覆盖适配IDEA的pom.xml `mv pom.xml.idea pom.xml`
-2. 覆盖适配IDEA的Application.java文件 `mv Application.java.idea Application.java`
+```
+Run -> Edit Configurations -> 添加TomcatServer(Local) -> Server中配置Tomcat路径 -> Deployment中添加Artifact选择java-sec-code:war exploded
+```
+
+
+配置完成后，右上角直接点击run，即可运行。
+
+```
+http://localhost:8080/rce/exec?cmd=whoami
+```
+ 
+返回
+
+``` 
+Viarus
+```
