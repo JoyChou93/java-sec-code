@@ -12,7 +12,7 @@ import java.io.ObjectInputStream;
 /**
  * @author: JoyChou
  * @Date:   2018年06月14日
- * @Desc：  将根目录的poc放到/tmp/poc就能在mac上弹计算器。该应用必须有Commons-Collections包才能利用反序列化。
+ * @Desc：  该应用必须有Commons-Collections包才能利用反序列化。
  */
 
 @Controller
