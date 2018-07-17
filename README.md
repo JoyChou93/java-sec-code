@@ -61,6 +61,10 @@ Viarus
 
 ## 说明
 
+## SSRF
+
+针对SSRF具体利用，可以阅读我写的[这篇博文](https://joychou.org/java/javassrf.html)。
+
 ### 反序列化
 
 打包ysoserial
