@@ -16,6 +16,7 @@
 - [CRLF注入](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/CRLFInjection.java)
 - [远程命令执行](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Rce.java)
 - [反序列化](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Deserialize.java)
+- [文件上传](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/FileUpload.java)
 
 ## 如何运行
 
@@ -59,13 +60,12 @@ http://localhost:8080/rce/exec?cmd=whoami
 Viarus
 ```
 
-## 说明
 
 ## SSRF
 
 针对SSRF具体利用，可以阅读我写的[这篇博文](https://joychou.org/java/javassrf.html)。
 
-### 反序列化
+## 反序列化
 
 打包ysoserial
 
@@ -93,3 +93,14 @@ def poc(url , gadget, command):
 if __name__ == '__main__':
 	poc('http://127.0.0.1:8080/deserialize/test', 'CommonsCollections5', 'open -a Calculator')
 ```
+
+## 文件上传
+
+目前这类漏洞在spring里非常少，原因有两点：
+1. 大多数公司上传的文件都会到cdn
+2. spring的jsp文件必须在web-inf目录下才能执行
+
+除非，可以上传war包到tomcat的webapps目录。所以就不YY写漏洞了。
+
+访问`http://localhost:8080/file/`进行文件上传，上传成功后，再访问`http://localhost:8080/image/上传的文件名`可访问上传后的文件。
+

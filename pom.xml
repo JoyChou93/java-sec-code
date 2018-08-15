@@ -9,6 +9,7 @@
     <version>1.0.0</version>
     <packaging>war</packaging>
 
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -19,7 +20,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <!-- 移除嵌入式tomcat插件 -->
+            <!-- 移除嵌入式tomcat插件，为了使用非嵌入式的tomcat -->
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
@@ -35,6 +36,13 @@
             <version>8.0.36</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- 添加thymeleaf为了动态解析html-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>com.google.guava</groupId>

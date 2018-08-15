@@ -9,10 +9,6 @@
         <webroots>
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
         </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/main/java" />
-          <root url="file://$MODULE_DIR$/src/main/resources" />
-        </sourceRoots>
       </configuration>
     </facet>
   </component>
@@ -22,30 +18,10 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/javasec/commons-collections-3.2.1.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../CDNBalance-1.1.1.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tomcat:tomcat-servlet-api:8.0.36" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:1.5.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:1.5.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:1.5.1.RELEASE" level="project" />
@@ -53,7 +29,6 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:1.5.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.1.9" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.1.9" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.22" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.7.22" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jul-to-slf4j:1.7.22" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:log4j-over-slf4j:1.7.22" level="project" />
@@ -73,6 +48,15 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:4.3.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:4.3.6.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tomcat:tomcat-servlet-api:8.0.36" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-thymeleaf:1.5.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf-spring4:2.1.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf:2.1.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: ognl:ognl:3.0.8" level="project" />
+    <orderEntry type="library" name="Maven: org.javassist:javassist:3.21.0-GA" level="project" />
+    <orderEntry type="library" name="Maven: org.unbescape:unbescape:1.1.0.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.22" level="project" />
+    <orderEntry type="library" name="Maven: nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy:2.4.7" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:21.0" level="project" />
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.1" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.4" level="project" />
