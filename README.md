@@ -174,3 +174,8 @@ SET FOREIGN_KEY_CHECKS = 1;
 SQL注入修复方式采用预处理方式，修复见代码。Mybatis的`#{}`也是预处理方式处理SQL注入。
 
 在使用了mybatis框架后，需要进行排序功能时，在mapper.xml文件中编写sql语句时，注意orderBy后的变量要使用${},而不用#{}。因为`#{}`变量是经过预编译的，${}没有经过预编译。虽然${}存在sql注入的风险，但orderBy必须使用`${}`，因为`#{}`会多出单引号`''`导致sql语句失效。为防止sql注入只能自己判断输入的值是否是否存在SQL。
+
+```sql
+select * from users order by 'id' desc  -- 排序无效，默认升序
+select * from users order by id desc   -- 降序
+```
