@@ -132,45 +132,13 @@ http://localhost:8080/xxe/DocumentBuilder_xinclude?xml=%3C%3fxml+version%3d%221.
 
 ### POC
 
-访问
+访问`http://localhost:8080/sqli/jdbc?id=1' or 'a'='a`返回`joychou: 123 wilson: 456 lightless: 789`。
 
-``` 
-http://localhost:8080/sqli/jdbc?name=joychou' or 'a'='a
-```
+正常访问`http://localhost:8080/sqli/jdbc?id=1`返回`joychou: 123`
 
-返回
-```
-joychou: 123 wilson: 456 lightless: 789
-```
-
-正常访问
-```
-http://localhost:8080/sqli/jdbc?name=joychou
-```
-
-返回
-
-``` 
-joychou: 123
-```
-### 数据库配置
+### 数据库表数据SQL
 
 ```sql
-/*
- Navicat Premium Data Transfer
-
- Source Server         : localhost
- Source Server Type    : MySQL
- Source Server Version : 80012
- Source Host           : localhost:3306
- Source Schema         : sectest
-
- Target Server Type    : MySQL
- Target Server Version : 80012
- File Encoding         : 65001
-
- Date: 22/08/2018 21:09:57
-*/
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -182,23 +150,27 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `name` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `isAdmin` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `isAdmin` varchar(255) NOT NULL,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
 BEGIN;
-INSERT INTO `users` VALUES ('joychou', '123', '1');
-INSERT INTO `users` VALUES ('wilson', '456', '0');
-INSERT INTO `users` VALUES ('lightless', '789', '0');
+INSERT INTO `users` VALUES ('joychou', '123', '1', 1);
+INSERT INTO `users` VALUES ('wilson', '456', '0', 2);
+INSERT INTO `users` VALUES ('lightless', '789', '0', 3);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
 
 ```
 
 ### 说明
 
-SQL注入修复方式采用预处理方式，修复见代码。
-Mybatis的`#{}`也是预处理方式处理SQL注入。
+SQL注入修复方式采用预处理方式，修复见代码。Mybatis的`#{}`也是预处理方式处理SQL注入。
+
+在使用了mybatis框架后，需要进行排序功能时，在mapper.xml文件中编写sql语句时，注意orderBy后的变量要使用${},而不用#{}。因为`#{}`变量是经过预编译的，${}没有经过预编译。虽然${}存在sql注入的风险，但orderBy必须使用`${}`，因为`#{}`会多出单引号`''`导致sql语句失效。为防止sql注入只能自己判断输入的值是否是否存在SQL。
