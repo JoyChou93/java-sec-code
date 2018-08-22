@@ -138,7 +138,7 @@ public class XXE {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
             dbf.setXIncludeAware(true);   // 支持XInclude
-            dbf.setNamespaceAware(true);
+            dbf.setNamespaceAware(true);  // 支持XInclude
 
             // fix code start
 
