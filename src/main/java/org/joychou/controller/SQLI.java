@@ -23,7 +23,7 @@ public class SQLI {
     @ResponseBody
     public static String jdbc_sqli(HttpServletRequest request){
 
-        String id = request.getParameter("id");
+        String name = request.getParameter("name");
         String driver = "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://localhost:3306/sectest";
         String user = "root";
@@ -38,14 +38,14 @@ public class SQLI {
 
             // sqli vuln code 漏洞代码
              Statement statement = con.createStatement();
-             String sql = "select * from users where id = '" + id + "'";
+             String sql = "select * from users where name = '" + name + "'";
              System.out.println(sql);
              ResultSet rs = statement.executeQuery(sql);
 
             // fix code 用预处理修复SQL注入
-//            String sql = "select * from users where id = ?";
+//            String sql = "select * from users where name = ?";
 //            PreparedStatement st = con.prepareStatement(sql);
-//            st.setString(1, id);
+//            st.setString(1, name);
 //            System.out.println(st.toString());  // 预处理后的sql
 //            ResultSet rs = st.executeQuery();
 

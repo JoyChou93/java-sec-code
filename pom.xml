@@ -57,6 +57,12 @@
             <version>1.2.49</version>
         </dependency>
 
+        <!-- 获取url根域名-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>21.0</version>
+        </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
