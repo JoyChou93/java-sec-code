@@ -1,5 +1,6 @@
 package org.joychou.controller;
 
+
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
@@ -8,7 +9,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.XMLReader;
-import java.io.StringReader;
+import java.io.*;
 import org.xml.sax.InputSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -27,13 +28,14 @@ import org.apache.commons.digester3.Digester;
 @RequestMapping("/xxe")
 public class XXE {
 
-    @RequestMapping("/xmlReader")
+    @RequestMapping(value = "/xmlReader", method = RequestMethod.POST)
     @ResponseBody
-    public static String xxe_xmlReader(HttpServletRequest request) {
+    public  String xxe_xmlReader(HttpServletRequest request) {
         try {
-            String xml_con = request.getParameter("xml").toString();
+            String xml_con = getBody(request);
             System.out.println(xml_con);
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+
             // fix code start
 
 //            xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
@@ -50,12 +52,11 @@ public class XXE {
         }
     }
 
-
-    @RequestMapping("/SAXParser")
+    @RequestMapping(value = "/SAXParser", method = RequestMethod.POST)
     @ResponseBody
-    public static String xxe_SAXParser(HttpServletRequest request) {
+    public String xxe_SAXParser(HttpServletRequest request) {
         try {
-            String xml_con = request.getParameter("xml").toString();
+            String xml_con = getBody(request);
             System.out.println(xml_con);
             SAXParserFactory spf = SAXParserFactory.newInstance();
 
@@ -66,6 +67,7 @@ public class XXE {
 //            spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 
             // fix code end
+
             SAXParser parser = spf.newSAXParser();
             parser.parse(new InputSource(new StringReader(xml_con)), new DefaultHandler());  // parse xml
             return "test";
@@ -75,11 +77,11 @@ public class XXE {
         }
     }
 
-    @RequestMapping("/Digester")
+    @RequestMapping(value = "/Digester", method = RequestMethod.POST)
     @ResponseBody
-    public static String xxe_Digester(HttpServletRequest request) {
+    public String xxe_Digester(HttpServletRequest request) {
         try {
-            String xml_con = request.getParameter("xml").toString();
+            String xml_con = getBody(request);
             System.out.println(xml_con);
             Digester digester = new Digester();
 
@@ -100,11 +102,11 @@ public class XXE {
     }
 
 
-    @RequestMapping("/DocumentBuilder")
+    @RequestMapping(value = "/DocumentBuilder", method = RequestMethod.POST)
     @ResponseBody
-    public static String xxe_DocumentBuilder(HttpServletRequest request) {
+    public String xxe_DocumentBuilder(HttpServletRequest request) {
         try {
-            String xml_con = request.getParameter("xml").toString();
+            String xml_con = getBody(request);
             System.out.println(xml_con);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -129,11 +131,11 @@ public class XXE {
     }
 
 
-    @RequestMapping("/DocumentBuilder_xinclude")
+    @RequestMapping(value = "/DocumentBuilder_xinclude", method = RequestMethod.POST)
     @ResponseBody
-    public static String xxe_xinclude_DocumentBuilder(HttpServletRequest request) {
+    public String xxe_xinclude_DocumentBuilder(HttpServletRequest request) {
         try {
-            String xml_con = request.getParameter("xml").toString();
+            String xml_con = getBody(request);
             System.out.println(xml_con);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -173,6 +175,22 @@ public class XXE {
         }
     }
 
-
+    // 获取body数据
+    private String getBody(HttpServletRequest request) throws IOException {
+        InputStream in = request.getInputStream();
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        StringBuffer sb = new StringBuffer("");
+        String temp;
+        while ((temp = br.readLine()) != null) {
+            sb.append(temp);
+        }
+        if (in != null) {
+            in.close();
+        }
+        if (br != null) {
+            br.close();
+        }
+        return sb.toString();
+    }
 
 }
