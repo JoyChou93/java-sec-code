@@ -57,6 +57,22 @@
             <version>1.2.49</version>
         </dependency>
 
+        <!-- jdom解析xml 最新版本为2.0.6 时间为2015-02-28 https://github.com/hunterhacker/jdom/releases-->
+        <!-- https://mvnrepository.com/artifact/org.jdom/jdom2 -->
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom2</artifactId>
+            <version>2.0.6</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.dom4j/dom4j -->
+        <dependency>
+            <groupId>org.dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+
         <!-- 获取url根域名-->
         <dependency>
             <groupId>com.google.guava</groupId>

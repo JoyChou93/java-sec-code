@@ -1,6 +1,7 @@
 package org.joychou.controller;
 
 
+import org.dom4j.io.SAXReader;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,8 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.parsers.SAXParser;
 import org.xml.sax.helpers.DefaultHandler;
 import org.apache.commons.digester3.Digester;
+import org.jdom2.input.SAXBuilder;
+
 
 /**
  * @author: JoyChou (joychou@joychou.org)
@@ -35,16 +38,104 @@ public class XXE {
             String xml_con = getBody(request);
             System.out.println(xml_con);
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
-
-            // fix code start
-
-//            xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-//            xmlReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
-//            xmlReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-
-            //fix code end
-
             xmlReader.parse( new InputSource(new StringReader(xml_con)) );  // parse xml
+            return "ok";
+        } catch (Exception e) {
+            System.out.println(e);
+            return "except";
+        }
+    }
+
+
+    @RequestMapping(value = "/xmlReader_fix", method = RequestMethod.POST)
+    @ResponseBody
+    public  String xxe_xmlReader_fix(HttpServletRequest request) {
+        try {
+            String xml_con = getBody(request);
+            System.out.println(xml_con);
+
+            XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+            // fix code start
+            xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            xmlReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            xmlReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            //fix code end
+            xmlReader.parse( new InputSource(new StringReader(xml_con)) );  // parse xml
+
+            return "ok";
+        } catch (Exception e) {
+            System.out.println(e);
+            return "except";
+        }
+    }
+
+
+    @RequestMapping(value = "/SAXBuilder", method = RequestMethod.POST)
+    @ResponseBody
+    public  String xxe_SAXBuilder(HttpServletRequest request) {
+        try {
+            String xml_con = getBody(request);
+            System.out.println(xml_con);
+
+            SAXBuilder builder = new SAXBuilder();
+            org.jdom2.Document document = builder.build( new InputSource(new StringReader(xml_con)) );  // case xxe
+            return "ok";
+        } catch (Exception e) {
+            System.out.println(e);
+            return "except";
+        }
+    }
+
+    @RequestMapping(value = "/SAXBuilder_fix", method = RequestMethod.POST)
+    @ResponseBody
+    public  String xxe_SAXBuilder_fix(HttpServletRequest request) {
+        try {
+            String xml_con = getBody(request);
+            System.out.println(xml_con);
+
+            SAXBuilder builder = new SAXBuilder();
+            builder.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            builder.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            builder.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            org.jdom2.Document document = builder.build( new InputSource(new StringReader(xml_con)) );
+
+            return "ok";
+        } catch (Exception e) {
+            System.out.println(e);
+            return "except";
+        }
+    }
+
+    @RequestMapping(value = "/SAXReader", method = RequestMethod.POST)
+    @ResponseBody
+    public  String xxe_SAXReader(HttpServletRequest request) {
+        try {
+            String xml_con = getBody(request);
+            System.out.println(xml_con);
+
+            SAXReader reader = new SAXReader();
+            org.dom4j.Document document = reader.read(  new InputSource(new StringReader(xml_con)) ); // case xxe
+
+            return "ok";
+        } catch (Exception e) {
+            System.out.println(e);
+            return "except";
+        }
+    }
+
+    @RequestMapping(value = "/SAXReader_fix", method = RequestMethod.POST)
+    @ResponseBody
+    public  String xxe_SAXReader_fix(HttpServletRequest request) {
+        try {
+            String xml_con = getBody(request);
+            System.out.println(xml_con);
+
+            SAXReader reader = new SAXReader();
+            reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            org.dom4j.Document document = reader.read(  new InputSource(new StringReader(xml_con)) );
+
             return "ok";
         } catch (Exception e) {
             System.out.println(e);
@@ -58,16 +149,30 @@ public class XXE {
         try {
             String xml_con = getBody(request);
             System.out.println(xml_con);
+
             SAXParserFactory spf = SAXParserFactory.newInstance();
+            SAXParser parser = spf.newSAXParser();
+            parser.parse(new InputSource(new StringReader(xml_con)), new DefaultHandler());  // parse xml
 
-            // fix code start
+            return "test";
+        } catch (Exception e) {
+            System.out.println(e);
+            return "except";
+        }
+    }
 
-//            spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-//            spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-//            spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 
-            // fix code end
+    @RequestMapping(value = "/SAXParser_fix", method = RequestMethod.POST)
+    @ResponseBody
+    public String xxe_SAXParser_fix(HttpServletRequest request) {
+        try {
+            String xml_con = getBody(request);
+            System.out.println(xml_con);
 
+            SAXParserFactory spf = SAXParserFactory.newInstance();
+            spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             SAXParser parser = spf.newSAXParser();
             parser.parse(new InputSource(new StringReader(xml_con)), new DefaultHandler());  // parse xml
             return "test";
@@ -77,23 +182,58 @@ public class XXE {
         }
     }
 
+
     @RequestMapping(value = "/Digester", method = RequestMethod.POST)
     @ResponseBody
     public String xxe_Digester(HttpServletRequest request) {
         try {
             String xml_con = getBody(request);
             System.out.println(xml_con);
+
             Digester digester = new Digester();
-
-            // fix code start
-
-//            digester.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-//            digester.setFeature("http://xml.org/sax/features/external-general-entities", false);
-//            digester.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-
-            // fix code end
-
             digester.parse(new StringReader(xml_con));  // parse xml
+
+            return "test";
+        } catch (Exception e) {
+            System.out.println(e);
+            return "except";
+        }
+    }
+
+    @RequestMapping(value = "/Digester_fix", method = RequestMethod.POST)
+    @ResponseBody
+    public String xxe_Digester_fix(HttpServletRequest request) {
+        try {
+            String xml_con = getBody(request);
+            System.out.println(xml_con);
+
+            Digester digester = new Digester();
+            digester.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            digester.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            digester.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            digester.parse(new StringReader(xml_con));  // parse xml
+
+            return "test";
+        } catch (Exception e) {
+            System.out.println(e);
+            return "except";
+        }
+    }
+
+    @RequestMapping(value = "/DocumentBuilder", method = RequestMethod.POST)
+    @ResponseBody
+    public String xxe_DocumentBuilder(HttpServletRequest request) {
+        try {
+            String xml_con = getBody(request);
+            System.out.println(xml_con);
+
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            StringReader sr = new StringReader(xml_con);
+            InputSource is = new InputSource(sr);
+            Document document = db.parse(is);  // parse xml
+            sr.close();
+
             return "test";
         } catch (Exception e) {
             System.out.println(e);
@@ -102,27 +242,23 @@ public class XXE {
     }
 
 
-    @RequestMapping(value = "/DocumentBuilder", method = RequestMethod.POST)
+    @RequestMapping(value = "/DocumentBuilder_fix", method = RequestMethod.POST)
     @ResponseBody
-    public String xxe_DocumentBuilder(HttpServletRequest request) {
+    public String xxe_DocumentBuilder_fix(HttpServletRequest request) {
         try {
             String xml_con = getBody(request);
             System.out.println(xml_con);
+
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-
-            // fix code start
-
-//            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-//            dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-//            dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-
-            // fix code end
-
+            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             DocumentBuilder db = dbf.newDocumentBuilder();
             StringReader sr = new StringReader(xml_con);
             InputSource is = new InputSource(sr);
             Document document = db.parse(is);  // parse xml
             sr.close();
+
             return "test";
         } catch (Exception e) {
             System.out.println(e);
@@ -137,19 +273,10 @@ public class XXE {
         try {
             String xml_con = getBody(request);
             System.out.println(xml_con);
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setXIncludeAware(true);   // 支持XInclude
             dbf.setNamespaceAware(true);  // 支持XInclude
-
-            // fix code start
-
-//            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-//            dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-//            dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-
-            // fix code end
-
             DocumentBuilder db = dbf.newDocumentBuilder();
             StringReader sr = new StringReader(xml_con);
             InputSource is = new InputSource(sr);
@@ -162,7 +289,48 @@ public class XXE {
                 NodeList xxe = rootNode.getChildNodes();
                 for (int j = 0; j < xxe.getLength(); j++) {
                     Node xxeNode = xxe.item(j);
-                    System.out.println("xxeNode: " + xxeNode.getNodeValue());  // 回显
+                    // 测试不能blind xxe，所以强行加了一个回显
+                    System.out.println("xxeNode: " + xxeNode.getNodeValue());
+                }
+
+            }
+
+            sr.close();
+            return "test";
+        } catch (Exception e) {
+            System.out.println(e);
+            return "except";
+        }
+    }
+
+
+    @RequestMapping(value = "/DocumentBuilder_xinclude_fix", method = RequestMethod.POST)
+    @ResponseBody
+    public String xxe_xinclude_DocumentBuilder_fix(HttpServletRequest request) {
+        try {
+            String xml_con = getBody(request);
+            System.out.println(xml_con);
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+            dbf.setXIncludeAware(true);   // 支持XInclude
+            dbf.setNamespaceAware(true);  // 支持XInclude
+            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            StringReader sr = new StringReader(xml_con);
+            InputSource is = new InputSource(sr);
+            Document document = db.parse(is);  // parse xml
+
+            NodeList rootNodeList = document.getChildNodes();
+
+            for (int i = 0; i < rootNodeList.getLength(); i++) {
+                Node rootNode = rootNodeList.item(i);
+                NodeList xxe = rootNode.getChildNodes();
+                for (int j = 0; j < xxe.getLength(); j++) {
+                    Node xxeNode = xxe.item(j);
+                    // 测试不能blind xxe，所以强行加了一个回显
+                    System.out.println("xxeNode: " + xxeNode.getNodeValue());
                 }
 
             }
