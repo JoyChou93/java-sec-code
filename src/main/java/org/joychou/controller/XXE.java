@@ -78,7 +78,7 @@ public class XXE {
             System.out.println(xml_con);
 
             SAXBuilder builder = new SAXBuilder();
-            org.jdom2.Document document = builder.build( new InputSource(new StringReader(xml_con)) );  // case xxe
+            org.jdom2.Document document = builder.build( new InputSource(new StringReader(xml_con)) );  // cause xxe
             return "ok";
         } catch (Exception e) {
             System.out.println(e);
@@ -114,7 +114,7 @@ public class XXE {
             System.out.println(xml_con);
 
             SAXReader reader = new SAXReader();
-            org.dom4j.Document document = reader.read(  new InputSource(new StringReader(xml_con)) ); // case xxe
+            org.dom4j.Document document = reader.read(  new InputSource(new StringReader(xml_con)) ); // cause xxe
 
             return "ok";
         } catch (Exception e) {
@@ -220,9 +220,11 @@ public class XXE {
         }
     }
 
-    @RequestMapping(value = "/DocumentBuilder", method = RequestMethod.POST)
+
+    // 有回显的XXE
+    @RequestMapping(value = "/DocumentBuilder_return", method = RequestMethod.POST)
     @ResponseBody
-    public String xxe_DocumentBuilder(HttpServletRequest request) {
+    public String xxeDocumentBuilderReturn(HttpServletRequest request) {
         try {
             String xml_con = getBody(request);
             System.out.println(xml_con);
@@ -232,9 +234,58 @@ public class XXE {
             StringReader sr = new StringReader(xml_con);
             InputSource is = new InputSource(sr);
             Document document = db.parse(is);  // parse xml
-            sr.close();
 
-            return "test";
+            // 遍历xml节点name和value
+            StringBuffer buf = new StringBuffer();
+            NodeList rootNodeList = document.getChildNodes();
+            for (int i = 0; i < rootNodeList.getLength(); i++) {
+                Node rootNode = rootNodeList.item(i);
+                NodeList child = rootNode.getChildNodes();
+                for (int j = 0; j < child.getLength(); j++) {
+                    Node node = child.item(j);
+                    buf.append( node.getNodeName() + ": " + node.getTextContent() + "\n" );
+                }
+            }
+            sr.close();
+            System.out.println(buf.toString());
+            return buf.toString();
+        } catch (Exception e) {
+            System.out.println(e);
+            return "except";
+        }
+    }
+
+
+    @RequestMapping(value = "/DocumentBuilder", method = RequestMethod.POST)
+    @ResponseBody
+    public String DocumentBuilder(HttpServletRequest request) {
+        try {
+            String xml_con = getBody(request);
+            System.out.println(xml_con);
+
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            StringReader sr = new StringReader(xml_con);
+            InputSource is = new InputSource(sr);
+            Document document = db.parse(is);  // parse xml
+
+            // 遍历xml节点name和value
+            StringBuffer result = new StringBuffer();
+            NodeList rootNodeList = document.getChildNodes();
+            for (int i = 0; i < rootNodeList.getLength(); i++) {
+                Node rootNode = rootNodeList.item(i);
+                NodeList child = rootNode.getChildNodes();
+                for (int j = 0; j < child.getLength(); j++) {
+                    Node node = child.item(j);
+                    // 正常解析XML，需要判断是否是ELEMENT_NODE类型。否则会出现多余的的节点。
+                    if(child.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                        result.append( node.getNodeName() + ": " + node.getFirstChild().getNodeValue() + "\n" );
+                    }
+                }
+            }
+            sr.close();
+            System.out.println(result.toString());
+            return result.toString();
         } catch (Exception e) {
             System.out.println(e);
             return "except";

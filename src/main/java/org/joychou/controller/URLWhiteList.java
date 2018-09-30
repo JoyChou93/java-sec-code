@@ -30,6 +30,7 @@ public class URLWhiteList {
     @ResponseBody
     public String endsWith(HttpServletRequest request) throws Exception{
         String url = request.getParameter("url");
+        System.out.println(url);
         URL u = new URL(url);
         String host = u.getHost().toLowerCase();
         String rootDomain = InternetDomainName.from(host).topPrivateDomain().toString();
