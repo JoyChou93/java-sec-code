@@ -22,10 +22,6 @@ import java.io.IOException;
 @RequestMapping("/urlRedirect")
 public class URLRedirect {
 
-    @GetMapping("/redirect")
-    public String redirect(@RequestParam("url") String url) {
-        return "redirect:" + url;
-    }
     /**
      * @disc: 存在URL重定向漏洞
      * @fix: 添加URL白名单 https://github.com/JoyChou93/trident/blob/master/src/main/java/CheckURL.java
