@@ -19,10 +19,11 @@
 - [文件上传](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/FileUpload.java)
 - [SQL注入](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SQLI.java)
 - [URL白名单Bypass](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/URLWhiteList.java)
+- [Java RMI](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/RMI/Server.java)
 
 ## 漏洞说明
 
-查看[漏洞说明文档](https://github.com/JoyChou93/java-sec-code/wiki/%E6%BC%8F%E6%B4%9E%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3)
+查看[漏洞说明文档](https://github.com/JoyChou93/java-sec-code/wiki)
 
 ## 如何运行
 
