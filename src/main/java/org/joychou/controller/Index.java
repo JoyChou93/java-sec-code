@@ -1,10 +1,13 @@
 package org.joychou.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -18,6 +21,12 @@ public class Index {
     @RequestMapping("/")
     @ResponseBody
     public static String index() {
-        return "Welcome to java sec code home page by JoyChou(joychou@joychou.org)";
+        Map m = new HashMap();
+        m.put("app_name", "java_vul_code");
+        m.put("java_version", System.getProperty("java.version"));
+        m.put("fastjson_version", JSON.VERSION);
+
+        // covert map to string
+        return JSON.toJSONString(m);
     }
 }

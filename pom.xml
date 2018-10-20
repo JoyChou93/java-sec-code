@@ -51,11 +51,13 @@
         </dependency>
 
         <!-- 处理json数据 -->
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.49</version>
+            <version>1.2.24</version>
         </dependency>
+
 
         <!-- jdom解析xml 最新版本为2.0.6 时间为2015-02-28 https://github.com/hunterhacker/jdom/releases-->
         <!-- https://mvnrepository.com/artifact/org.jdom/jdom2 -->
