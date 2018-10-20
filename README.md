@@ -25,7 +25,12 @@
 
 ## 漏洞说明
 
-查看[漏洞说明文档](https://github.com/JoyChou93/java-sec-code/wiki)
+- [Java RMI](https://github.com/JoyChou93/java-sec-code/wiki/Java-RMI)
+- [XXE](https://github.com/JoyChou93/java-sec-code/wiki/XXE)
+- [SQLI](https://github.com/JoyChou93/java-sec-code/wiki/SQL-Inject)
+- [Fastjson](https://github.com/JoyChou93/java-sec-code/wiki/Fastjson)
+- [Others](https://github.com/JoyChou93/java-sec-code/wiki/others)
+
 
 ## 如何运行
 
