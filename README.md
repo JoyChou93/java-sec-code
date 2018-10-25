@@ -31,6 +31,7 @@
 - [XXE](https://github.com/JoyChou93/java-sec-code/wiki/XXE)
 - [SQLI](https://github.com/JoyChou93/java-sec-code/wiki/SQL-Inject)
 - [Fastjson](https://github.com/JoyChou93/java-sec-code/wiki/Fastjson)
+- [CORS](https://github.com/JoyChou93/java-sec-code/wiki/CORS)
 - [Others](https://github.com/JoyChou93/java-sec-code/wiki/others)
 
 

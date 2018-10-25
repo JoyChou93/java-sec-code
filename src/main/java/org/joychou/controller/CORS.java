@@ -26,7 +26,7 @@ public class CORS {
      *
      * @param request
      * @param response
-     * @desc: 当origin为空，即直接访问的情况下，response的header中不会出现Access-Control-Allow-Origin
+     * @desc  https://github.com/JoyChou93/java-sec-code/wiki/CORS
      */
     @RequestMapping("/vuls1")
     @ResponseBody
@@ -61,7 +61,16 @@ public class CORS {
     private static String seccode(HttpServletRequest request, HttpServletResponse response) {
         String origin = request.getHeader("Origin");
         Security sec = new Security();
-        if (!sec.checkSafeUrl(origin, urlwhitelist)) {
+        Boolean origin_safe = false;
+
+        // 如果origin为空，表示是同域过来的请求或者浏览器直接发起的请求，这种直接放过，没有安全问题。
+        if (origin == null) {
+            origin_safe = true;
+        }else if (sec.checkSafeUrl(origin, urlwhitelist)) {
+            origin_safe = true;
+        }
+
+        if (!origin_safe) {
             return "Origin is not safe.";
         }
         response.setHeader("Access-Control-Allow-Origin", "*");
