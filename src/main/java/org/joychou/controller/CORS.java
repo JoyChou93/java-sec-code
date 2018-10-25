@@ -50,7 +50,7 @@ public class CORS {
     }
 
     @CrossOrigin("*")
-    @RequestMapping("/vul3")
+    @RequestMapping("/vuls3")
     @ResponseBody
     private static String vuls3(HttpServletResponse response) {
         return info;
