@@ -1,10 +1,13 @@
 package org.joychou.controller;
 
+import org.joychou.utils.Security;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.joychou.utils.Security;
 
 /**
  * @author: JoyChou
@@ -43,6 +46,13 @@ public class CORS {
         response.setHeader("Access-Control-Allow-Origin", "*");
         // response.setHeader("Access-Control-Allow-Methods", "POST, GET");
         // response.setHeader("Access-Control-Allow-Credentials", "true");
+        return info;
+    }
+
+    @CrossOrigin("*")
+    @RequestMapping("/vul3")
+    @ResponseBody
+    private static String vuls3(HttpServletResponse response) {
         return info;
     }
 
