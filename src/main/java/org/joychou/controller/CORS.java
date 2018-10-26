@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author: JoyChou
  * @date:   2018年10月24日
- * @desc:   只要Access-Control-Allow-Origin为*，或者可被绕过，就存在CORS跨域
+ * @desc:   https://github.com/JoyChou93/java-sec-code/wiki/CORS
  */
 
 @Controller
@@ -22,12 +22,6 @@ public class CORS {
     protected static String info = "{\"name\": \"JoyChou\", \"phone\": \"18200001111\"}";
     protected static String[] urlwhitelist = {"joychou.com", "joychou.me"};
 
-    /**
-     *
-     * @param request
-     * @param response
-     * @desc  https://github.com/JoyChou93/java-sec-code/wiki/CORS
-     */
     @RequestMapping("/vuls1")
     @ResponseBody
     private static String vuls1(HttpServletRequest request, HttpServletResponse response) {
