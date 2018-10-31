@@ -77,6 +77,18 @@ public class URLWhiteList {
     }
 
 
+    @RequestMapping("/indexof")
+    @ResponseBody
+    public String indexOf(HttpServletRequest request) throws Exception{
+        String url = request.getParameter("url");
+        // indexof返回-1，表示没有匹配到字符串
+        if (-1 == url.indexOf(urlwhitelist)) {
+            return "URL is illegal";
+        } else {
+            return "URL is legal";
+        }
+    }
+
     // 安全代码
     @RequestMapping("/seccode")
     @ResponseBody
