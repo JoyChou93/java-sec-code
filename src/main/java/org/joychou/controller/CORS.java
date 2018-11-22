@@ -30,7 +30,7 @@ public class CORS {
 
         response.setHeader("Access-Control-Allow-Origin", origin); // 设置Origin值为Header中获取到的
         // response.setHeader("Access-Control-Allow-Methods", "POST, GET");
-        // response.setHeader("Access-Control-Allow-Credentials", "true");  // cookie
+        response.setHeader("Access-Control-Allow-Credentials", "true");  // cookie
         return info;
     }
 
@@ -55,16 +55,10 @@ public class CORS {
     private static String seccode(HttpServletRequest request, HttpServletResponse response) {
         String origin = request.getHeader("Origin");
         Security sec = new Security();
-        Boolean origin_safe = false;
 
-        // 如果origin为空，表示是同域过来的请求或者浏览器直接发起的请求，这种直接放过，没有安全问题。
-        if (origin == null) {
-            origin_safe = true;
-        }else if (sec.checkSafeUrl(origin, urlwhitelist)) {
-            origin_safe = true;
-        }
-
-        if (!origin_safe) {
+        // 如果origin不为空并且origin不在白名单内，认定为不安全。
+        // 如果origin为空，表示是同域过来的请求或者浏览器直接发起的请求。
+        if ( origin != null && !sec.checkSafeUrl(origin, urlwhitelist) ) {
             return "Origin is not safe.";
         }
         response.setHeader("Access-Control-Allow-Origin", "*");
