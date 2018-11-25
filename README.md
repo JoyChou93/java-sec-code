@@ -32,6 +32,7 @@
 - [SQLI](https://github.com/JoyChou93/java-sec-code/wiki/SQL-Inject)
 - [Fastjson](https://github.com/JoyChou93/java-sec-code/wiki/Fastjson)
 - [CORS](https://github.com/JoyChou93/java-sec-code/wiki/CORS)
+- [CSRF](https://github.com/JoyChou93/java-sec-code/wiki/CSRF)
 - [Others](https://github.com/JoyChou93/java-sec-code/wiki/others)
 
 
