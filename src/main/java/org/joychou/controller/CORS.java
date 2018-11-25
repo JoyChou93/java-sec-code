@@ -27,9 +27,7 @@ public class CORS {
     private static String vuls1(HttpServletRequest request, HttpServletResponse response) {
         // 获取Header中的Origin
         String origin = request.getHeader("origin");
-
         response.setHeader("Access-Control-Allow-Origin", origin); // 设置Origin值为Header中获取到的
-        // response.setHeader("Access-Control-Allow-Methods", "POST, GET");
         response.setHeader("Access-Control-Allow-Credentials", "true");  // cookie
         return info;
     }
@@ -37,9 +35,9 @@ public class CORS {
     @RequestMapping("/vuls2")
     @ResponseBody
     private static String vuls2(HttpServletResponse response) {
+        // 不建议设置为*
+        // 后端设置Access-Control-Allow-Origin为*的情况下，跨域的时候前端如果设置withCredentials为true会异常
         response.setHeader("Access-Control-Allow-Origin", "*");
-        // response.setHeader("Access-Control-Allow-Methods", "POST, GET");
-        // response.setHeader("Access-Control-Allow-Credentials", "true");
         return info;
     }
 
@@ -61,9 +59,8 @@ public class CORS {
         if ( origin != null && !sec.checkSafeUrl(origin, urlwhitelist) ) {
             return "Origin is not safe.";
         }
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        // response.setHeader("Access-Control-Allow-Methods", "POST, GET");
-        // response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", origin);
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         return info;
     }
 
