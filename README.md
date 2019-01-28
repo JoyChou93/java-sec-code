@@ -34,6 +34,7 @@
 - [Fastjson](https://github.com/JoyChou93/java-sec-code/wiki/Fastjson)
 - [CORS](https://github.com/JoyChou93/java-sec-code/wiki/CORS)
 - [CSRF](https://github.com/JoyChou93/java-sec-code/wiki/CSRF)
+- [JSONP](https://github.com/JoyChou93/java-sec-code/wiki/JSONP)
 - [Others](https://github.com/JoyChou93/java-sec-code/wiki/others)
 
 

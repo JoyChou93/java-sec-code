@@ -30,6 +30,27 @@ public class JSONP {
         return callback + "(" + info + ")";
     }
 
+    /**
+     * Desc: 直接访问不限制Referer，非直接访问限制Referer (开发同学喜欢这样进行JSONP测试)
+     * URL:  http://localhost:8080/jsonp/emptyReferer?callback=test
+     */
+    @RequestMapping("/emptyReferer")
+    @ResponseBody
+    private static String emptyReferer(HttpServletRequest request, HttpServletResponse response) {
+        String referer = request.getHeader("referer");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        if (null == referer) {
+            String callback = request.getParameter("callback");
+            return callback + "(" + info + ")";
+        } else {
+            Security sec = new Security();
+            if (!sec.checkSafeUrl(referer, urlwhitelist)) {
+                return "Referer is not safe.";
+            }
+            String callback = request.getParameter("callback");
+            return callback + "(" + info + ")";
+        }
+    }
 
     // http://localhost:8080/jsonp/sec?callback=test
     @RequestMapping("/sec")
