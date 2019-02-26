@@ -80,3 +80,10 @@ http://localhost:8080/rce/exec?cmd=whoami
 Viarus
 ```
 
+--- 
+
+有人反馈不想额外下载Tomcat，想使用SpringBoot自带的Tomcat，所以额外添加了这个小功能。
+执行`cp pom-idea.xml pom.xml`后，最后在IDEA中右键`Run Application`。
+
+
+
