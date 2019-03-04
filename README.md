@@ -24,7 +24,7 @@
 - [CORS](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/CORS.java)
 - [JSONP](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/JSONP.java)
 - [SPEL](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SPEL.java)
-
+- [Actuators to RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/resources/logback.xml)
 
 ## 漏洞说明
 
@@ -35,6 +35,7 @@
 - [CORS](https://github.com/JoyChou93/java-sec-code/wiki/CORS)
 - [CSRF](https://github.com/JoyChou93/java-sec-code/wiki/CSRF)
 - [JSONP](https://github.com/JoyChou93/java-sec-code/wiki/JSONP)
+- [Actuators to RCE](https://github.com/JoyChou93/java-sec-code/wiki/Actuators-to-RCE)
 - [Others](https://github.com/JoyChou93/java-sec-code/wiki/others)
 
 
