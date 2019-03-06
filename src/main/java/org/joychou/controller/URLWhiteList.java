@@ -91,9 +91,9 @@ public class URLWhiteList {
     }
 
     // URL类getHost方法被绕过造成的安全问题
-    // 绕过姿势：http://localhost:8080/url/seccode?url=http://www.taobao.com%23@joychou.com/, URL类getHost为joychou.com
+    // 绕过姿势：http://localhost:8080/url/urlVul?url=http://www.taobao.com%23@joychou.com/, URL类getHost为joychou.com
     // 直接访问http://www.taobao.com#@joychou.com/，浏览器请求的是www.taobao.com
-    @RequestMapping("/url")
+    @RequestMapping("/urlVul")
     @ResponseBody
     public String urlVul(HttpServletRequest request) throws Exception{
         String url = request.getParameter("url");
