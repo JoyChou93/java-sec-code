@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -89,17 +90,21 @@ public class URLWhiteList {
         }
     }
 
-    // 安全代码
-    @RequestMapping("/seccode")
+    // URL类getHost方法被绕过造成的安全问题
+    // 绕过姿势：http://localhost:8080/url/seccode?url=http://www.taobao.com%23@joychou.com/, URL类getHost为joychou.com
+    // 直接访问http://www.taobao.com#@joychou.com/，浏览器请求的是www.taobao.com
+    @RequestMapping("/url")
     @ResponseBody
-    public String seccode(HttpServletRequest request) throws Exception{
+    public String urlVul(HttpServletRequest request) throws Exception{
         String url = request.getParameter("url");
+        System.out.println("url:  " + url);
         URL u = new URL(url);
         // 判断是否是http(s)协议
         if (!u.getProtocol().startsWith("http") && !u.getProtocol().startsWith("https")) {
             return "URL is not http or https";
         }
         String host = u.getHost().toLowerCase();
+        System.out.println("host:  " + host);
         // 如果非顶级域名后缀会报错
         String rootDomain = InternetDomainName.from(host).topPrivateDomain().toString();
 
@@ -111,4 +116,29 @@ public class URLWhiteList {
     }
 
 
+    // 安全代码
+    @RequestMapping("/seccode")
+    @ResponseBody
+    public String seccode(HttpServletRequest request) throws Exception{
+        String url = request.getParameter("url");
+        System.out.println("url:  " + url);
+        URI uri = new URI(url);
+        URL u = new URL(url);
+        // 判断是否是http(s)协议
+        if (!u.getProtocol().startsWith("http") && !u.getProtocol().startsWith("https")) {
+            return "URL is not http or https";
+        }
+        // 使用uri获取host
+        String host = uri.getHost().toLowerCase();
+        System.out.println("host:  " + host);
+
+        // 如果非顶级域名后缀会报错
+        String rootDomain = InternetDomainName.from(host).topPrivateDomain().toString();
+
+        if (rootDomain.equals(urlwhitelist)) {
+            return "URL is legal";
+        } else {
+            return "URL is illegal";
+        }
+    }
 }

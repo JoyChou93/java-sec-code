@@ -1,6 +1,8 @@
 package org.joychou.utils;
 
 import com.google.common.net.InternetDomainName;
+
+import java.net.URI;
 import java.net.URL;
 
 public class Security {
@@ -11,12 +13,15 @@ public class Security {
     public static Boolean checkSafeUrl(String url, String[] urlwhitelist){
         try{
             URL u = new URL(url);
+            URI uri = new URI(url);
             // 判断是否是http(s)协议
             if (!u.getProtocol().startsWith("http") && !u.getProtocol().startsWith("https")) {
                 System.out.println("The protocol of url is not http or https.");
                 return false;
             }
-            String host = u.getHost().toLowerCase();
+            // 使用uri获取host
+            String host = uri.getHost().toLowerCase();
+
             // 如果非顶级域名后缀会报错
             String rootDomain = InternetDomainName.from(host).topPrivateDomain().toString();
 
