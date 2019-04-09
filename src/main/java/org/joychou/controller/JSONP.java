@@ -39,17 +39,16 @@ public class JSONP {
     private static String emptyReferer(HttpServletRequest request, HttpServletResponse response) {
         String referer = request.getHeader("referer");
         response.setHeader("Access-Control-Allow-Origin", "*");
-        if (null == referer) {
-            String callback = request.getParameter("callback");
-            return callback + "(" + info + ")";
-        } else {
-            Security sec = new Security();
-            if (!sec.checkSafeUrl(referer, urlwhitelist)) {
-                return "Referer is not safe.";
-            }
-            String callback = request.getParameter("callback");
-            return callback + "(" + info + ")";
+        Security sec = new Security();
+
+        // 如果referer不为空，并且referer不在安全域名白名单内，return error
+        // 导致空referer就会绕过校验。开发同学为了方便测试，不太喜欢校验空Referer
+        if (null != referer && !sec.checkSafeUrl(referer, urlwhitelist)) {
+            return "error";
         }
+
+        String callback = request.getParameter("callback");
+        return callback + "(" + info + ")";
     }
 
     // http://localhost:8080/jsonp/sec?callback=test
@@ -60,9 +59,11 @@ public class JSONP {
         response.setHeader("Access-Control-Allow-Origin", "*");
         String referer = request.getHeader("referer");
         Security sec = new Security();
+
         if (!sec.checkSafeUrl(referer, urlwhitelist)) {
-            return "Referer is not safe.";
+            return "error";
         }
+
         String callback = request.getParameter("callback");
         return callback + "(" + info + ")";
     }
