@@ -37,7 +37,6 @@
 - [CSRF](https://github.com/JoyChou93/java-sec-code/wiki/CSRF)
 - [JSONP](https://github.com/JoyChou93/java-sec-code/wiki/JSONP)
 - [Actuators to RCE](https://github.com/JoyChou93/java-sec-code/wiki/Actuators-to-RCE)
-- [CSRF](https://github.com/JoyChou93/java-sec-code/wiki/CSRF)
 - [Others](https://github.com/JoyChou93/java-sec-code/wiki/others)
 
 
