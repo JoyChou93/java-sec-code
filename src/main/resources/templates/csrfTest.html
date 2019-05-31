@@ -1,0 +1,27 @@
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<body>
+
+
+<div>
+    <form name="f" th:action="@{/csrf/post}" method="post">
+        <input type="text" name="input" />
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+
+
+</body>
+
+
+<!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />  -->
+
+<!--<script>-->
+    <!--window.csrfToken = {-->
+        <!--tokenName: "${_csrf.parameterName}",-->
+        <!--tokenValue: "${_csrf.token}"-->
+    <!--};-->
+<!--</script>-->
+
+</html>

@@ -8,7 +8,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 
 @SpringBootApplication
-@EnableEurekaClient
+// @EnableEurekaClient  // 测试Eureka请打开注释，防止控制台一直有warning
 public class Application extends SpringBootServletInitializer {
 
     @Override

@@ -136,6 +136,25 @@
             <version>3.1.4</version>
         </dependency>
 
+        <!-- 5.x的spring-security版本不适配springboot 1.5，因为1.5的springboot的spring-core版本是4.x，所以spring-security改为4.x即可适配。 -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>4.2.12.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>4.2.12.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>2.1.5.RELEASE</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
