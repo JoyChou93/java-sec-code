@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/fastjson")
 public class Fastjson {
 
-    @RequestMapping(value = "deserialize", method = {RequestMethod.POST })
+    @RequestMapping(value = "/deserialize", method = {RequestMethod.POST })
     @ResponseBody
     public static String Deserialize(@RequestBody String params) {
         // 如果Content-Type不设置application/json格式，post数据会被url编码
