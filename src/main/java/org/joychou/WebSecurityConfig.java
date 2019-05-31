@@ -8,7 +8,8 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.regex.Pattern;
+import java.util.Arrays;
+import java.util.HashSet;
 
 @EnableWebSecurity
 @Configuration
@@ -17,14 +18,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     RequestMatcher csrfRequestMatcher = new RequestMatcher() {
 
         // 配置不需要CSRF校验的请求方式
-        private Pattern allowedMethods =
-                Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$");
+        private final HashSet<String> allowedMethods = new HashSet<String>(
+                Arrays.asList("GET", "HEAD", "TRACE", "OPTIONS"));
 
         @Override
         public boolean matches(HttpServletRequest request) {
-            // CSRF disabled on allowedMethod
-            // false表示不校验csrf
-            return !(allowedMethods.matcher(request.getMethod()).matches());
+            // return false表示不校验csrf
+            return !this.allowedMethods.contains(request.getMethod());
         }
 
     };
