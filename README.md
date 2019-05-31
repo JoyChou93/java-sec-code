@@ -25,7 +25,7 @@
 - [JSONP](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/JSONP.java)
 - [SPEL](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SPEL.java)
 - [Actuators to RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/resources/logback.xml)
-- [CSRF](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/CSRF.java)
+- [CSRF](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/WebSecurityConfig.java)
 
 ## 漏洞说明
 
