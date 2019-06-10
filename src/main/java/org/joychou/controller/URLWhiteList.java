@@ -115,8 +115,7 @@ public class URLWhiteList {
         }
     }
 
-
-    // 安全代码
+    // 利用InternetDomainName库获取一级域名的安全代码 (一级域名白名单)
     @RequestMapping("/seccode")
     @ResponseBody
     public String seccode(HttpServletRequest request) throws Exception{
@@ -140,5 +139,74 @@ public class URLWhiteList {
         } else {
             return "URL is illegal";
         }
+    }
+
+    /**
+     * @desc 自定义一级域名白名单
+     * @usage http://localhost:8080/url/seccode1?url=http://aa.taobao.com
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/seccode1")
+    @ResponseBody
+    public String seccode1(HttpServletRequest request) throws Exception{
+
+        // 定义一级域名白名单list，用endsWith加上.判断
+        String whiteDomainlists[] = {"taobao.com", "tmall.com"};
+
+        String url = request.getParameter("url");
+        System.out.println("url:  " + url);
+        URI uri = new URI(url);
+        URL u = new URL(url);
+        // 判断是否是http(s)协议
+        if (!u.getProtocol().startsWith("http") && !u.getProtocol().startsWith("https")) {
+            return "URL is not http or https";
+        }
+        // 使用uri获取host
+        String host = uri.getHost().toLowerCase();
+        System.out.println("host:  " + host);
+
+        for (String domain: whiteDomainlists){
+            if (host.endsWith("." + domain)) {
+                return "good url";
+            }
+        }
+
+        return "bad url";
+    }
+
+    /**
+     * @desc 自定义多级域名白名单
+     * @usage http://localhost:8080/url/seccode2?url=http://ccc.bbb.taobao.com
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/seccode2")
+    @ResponseBody
+    public String seccode2(HttpServletRequest request) throws Exception{
+
+        // 定义多级域名白名单，判断使用equals
+        String whiteDomainlists[] = {"aaa.taobao.com", "ccc.bbb.taobao.com"};
+
+        String url = request.getParameter("url");
+        System.out.println("url:  " + url);
+        URI uri = new URI(url);
+        URL u = new URL(url);
+        // 判断是否是http(s)协议
+        if (!u.getProtocol().startsWith("http") && !u.getProtocol().startsWith("https")) {
+            return "URL is not http or https";
+        }
+        // 使用uri获取host
+        String host = uri.getHost().toLowerCase();
+        System.out.println("host:  " + host);
+
+        for (String domain: whiteDomainlists){
+            if (host.equals(domain)) {
+                return "good url";
+            }
+        }
+        return "bad url";
     }
 }

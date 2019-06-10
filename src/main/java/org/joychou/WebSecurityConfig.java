@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -38,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .requireCsrfProtectionMatcher(csrfRequestMatcher)
                 .ignoringAntMatchers("/xxe/**", "/fastjon/**")  // 不进行csrf校验的uri，多个uri使用逗号分隔
                 .csrfTokenRepository(new CookieCsrfTokenRepository());
+        http.exceptionHandling().accessDeniedHandler(new CsrfAccessDeniedHandler());
         // http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
 }
