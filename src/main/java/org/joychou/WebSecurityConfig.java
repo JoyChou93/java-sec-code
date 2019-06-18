@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .requireCsrfProtectionMatcher(csrfRequestMatcher)
                 .ignoringAntMatchers("/xxe/**", "/fastjon/**")  // 不进行csrf校验的uri，多个uri使用逗号分隔
                 .csrfTokenRepository(new CookieCsrfTokenRepository());
+        // 自定义csrf校验失败的代码，默认是返回403错误页面
         http.exceptionHandling().accessDeniedHandler(new CsrfAccessDeniedHandler());
         // http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }

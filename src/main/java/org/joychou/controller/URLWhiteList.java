@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,130 +24,142 @@ import java.util.regex.Pattern;
 public class URLWhiteList {
 
 
-    private String urlwhitelist = "joychou.com";
+    private String urlwhitelist[] = {"joychou.org", "joychou.com"};
 
-
-    // 绕过方法bypassjoychou.com
+    /**
+     * @desc 绕过方法bypassjoychou.org
+     * @usage http://localhost:8080/url/endswith?url=http://aaajoychou.org
+     */
     @RequestMapping("/endswith")
     @ResponseBody
     public String endsWith(HttpServletRequest request) throws Exception{
         String url = request.getParameter("url");
-        System.out.println(url);
         URL u = new URL(url);
         String host = u.getHost().toLowerCase();
-        String rootDomain = InternetDomainName.from(host).topPrivateDomain().toString();
 
-        if (rootDomain.endsWith(urlwhitelist)) {
-            return "URL is legal";
-        } else {
-            return "URL is illegal";
+        for (String domain: urlwhitelist){
+            if (host.endsWith(domain)) {
+                return "Good url.";
+            }
         }
+        return "Bad url.";
     }
 
-    // 绕过方法joychou.com.bypass.com  bypassjoychou.com
+    /**
+     * @desc 绕过方法joychou.org.bypass.com  bypassjoychou.org
+     * @usage http://localhost:8080/url/contains?url=http://joychou.org.bypass.com http://bypassjoychou.org
+     */
     @RequestMapping("/contains")
     @ResponseBody
     public String contains(HttpServletRequest request) throws Exception{
         String url = request.getParameter("url");
         URL u = new URL(url);
         String host = u.getHost().toLowerCase();
-        String rootDomain = InternetDomainName.from(host).topPrivateDomain().toString();
 
-        if (rootDomain.contains(urlwhitelist)) {
-            return "URL is legal";
-        } else {
-            return "URL is illegal";
+        for (String domain: urlwhitelist){
+            if (host.contains(domain)) {
+                return "Good url.";
+            }
         }
+        return "Bad url.";
     }
 
-    // 绕过方法bypassjoychou.com，代码功能和endsWith一样/
+
+    /**
+     * @desc 绕过方法bypassjoychou.org，代码功能和endsWith一样
+     * @usage http://localhost:8080/url/regex?url=http://aaajoychou.org
+     */
     @RequestMapping("/regex")
     @ResponseBody
     public String regex(HttpServletRequest request) throws Exception{
         String url = request.getParameter("url");
         URL u = new URL(url);
         String host = u.getHost().toLowerCase();
-        String rootDomain = InternetDomainName.from(host).topPrivateDomain().toString();
 
-        Pattern p = Pattern.compile("joychou\\.com");
-        Matcher m = p.matcher(rootDomain);
+        Pattern p = Pattern.compile("joychou\\.org$");
+        Matcher m = p.matcher(host);
         if (m.find()) {
-            return "URL is legal";
+            return "Good url.";
         } else {
-            return "URL is illegal";
+            return "Bad url.";
         }
     }
 
 
+    /**
+     * @desc 绕过方法joychou.org.bypass.com  bypassjoychou.org，代码功能和 contains 一样
+     * @usage http://localhost:8080/url/indexof?url=http://joychou.org.bypass.com http://bypassjoychou.org
+     */
     @RequestMapping("/indexof")
     @ResponseBody
     public String indexOf(HttpServletRequest request) throws Exception{
         String url = request.getParameter("url");
-        // indexof返回-1，表示没有匹配到字符串
-        if (-1 == url.indexOf(urlwhitelist)) {
-            return "URL is illegal";
-        } else {
-            return "URL is legal";
+        URL u = new URL(url);
+        String host = u.getHost();
+        // indexOf为-1，表示没有匹配到字符串
+        for (String domain: urlwhitelist){
+            if (host.indexOf(domain) != -1) {
+                return "Good url.";
+            }
         }
+        return "Bad url.";
     }
 
-    // URL类getHost方法被绕过造成的安全问题
-    // 绕过姿势：http://localhost:8080/url/urlVul?url=http://www.taobao.com%23@joychou.com/, URL类getHost为joychou.com
-    // 直接访问http://www.taobao.com#@joychou.com/，浏览器请求的是www.taobao.com
-    @RequestMapping("/urlVul")
+    /**
+     * @desc 用java.net.URL类的getHost被绕过情况
+     * @usage https://github.com/JoyChou93/java-sec-code/wiki/SecurityUtil-whtielist-Bypass
+     */
+    @RequestMapping("/url_bypass")
     @ResponseBody
-    public String urlVul(HttpServletRequest request) throws Exception{
+    public String url_bypass(HttpServletRequest request) throws Exception{
         String url = request.getParameter("url");
         System.out.println("url:  " + url);
         URL u = new URL(url);
         // 判断是否是http(s)协议
         if (!u.getProtocol().startsWith("http") && !u.getProtocol().startsWith("https")) {
-            return "URL is not http or https";
+            return "Url is not http or https";
         }
         String host = u.getHost().toLowerCase();
         System.out.println("host:  " + host);
-        // 如果非顶级域名后缀会报错
-        String rootDomain = InternetDomainName.from(host).topPrivateDomain().toString();
 
-        if (rootDomain.equals(urlwhitelist)) {
-            return "URL is legal";
+        if (host.endsWith("." + urlwhitelist)) {
+            return "Good url.";
         } else {
-            return "URL is illegal";
+            return "Bad url.";
         }
     }
 
-    // 利用InternetDomainName库获取一级域名的安全代码 (一级域名白名单)
+
+    /**
+     * @desc 利用InternetDomainName库获取一级域名的安全代码 (一级域名白名单)
+     */
     @RequestMapping("/seccode")
     @ResponseBody
     public String seccode(HttpServletRequest request) throws Exception{
         String url = request.getParameter("url");
-        System.out.println("url:  " + url);
+
         URI uri = new URI(url);
-        URL u = new URL(url);
         // 判断是否是http(s)协议
-        if (!u.getProtocol().startsWith("http") && !u.getProtocol().startsWith("https")) {
-            return "URL is not http or https";
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            return "SecurityUtil is not http or https";
         }
+
         // 使用uri获取host
         String host = uri.getHost().toLowerCase();
-        System.out.println("host:  " + host);
 
         // 如果非顶级域名后缀会报错
         String rootDomain = InternetDomainName.from(host).topPrivateDomain().toString();
 
         if (rootDomain.equals(urlwhitelist)) {
-            return "URL is legal";
+            return "Good url.";
         } else {
-            return "URL is illegal";
+            return "Bad url.";
         }
     }
 
     /**
      * @desc 自定义一级域名白名单
      * @usage http://localhost:8080/url/seccode1?url=http://aa.taobao.com
-     * @param request
-     * @return
-     * @throws Exception
      */
     @RequestMapping("/seccode1")
     @ResponseBody
@@ -154,59 +167,79 @@ public class URLWhiteList {
 
         // 定义一级域名白名单list，用endsWith加上.判断
         String whiteDomainlists[] = {"taobao.com", "tmall.com"};
-
         String url = request.getParameter("url");
-        System.out.println("url:  " + url);
+
         URI uri = new URI(url);
-        URL u = new URL(url);
         // 判断是否是http(s)协议
-        if (!u.getProtocol().startsWith("http") && !u.getProtocol().startsWith("https")) {
-            return "URL is not http or https";
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            return "SecurityUtil is not http or https";
         }
+
         // 使用uri获取host
         String host = uri.getHost().toLowerCase();
-        System.out.println("host:  " + host);
 
         for (String domain: whiteDomainlists){
             if (host.endsWith("." + domain)) {
-                return "good url";
+                return "Good url.";
             }
         }
 
-        return "bad url";
+        return "Bad url.";
     }
 
     /**
      * @desc 自定义多级域名白名单
      * @usage http://localhost:8080/url/seccode2?url=http://ccc.bbb.taobao.com
-     * @param request
-     * @return
-     * @throws Exception
      */
     @RequestMapping("/seccode2")
     @ResponseBody
     public String seccode2(HttpServletRequest request) throws Exception{
-
         // 定义多级域名白名单，判断使用equals
         String whiteDomainlists[] = {"aaa.taobao.com", "ccc.bbb.taobao.com"};
-
         String url = request.getParameter("url");
-        System.out.println("url:  " + url);
+
         URI uri = new URI(url);
-        URL u = new URL(url);
         // 判断是否是http(s)协议
-        if (!u.getProtocol().startsWith("http") && !u.getProtocol().startsWith("https")) {
-            return "URL is not http or https";
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            return "SecurityUtil is not http or https";
         }
         // 使用uri获取host
         String host = uri.getHost().toLowerCase();
-        System.out.println("host:  " + host);
 
         for (String domain: whiteDomainlists){
             if (host.equals(domain)) {
-                return "good url";
+                return "Good url.";
             }
         }
-        return "bad url";
+        return "Bad url.";
+    }
+
+    /**
+     * @desc 自定义多级域名白名单
+     * @usage http://localhost:8080/url/seccode3?url=http://ccc.bbb.taobao.com
+     */
+    @RequestMapping("/seccode3")
+    @ResponseBody
+    public String seccode3(HttpServletRequest request) throws Exception{
+
+        // 定义多级域名白名单
+        ArrayList<String> whiteDomainlists = new ArrayList<String>();
+        whiteDomainlists.add("bbb.taobao.com");
+        whiteDomainlists.add("ccc.bbb.taobao.com");
+
+        String url = request.getParameter("url");
+        URI uri = new URI(url);
+
+        // 判断是否是http(s)协议
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            return "SecurityUtil is not http or https";
+        }
+        // 使用uri获取host
+        String host = uri.getHost().toLowerCase();
+
+        if (whiteDomainlists.indexOf(host) != -1) {
+            return "Good url.";
+        }
+        return "Bad url.";
     }
 }

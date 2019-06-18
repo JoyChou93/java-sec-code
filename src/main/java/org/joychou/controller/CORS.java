@@ -1,6 +1,6 @@
 package org.joychou.controller;
 
-import org.joychou.utils.Security;
+import org.joychou.security.SecurityUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,11 +52,10 @@ public class CORS {
     @ResponseBody
     private static String seccode(HttpServletRequest request, HttpServletResponse response) {
         String origin = request.getHeader("Origin");
-        Security sec = new Security();
 
         // 如果origin不为空并且origin不在白名单内，认定为不安全。
         // 如果origin为空，表示是同域过来的请求或者浏览器直接发起的请求。
-        if ( origin != null && !sec.checkSafeUrl(origin, urlwhitelist) ) {
+        if ( origin != null && !SecurityUtil.checkURLbyEndsWith(origin, urlwhitelist) ) {
             return "Origin is not safe.";
         }
         response.setHeader("Access-Control-Allow-Origin", origin);

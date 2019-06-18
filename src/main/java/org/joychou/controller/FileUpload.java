@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,8 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
-
-import static org.joychou.utils.Security.isImage;
 
 
 /**
@@ -153,5 +153,17 @@ public class FileUpload {
         fos.write(multiFile.getBytes());
         fos.close();
         return convFile;
+    }
+
+    /**
+     * @param file
+     * @desc 判断文件内容是否是图片
+     */
+    public static boolean isImage(File file) throws IOException {
+        BufferedImage bi = ImageIO.read(file);
+        if (bi == null) {
+            return false;
+        }
+        return true;
     }
 }

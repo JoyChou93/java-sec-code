@@ -37,6 +37,7 @@
 - [CSRF](https://github.com/JoyChou93/java-sec-code/wiki/CSRF)
 - [JSONP](https://github.com/JoyChou93/java-sec-code/wiki/JSONP)
 - [Actuators to RCE](https://github.com/JoyChou93/java-sec-code/wiki/Actuators-to-RCE)
+- [URL whitelist Bypass](https://github.com/JoyChou93/java-sec-code/wiki/URL-whtielist-Bypass)
 - [Others](https://github.com/JoyChou93/java-sec-code/wiki/others)
 
 
