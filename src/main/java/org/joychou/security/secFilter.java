@@ -15,7 +15,7 @@ import org.apache.commons.lang.StringUtils;
  * desc:  除了以下代码，还需要在Application.java中添加@ServletComponentScan注解
  */
 @WebFilter(filterName = "referSecCheck", urlPatterns = "/*")
-public class secFilter implements Filter{
+public class secFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -33,13 +33,10 @@ public class secFilter implements Filter{
         String referWhitelist[] = {"joychou.org", "joychou.com"};
 
         // get method and includes callback parameter
-        System.out.println(request.getMethod());
         if (request.getMethod().equals("GET") && StringUtils.isNotBlank(request.getParameter("callback")) ){
-            // if check referer failed, display 403 forbidden page.
+            // if check referer failed, redirect 403 forbidden page.
             if (!SecurityUtil.checkURLbyEndsWith(refer, referWhitelist)){
-                response.setContentType(MediaType.TEXT_HTML_VALUE); // content-type: text/html
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 403 forbidden
-                response.getWriter().write("Referer check failed. 403 Forbidden.");  // response
+                response.sendRedirect("https://test.joychou.org/error3.html");
                 return;
             }
         }
