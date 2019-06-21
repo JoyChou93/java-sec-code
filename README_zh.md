@@ -1,4 +1,8 @@
-# Java Security Code
+# Java Sec Code
+
+对于学习Java漏洞代码来说，`Java Sec Code`是一个非常强大且友好的项目
+
+[英文文档](https://github.com/JoyChou93/java-sec-code/blob/master/README.md)
 
 ## 介绍
 
@@ -51,11 +55,13 @@
 3. 重启Tomcat应用
 
 
+例子：
+
 ```
 http://localhost:8080/java-sec-code-1.0.0/rce/exec?cmd=whoami
 ```
  
-返回
+返回：
 
 ``` 
 Viarus
@@ -65,11 +71,13 @@ Viarus
 
 直接点击run按钮即可运行。
 
+例子：
+
 ```
 http://localhost:8080/rce/exec?cmd=whoami
 ```
  
-返回
+返回：
 
 ``` 
 Viarus
@@ -77,7 +85,7 @@ Viarus
 
 
 
-### Jar包
+### JAR包
 
 
 先修改pom.xml里的配置，将war改成jar。
@@ -95,3 +103,13 @@ Viarus
 mvn clean package -DskipTests 
 java -jar 打包后的jar包路径
 ```
+
+## 捐赠
+
+如果你喜欢这个项目，你可以捐款来支持我。 有了你的支持，我将能够更好地制作`Java sec code`项目。
+
+### Alipay
+
+扫描支付宝二维码支持`Java sec code`。
+
+<img title="Alipay QRcode" src="https://aliyun-testaaa.oss-cn-shanghai.aliyuncs.com/alipay_qr.png" width="200">
