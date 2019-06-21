@@ -56,7 +56,7 @@ Sort by letter.
 
 - Exclude tomcat in pom.xml.
 
-    ```
+    ```xml
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
@@ -70,7 +70,7 @@ Sort by letter.
     ```
 
 - Build war package by `mvn clean package`.
-- Copy war package to Tomcat webapps directory.
+- Copy war package to tomcat webapps directory.
 - Start tomcat application.
 
 Example:
@@ -101,20 +101,22 @@ return:
 Viarus
 ```
 
-### JAR
+### Jar
 
-Change `war` to `jar` in `pom.xml`.
+- Change `war` to `jar` in `pom.xml`.
 
-```
-<groupId>sec</groupId>
-<artifactId>java-sec-code</artifactId>
-<version>1.0.0</version>
-<packaging>war</packaging>
-```
+    ```xml
+    <groupId>sec</groupId>
+    <artifactId>java-sec-code</artifactId>
+    <version>1.0.0</version>
+    <packaging>war</packaging>
+    ```
 
-Build package and run.
+- Build package and run.
 
-```
-mvn clean package -DskipTests 
-java -jar target/java-sec-code-1.0.0.jar
-```
+    ```
+    mvn clean package -DskipTests 
+    java -jar target/java-sec-code-1.0.0.jar
+    ```
+
+
