@@ -1,6 +1,7 @@
 package org.joychou.security;
 
 
+
 import java.net.URI;
 
 public class SecurityUtil {
@@ -8,18 +9,21 @@ public class SecurityUtil {
     /**
      * 通过endsWith判断URL是否合法
      *
-     * @param url
+     * @param url 需要check的url
+     * @param urlwhitelist url白名单list
      * @return 安全url返回true，危险url返回false
      */
     public static Boolean checkURLbyEndsWith(String url, String[] urlwhitelist) {
+        if (null == url) {
+            return false;
+        }
         try {
             URI uri = new URI(url);
-            // 判断是否是http(s)协议
+
             if (!url.startsWith("http://") && !url.startsWith("https://")) {
                 return false;
             }
 
-            // 使用uri获取host
             String host = uri.getHost().toLowerCase();
             for (String whitelist: urlwhitelist){
                 if (host.endsWith("." + whitelist)) {
@@ -29,11 +33,22 @@ public class SecurityUtil {
 
             return false;
         } catch (Exception e) {
-            System.out.println(e.toString());
             return false;
         }
     }
 
-
+    /**
+     * 解析url的ip，判断ip是否是内网ip，所以TTL设置为0的情况不适用。
+     *
+     * @param url check的url
+     * @return 安全返回true，危险返回false
+     */
+    public static Boolean checkSSRF(String url) {
+        if (SSRFChecker.checkSSRF(url)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }

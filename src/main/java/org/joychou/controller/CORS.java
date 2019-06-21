@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author: JoyChou
- * @date:   2018年10月24日
- * @desc:   https://github.com/JoyChou93/java-sec-code/wiki/CORS
+ * @author  JoyChou (joychou@joychou.org)
+ * @date    2018.10.24
+ * @desc    https://github.com/JoyChou93/java-sec-code/wiki/CORS
  */
 
 @Controller
@@ -47,6 +47,7 @@ public class CORS {
     private static String vuls3(HttpServletResponse response) {
         return info;
     }
+
 
     @RequestMapping("/sec")
     @ResponseBody

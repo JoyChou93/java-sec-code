@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author: JoyChou (joychou@joychou.org)
- * @date:   2017.12.29
- * @desc:   Java获取IP安全代码
- * @detail: 关于获取IP不安全代码，详情可查看https://joychou.org/web/how-to-get-real-ip.html
+ * @author  JoyChou (joychou@joychou.org)
+ * @date    2017.12.29
+ * @desc    Java获取IP安全代码
+ * @detail  关于获取IP不安全代码，详情可查看https://joychou.org/web/how-to-get-real-ip.html
  */
 
 @Controller

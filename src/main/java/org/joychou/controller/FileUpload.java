@@ -21,9 +21,9 @@ import java.util.UUID;
 
 
 /**
- * @author: JoyChou (joychou@joychou.org)
- * @date:   2018.08.15
- * @desc:   Java file upload
+ * @author  JoyChou (joychou@joychou.org)
+ * @date    2018.08.15
+ * @desc    Java file upload
  */
 
 @Controller
@@ -136,11 +136,11 @@ public class FileUpload {
     }
 
     /**
-     * @desc 不建议使用transferTo，因为原始的MultipartFile会被覆盖
-     * @url https://stackoverflow.com/questions/24339990/how-to-convert-a-multipart-file-to-file
+     * 不建议使用transferTo，因为原始的MultipartFile会被覆盖
+     * https://stackoverflow.com/questions/24339990/how-to-convert-a-multipart-file-to-file
+     *
      * @param multiFile
      * @return
-     * @throws Exception
      */
     private File convert(MultipartFile multiFile) throws Exception {
         String fileName = multiFile.getOriginalFilename();
@@ -156,8 +156,10 @@ public class FileUpload {
     }
 
     /**
+     * Check if the file is a picture.
+     *
      * @param file
-     * @desc 判断文件内容是否是图片
+     * @return
      */
     public static boolean isImage(File file) throws IOException {
         BufferedImage bi = ImageIO.read(file);

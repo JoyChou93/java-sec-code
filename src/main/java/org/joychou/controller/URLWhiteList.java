@@ -14,9 +14,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * date: 2018年08月23日
- * author: JoyChou
- * desc: URL白名单绕过
+ * @author  JoyChou (joychou@joychou.org)
+ * @date    2018.08.23
+ * @desc    URL whitelist bypass.
  */
 
 @Controller

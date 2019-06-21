@@ -10,9 +10,9 @@ import java.sql.*;
 
 
 /**
- * Date：2018年08月22日
- * Author: JoyChou
- * Desc: SQL注入漏洞
+ * @author  JoyChou (joychou@joychou.org)
+ * @date    2018.08.22
+ * @desc    SQL Injection
  */
 
 @Controller

@@ -22,9 +22,9 @@ import org.jdom2.input.SAXBuilder;
 
 
 /**
- * @author: JoyChou (joychou@joychou.org)
- * @date:   2017.12.22
- * @desc:   Java XXE 漏洞代码，修复代码在注释里
+ * @author  JoyChou (joychou@joychou.org)
+ * @date    2017.12.22
+ * @desc    Java XXE vul code.
  */
 
 @Controller

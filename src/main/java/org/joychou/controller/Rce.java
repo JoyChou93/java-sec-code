@@ -10,10 +10,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 /**
- * @author: JoyChou (joychou@joychou.org)
- * @date:   2018.05.24
- * @desc:   java xxe vuls code
- * @fix:    过滤造成命令执行的参数
+ * @author  JoyChou (joychou@joychou.org)
+ * @date    2018.05.24
+ * @desc    Java code execute
+ * @fix     过滤造成命令执行的参数
  */
 
 @Controller

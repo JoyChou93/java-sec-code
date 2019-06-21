@@ -10,9 +10,9 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 
 /**
- * @author: JoyChou
- * @Date:   2018年06月14日
- * @Desc：  该应用必须有Commons-Collections包才能利用反序列化命令执行。
+ * @author JoyChou (joychou@joychou.org)
+ * @Date   2018年06月14日
+ * @Desc   该应用必须有Commons-Collections包才能利用反序列化命令执行。
  */
 
 @Controller

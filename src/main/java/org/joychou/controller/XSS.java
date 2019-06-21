@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author: JoyChou (joychou@joychou.org)
- * @date:   2018.01.02
- * @desc:   xss vuls code
+ * @author   JoyChou (joychou@joychou.org)
+ * @date     2018.01.02
+ * @desc     XSS vuls code
  */
 
 @Controller

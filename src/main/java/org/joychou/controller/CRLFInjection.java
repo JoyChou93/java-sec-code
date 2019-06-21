@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author: JoyChou (joychou@joychou.org)
- * @date:   2018.01.03
- * @desc:   Java 1.7/1.8没有CRLF漏洞 (test in Java 1.7/1.8)
+ * @author  JoyChou (joychou@joychou.org)
+ * @date    2018.01.03
+ * @desc    Java 1.7/1.8 no CRLF vuls (test in Java 1.7/1.8)
  */
 
 @Controller

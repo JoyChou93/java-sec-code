@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * @author: JoyChou (joychou@joychou.org)
- * @date:   2019.05.31
- * @desc:   check csrf using spring-security
- * @using:  access http://localhost:8080/csrf/ -> click submit
+ * @author  JoyChou (joychou@joychou.org)
+ * @date    2019.05.31
+ * @desc    check csrf using spring-security
+ * @usage   Access http://localhost:8080/csrf/ -> click submit
  */
 
 
