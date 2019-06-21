@@ -1,7 +1,9 @@
 # Java sec code
 
 
-[中文文档](https://github.com/JoyChou93/java-sec-code/blob/master/README.md)
+Java sec code is a very powerful and friendly project for learning Java vulnerability code.
+
+[中文文档](https://github.com/JoyChou93/java-sec-code/blob/master/README_zh.md)
 
 ## Introduce
 
@@ -101,22 +103,31 @@ return:
 Viarus
 ```
 
-### Jar
+### JAR
 
-- Change `war` to `jar` in `pom.xml`.
+Change `war` to `jar` in `pom.xml`.
 
-    ```xml
-    <groupId>sec</groupId>
-    <artifactId>java-sec-code</artifactId>
-    <version>1.0.0</version>
-    <packaging>war</packaging>
-    ```
+```xml
+<groupId>sec</groupId>
+<artifactId>java-sec-code</artifactId>
+<version>1.0.0</version>
+<packaging>war</packaging>
+```
 
-- Build package and run.
+Build package and run.
 
-    ```
-    mvn clean package -DskipTests 
-    java -jar target/java-sec-code-1.0.0.jar
-    ```
+```
+mvn clean package -DskipTests 
+java -jar target/java-sec-code-1.0.0.jar
+```
 
 
+## Donate
+
+If you like the poject, you can donate to support me. With your support, I will be able to make `Java sec code` better 😎.
+
+### Alipay
+
+Scan the QRcode to support `Java sec code`.
+
+<img title="Alipay QRcode" src="https://aliyun-testaaa.oss-cn-shanghai.aliyuncs.com/alipay_qr.png" width="200">
