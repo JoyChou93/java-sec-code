@@ -1,6 +1,6 @@
 # Java Sec Code
 
-对于学习Java漏洞代码来说，`Java Sec Code`是一个非常强大且友好的项目
+对于学习Java漏洞代码来说，`Java Sec Code`是一个非常强大且友好的项目。
 
 [英文文档](https://github.com/JoyChou93/java-sec-code/blob/master/README.md)
 
@@ -50,9 +50,9 @@
 
 ### Tomcat
 
-1. 生成war包 `mvn clean package`
-2. 将target目录的war包，cp到Tomcat的webapps目录
-3. 重启Tomcat应用
+1. 生成war包 `mvn clean package`。
+2. 将target目录的war包，cp到Tomcat的webapps目录。
+3. 重启Tomcat应用。
 
 
 例子：
