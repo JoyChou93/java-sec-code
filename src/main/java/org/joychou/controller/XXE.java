@@ -101,7 +101,6 @@ public class XXE {
 
             return "ok";
         } catch (Exception e) {
-            System.out.println(e);
             return "except";
         }
     }

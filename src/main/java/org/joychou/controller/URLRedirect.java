@@ -13,29 +13,28 @@ import java.io.IOException;
 import org.joychou.security.SecurityUtil;
 
 /**
- * @author  JoyChou (joychou@joychou.org)
- * @date    2017.12.28
- * @desc    Java url redirect.
- * @fix     Check redirect url whitelist.
+ * The vulnerability code and security code of Java url redirect.
+ * The security code is checking whitelist of url redirect.
+ *
+ * @author   JoyChou (joychou@joychou.org)
+ * @version  2017.12.28
  */
-
 
 @Controller
 @RequestMapping("/urlRedirect")
 public class URLRedirect {
 
     /**
-     * usage: http://localhost:8080/urlRedirect/redirect?url=http://www.baidu.com
-     *
+     * http://localhost:8080/urlRedirect/redirect?url=http://www.baidu.com
      */
     @GetMapping("/redirect")
     public String redirect(@RequestParam("url") String url) {
         return "redirect:" + url;
     }
 
+
     /**
-     * usage: http://localhost:8080/urlRedirect/setHeader?url=http://www.baidu.com
-     *
+     * http://localhost:8080/urlRedirect/setHeader?url=http://www.baidu.com
      */
     @RequestMapping("/setHeader")
     @ResponseBody
@@ -45,9 +44,9 @@ public class URLRedirect {
         response.setHeader("Location", url);
     }
 
+
     /**
-     * usage: http://localhost:8080/urlRedirect/sendRedirect?url=http://www.baidu.com
-     *
+     * http://localhost:8080/urlRedirect/sendRedirect?url=http://www.baidu.com
      */
     @RequestMapping("/sendRedirect")
     @ResponseBody
@@ -58,13 +57,12 @@ public class URLRedirect {
 
 
     /**
-     * desc: security code.Because it can only jump according to the path, it cannot jump according to other urls.
-     * usage: http://localhost:8080/urlRedirect/forward?url=/urlRedirect/test
-     *
+     * Safe code. Because it can only jump according to the path, it cannot jump according to other urls.
+     * http://localhost:8080/urlRedirect/forward?url=/urlRedirect/test
      */
     @RequestMapping("/forward")
     @ResponseBody
-    public static void forward(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    public static void forward(HttpServletRequest request, HttpServletResponse response) {
         String url = request.getParameter("url");
         RequestDispatcher rd =request.getRequestDispatcher(url);
         try{
@@ -74,10 +72,10 @@ public class URLRedirect {
         }
     }
 
+
     /**
-     * desc: sendRedirect security code
-     * usage: http://localhost:8080/urlRedirect/sendRedirect_seccode?url=http://www.baidu.com
-     *
+     * Safe code of sendRedirect.
+     * http://localhost:8080/urlRedirect/sendRedirect_seccode?url=http://www.baidu.com
      */
     @RequestMapping("/sendRedirect_seccode")
     @ResponseBody

@@ -8,7 +8,7 @@ import org.apache.commons.net.util.SubnetUtils;
 
 public class SSRFChecker {
 
-    public static int connectTime = 5*1000;  // 设置连接超时时间5s
+    private static int connectTime = 5*1000;  // 设置连接超时时间5s
 
     /**
      * 解析url的ip，判断ip是否是内网ip，所以TTL设置为0的情况不适用。
@@ -54,13 +54,12 @@ public class SSRFChecker {
     }
 
 
-
     /**
      * 判断一个URL的IP是否是内网IP
      *
      * @return 如果是内网IP，返回true；非内网IP，返回false。
      */
-    public static boolean isInnerIPByUrl(String url) throws Exception {
+    public static Boolean isInnerIPByUrl(String url) {
         String host = url2host(url);
         if (host.equals("")) {
             return true; // 异常URL当成内网IP等非法URL处理
@@ -78,10 +77,10 @@ public class SSRFChecker {
     /**
      * 使用SubnetUtils库判断ip是否在内网网段
      *
-     * @param strIP
+     * @param strIP ip字符串
      * @return 如果是内网ip，返回true，否则返回false。
      */
-    public static boolean isInnerIp(String strIP){
+    private static boolean isInnerIp(String strIP){
 
         String blackSubnetlist[] = {"10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8"};
 
@@ -102,9 +101,9 @@ public class SSRFChecker {
      * 167772161转换为10.0.0.1
      * 127.0.0.1.xip.io转换为127.0.0.1
      *
-     * @param host
+     * @param host 域名host
      */
-    public static String host2ip(String host) {
+    private static String host2ip(String host) {
         try {
             InetAddress IpAddress = InetAddress.getByName(host); //  send dns request
             return IpAddress.getHostAddress();
@@ -117,9 +116,9 @@ public class SSRFChecker {
     /**
      * 从URL中获取host，限制为http/https协议。只支持http:// 和 https://，不支持//的http协议。
      *
-     * @param url
+     * @param url http的url
      */
-    public static String url2host(String url) {
+    private static String url2host(String url) {
         try {
             // 使用URI，而非URL，防止被绕过。
             URI u = new URI(url);

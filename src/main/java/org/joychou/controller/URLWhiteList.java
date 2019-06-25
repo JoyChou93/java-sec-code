@@ -1,7 +1,6 @@
 package org.joychou.controller;
 
 
-import com.google.common.net.InternetDomainName;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,9 +13,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author  JoyChou (joychou@joychou.org)
- * @date    2018.08.23
- * @desc    URL whitelist bypass.
+ * The vulnerability code and security code of Java url whitelist.
+ * The security code is checking url whitelist.
+ *
+ * @author    JoyChou (joychou@joychou.org)
+ * @version   2018.08.23
  */
 
 @Controller
@@ -24,11 +25,12 @@ import java.util.regex.Pattern;
 public class URLWhiteList {
 
 
-    private String urlwhitelist[] = {"joychou.org", "joychou.com"};
+    private String domainwhitelist[] = {"joychou.org", "joychou.com"};
 
     /**
-     * @desc 绕过方法bypassjoychou.org
-     * @usage http://localhost:8080/url/endswith?url=http://aaajoychou.org
+     * bypass poc: bypassjoychou.org
+     * http://localhost:8080/url/endswith?url=http://aaajoychou.org
+     *
      */
     @RequestMapping("/endswith")
     @ResponseBody
@@ -37,7 +39,7 @@ public class URLWhiteList {
         URL u = new URL(url);
         String host = u.getHost().toLowerCase();
 
-        for (String domain: urlwhitelist){
+        for (String domain: domainwhitelist){
             if (host.endsWith(domain)) {
                 return "Good url.";
             }
@@ -46,8 +48,9 @@ public class URLWhiteList {
     }
 
     /**
-     * @desc 绕过方法joychou.org.bypass.com  bypassjoychou.org
-     * @usage http://localhost:8080/url/contains?url=http://joychou.org.bypass.com http://bypassjoychou.org
+     * bypass poc: joychou.org.bypass.com or bypassjoychou.org.
+     * http://localhost:8080/url/contains?url=http://joychou.org.bypass.com http://bypassjoychou.org
+     *
      */
     @RequestMapping("/contains")
     @ResponseBody
@@ -56,7 +59,7 @@ public class URLWhiteList {
         URL u = new URL(url);
         String host = u.getHost().toLowerCase();
 
-        for (String domain: urlwhitelist){
+        for (String domain: domainwhitelist){
             if (host.contains(domain)) {
                 return "Good url.";
             }
@@ -66,8 +69,9 @@ public class URLWhiteList {
 
 
     /**
-     * @desc 绕过方法bypassjoychou.org，代码功能和endsWith一样
-     * @usage http://localhost:8080/url/regex?url=http://aaajoychou.org
+     * bypass poc: bypassjoychou.org. It's the same with endsWith.
+     * http://localhost:8080/url/regex?url=http://aaajoychou.org
+     *
      */
     @RequestMapping("/regex")
     @ResponseBody
@@ -87,8 +91,9 @@ public class URLWhiteList {
 
 
     /**
-     * @desc 绕过方法joychou.org.bypass.com  bypassjoychou.org，代码功能和 contains 一样
-     * @usage http://localhost:8080/url/indexof?url=http://joychou.org.bypass.com http://bypassjoychou.org
+     * bypass poc: joychou.org.bypass.com or bypassjoychou.org. It's the same with contains.
+     * http://localhost:8080/url/indexof?url=http://joychou.org.bypass.com http://bypassjoychou.org
+     *
      */
     @RequestMapping("/indexof")
     @ResponseBody
@@ -96,8 +101,8 @@ public class URLWhiteList {
         String url = request.getParameter("url");
         URL u = new URL(url);
         String host = u.getHost();
-        // indexOf为-1，表示没有匹配到字符串
-        for (String domain: urlwhitelist){
+        // If indexOf returns -1, it means that no string was found.
+        for (String domain: domainwhitelist){
             if (host.indexOf(domain) != -1) {
                 return "Good url.";
             }
@@ -106,8 +111,12 @@ public class URLWhiteList {
     }
 
     /**
-     * @desc 用java.net.URL类的getHost被绕过情况
-     * @usage https://github.com/JoyChou93/java-sec-code/wiki/SecurityUtil-whtielist-Bypass
+     * The bypass of using java.net.URL to getHost.
+     *
+     * Bypass poc1: curl -v 'http://localhost:8080/url/url_bypass?url=http://evel.com%5c@www.joychou.org/a.html'
+     * Bypass poc2: curl -v 'http://localhost:8080/url/url_bypass?url=http://evil.com%5cwww.joychou.org/a.html'
+     *
+     * Detail: https://github.com/JoyChou93/java-sec-code/wiki/URL-whtielist-Bypass
      */
     @RequestMapping("/url_bypass")
     @ResponseBody
@@ -115,69 +124,46 @@ public class URLWhiteList {
         String url = request.getParameter("url");
         System.out.println("url:  " + url);
         URL u = new URL(url);
-        // 判断是否是http(s)协议
+
         if (!u.getProtocol().startsWith("http") && !u.getProtocol().startsWith("https")) {
             return "Url is not http or https";
         }
+
         String host = u.getHost().toLowerCase();
         System.out.println("host:  " + host);
 
-        if (host.endsWith("." + urlwhitelist)) {
-            return "Good url.";
-        } else {
-            return "Bad url.";
+        // endsWith .
+        for (String domain: domainwhitelist){
+            if (host.endsWith("." + domain)) {
+                return "Good url.";
+            }
         }
+
+        return "Bad url.";
     }
 
 
-    /**
-     * @desc 利用InternetDomainName库获取一级域名的安全代码 (一级域名白名单)
-     */
-    @RequestMapping("/seccode")
-    @ResponseBody
-    public String seccode(HttpServletRequest request) throws Exception{
-        String url = request.getParameter("url");
-
-        URI uri = new URI(url);
-        // 判断是否是http(s)协议
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            return "SecurityUtil is not http or https";
-        }
-
-        // 使用uri获取host
-        String host = uri.getHost().toLowerCase();
-
-        // 如果非顶级域名后缀会报错
-        String rootDomain = InternetDomainName.from(host).topPrivateDomain().toString();
-
-        if (rootDomain.equals(urlwhitelist)) {
-            return "Good url.";
-        } else {
-            return "Bad url.";
-        }
-    }
 
     /**
-     * @desc 自定义一级域名白名单
-     * @usage http://localhost:8080/url/seccode1?url=http://aa.taobao.com
+     * First-level host whitelist.
+     * http://localhost:8080/url/seccode1?url=http://aa.taobao.com
+     *
      */
     @RequestMapping("/seccode1")
     @ResponseBody
     public String seccode1(HttpServletRequest request) throws Exception{
 
-        // 定义一级域名白名单list，用endsWith加上.判断
         String whiteDomainlists[] = {"taobao.com", "tmall.com"};
         String url = request.getParameter("url");
 
         URI uri = new URI(url);
-        // 判断是否是http(s)协议
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
             return "SecurityUtil is not http or https";
         }
 
-        // 使用uri获取host
         String host = uri.getHost().toLowerCase();
 
+        // endsWith .
         for (String domain: whiteDomainlists){
             if (host.endsWith("." + domain)) {
                 return "Good url.";
@@ -188,24 +174,23 @@ public class URLWhiteList {
     }
 
     /**
-     * @desc 自定义多级域名白名单
-     * @usage http://localhost:8080/url/seccode2?url=http://ccc.bbb.taobao.com
+     * Muti-level host whitelist.
+     * http://localhost:8080/url/seccode2?url=http://ccc.bbb.taobao.com
+     *
      */
     @RequestMapping("/seccode2")
     @ResponseBody
     public String seccode2(HttpServletRequest request) throws Exception{
-        // 定义多级域名白名单，判断使用equals
         String whiteDomainlists[] = {"aaa.taobao.com", "ccc.bbb.taobao.com"};
         String url = request.getParameter("url");
 
         URI uri = new URI(url);
-        // 判断是否是http(s)协议
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
             return "SecurityUtil is not http or https";
         }
-        // 使用uri获取host
         String host = uri.getHost().toLowerCase();
 
+        // equals
         for (String domain: whiteDomainlists){
             if (host.equals(domain)) {
                 return "Good url.";
@@ -215,14 +200,15 @@ public class URLWhiteList {
     }
 
     /**
-     * @desc 自定义多级域名白名单
-     * @usage http://localhost:8080/url/seccode3?url=http://ccc.bbb.taobao.com
+     * Muti-level host whitelist.
+     * http://localhost:8080/url/seccode3?url=http://ccc.bbb.taobao.com
+     *
      */
     @RequestMapping("/seccode3")
     @ResponseBody
     public String seccode3(HttpServletRequest request) throws Exception{
 
-        // 定义多级域名白名单
+        // Define muti-level host whitelist.
         ArrayList<String> whiteDomainlists = new ArrayList<String>();
         whiteDomainlists.add("bbb.taobao.com");
         whiteDomainlists.add("ccc.bbb.taobao.com");
@@ -230,13 +216,10 @@ public class URLWhiteList {
         String url = request.getParameter("url");
         URI uri = new URI(url);
 
-        // 判断是否是http(s)协议
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
             return "SecurityUtil is not http or https";
         }
-        // 使用uri获取host
         String host = uri.getHost().toLowerCase();
-
         if (whiteDomainlists.indexOf(host) != -1) {
             return "Good url.";
         }

@@ -51,4 +51,15 @@ public class SecurityUtil {
         }
     }
 
+
+    /**
+     * Suitable for: TTL isn't set to 0 & Redirect is forbidden.
+     *
+     * @param url the url needs to check
+     * @return Safe url returns true. Dangerous url returns false.
+     */
+    public static boolean checkSSRFWithoutRedirect(String url) {
+        return !SSRFChecker.isInnerIPByUrl(url);
+    }
+
 }

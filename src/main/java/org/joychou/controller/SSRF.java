@@ -2,7 +2,10 @@ package org.joychou.controller;
 
 import com.google.common.io.Files;
 import com.squareup.okhttp.OkHttpClient;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -172,6 +175,55 @@ public class SSRF {
             e.printStackTrace();
             return "fail";
         }
+
+    }
+
+
+    /**
+     * Safe code: http://localhost:8080/ssrf/commonsHttpClient?url=http://www.baidu.com
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("/commonsHttpClient")
+    @ResponseBody
+    public static String commonsHttpClient(HttpServletRequest request) {
+
+        String url = request.getParameter("url");
+
+        // Security check
+        if (!SecurityUtil.checkSSRFWithoutRedirect(url)) {
+            return "Bad man. I got u.";
+        }
+        // Create an instance of HttpClient.
+        HttpClient client = new HttpClient();
+
+        // Create a method instance.
+        GetMethod method = new GetMethod(url);
+
+        // forbid 302 redirection
+        method.setFollowRedirects(false);
+
+        try {
+            // Send http request.
+            int status_code = client.executeMethod(method);
+
+            // Only allow the url that status_code is 200.
+            if (status_code != HttpStatus.SC_OK) {
+                return "Method failed: " + method.getStatusLine();
+            }
+
+            // Read the response body.
+            byte[] resBody = method.getResponseBody();
+            return new String(resBody);
+
+        } catch (IOException e) {
+            return "Error: " + e.getMessage();
+        } finally {
+            // Release the connection.
+            method.releaseConnection();
+        }
+
 
     }
 

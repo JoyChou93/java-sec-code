@@ -1,6 +1,5 @@
 package org.joychou.security;
 
-import org.springframework.http.MediaType;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -11,8 +10,11 @@ import org.apache.commons.lang.StringUtils;
 
 
 /**
- * usage: 对所有带有callback参数的get请求做referer校验，如果校验失败返回403页面
- * desc:  除了以下代码，还需要在Application.java中添加@ServletComponentScan注解
+ * Check referer for all GET requests with callback parameters.
+ * If the check of referer fails, a 403 forbidden error page will be returned.
+ *
+ * Still need to add @ServletComponentScan annotation in Application.java.
+ *
  */
 @WebFilter(filterName = "referSecCheck", urlPatterns = "/*")
 public class secFilter implements Filter {
@@ -32,9 +34,9 @@ public class secFilter implements Filter {
         String refer = request.getHeader("referer");
         String referWhitelist[] = {"joychou.org", "joychou.com"};
 
-        // get method and includes callback parameter
+        // Check referer for all GET requests with callback parameters.
         if (request.getMethod().equals("GET") && StringUtils.isNotBlank(request.getParameter("callback")) ){
-            // if check referer failed, redirect 403 forbidden page.
+             // If the check of referer fails, a 403 forbidden error page will be returned.
             if (!SecurityUtil.checkURLbyEndsWith(refer, referWhitelist)){
                 response.sendRedirect("https://test.joychou.org/error3.html");
                 return;

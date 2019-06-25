@@ -170,5 +170,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:4.3.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-security:2.1.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: commons-net:commons-net:3.6" level="project" />
+    <orderEntry type="library" name="Maven: commons-httpclient:commons-httpclient:3.1" level="project" />
   </component>
 </module>
