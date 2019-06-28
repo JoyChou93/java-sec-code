@@ -22,9 +22,9 @@ import org.jdom2.input.SAXBuilder;
 
 
 /**
- * @author  JoyChou (joychou@joychou.org)
- * @date    2017.12.22
- * @desc    Java XXE vul code.
+ * Java xxe vul and safe code.
+ *
+ * @author JoyChou @2017-12-22
  */
 
 @Controller

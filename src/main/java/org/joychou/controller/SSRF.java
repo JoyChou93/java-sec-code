@@ -99,6 +99,11 @@ public class SSRF {
     }
 
 
+    /**
+     * Download the url file.
+     * http://localhost:8080/ssrf/openStream?url=file:///etc/passwd
+     *
+     */
     @RequestMapping("/openStream")
     @ResponseBody
     public static void ssrf_openStream (HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -155,6 +160,11 @@ public class SSRF {
     }
 
 
+    /**
+     * http://localhost:8080/ssrf/HttpClient?url=http://www.baidu.com
+     *
+     * @return The response of url param.
+     */
     @RequestMapping("/HttpClient")
     @ResponseBody
     public static String ssrf_HttpClient(HttpServletRequest request) {
@@ -180,10 +190,9 @@ public class SSRF {
 
 
     /**
-     * Safe code: http://localhost:8080/ssrf/commonsHttpClient?url=http://www.baidu.com
+     * Safe code.
+     * http://localhost:8080/ssrf/commonsHttpClient?url=http://www.baidu.com
      *
-     * @param request
-     * @return
      */
     @RequestMapping("/commonsHttpClient")
     @ResponseBody
@@ -229,10 +238,9 @@ public class SSRF {
 
 
     /**
-     * http://localhost:8080/ssrf/ImageIO_safe?url=
+     * Safe code.
+     * http://localhost:8080/ssrf/ImageIO_safe?url=http://www.baidu.com
      *
-     * @param request
-     * @return
      */
     @RequestMapping("/ImageIO_safe")
     @ResponseBody
