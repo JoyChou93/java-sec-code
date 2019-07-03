@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 
 
 /**
@@ -19,6 +20,9 @@ import org.apache.commons.lang.StringUtils;
 @WebFilter(filterName = "referSecCheck", urlPatterns = "/*")
 public class secFilter implements Filter {
 
+    @Value("${org.joychou.security.jsonp}")
+    private Boolean jsonpSwitch;  // get application.properties configure
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -27,6 +31,12 @@ public class secFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
             throws IOException, ServletException {
+
+
+        // If don't check referer, return.
+        if (!jsonpSwitch) {
+            return ;
+        }
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
