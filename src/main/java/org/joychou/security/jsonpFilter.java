@@ -32,26 +32,23 @@ public class jsonpFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
             throws IOException, ServletException {
 
-
-        // If don't check referer, return.
-        if (!jsonpSwitch) {
-            return ;
-        }
-
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
         String refer = request.getHeader("referer");
         String referWhitelist[] = {"joychou.org", "joychou.com"};
 
-        // Check referer for all GET requests with callback parameters.
-        if (request.getMethod().equals("GET") && StringUtils.isNotBlank(request.getParameter("callback")) ){
-             // If the check of referer fails, a 403 forbidden error page will be returned.
-            if (!SecurityUtil.checkURLbyEndsWith(refer, referWhitelist)){
-                response.sendRedirect("https://test.joychou.org/error3.html");
-                return;
+        if (jsonpSwitch) {
+            // Check referer for all GET requests with callback parameters.
+            if (request.getMethod().equals("GET") && StringUtils.isNotBlank(request.getParameter("callback")) ){
+                // If the check of referer fails, a 403 forbidden error page will be returned.
+                if (!SecurityUtil.checkURLbyEndsWith(refer, referWhitelist)){
+                    response.sendRedirect("https://test.joychou.org/error3.html");
+                    return;
+                }
             }
         }
+
 
         filterChain.doFilter(req, res);
     }
