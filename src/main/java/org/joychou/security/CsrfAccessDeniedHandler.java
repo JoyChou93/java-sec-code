@@ -1,4 +1,4 @@
-package org.joychou;
+package org.joychou.security;
 
 
 import org.springframework.http.MediaType;
@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Design csrf access denied page.
+ *
+ */
 public class CsrfAccessDeniedHandler implements AccessDeniedHandler {
 
-    /**
-     * Design csrf access denied page.
-     *
-     */
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException, ServletException {

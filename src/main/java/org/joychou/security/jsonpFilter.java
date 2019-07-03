@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
  *
  */
 @WebFilter(filterName = "referSecCheck", urlPatterns = "/*")
-public class secFilter implements Filter {
+public class jsonpFilter implements Filter {
 
     @Value("${org.joychou.security.jsonp}")
     private Boolean jsonpSwitch;  // get application.properties configure

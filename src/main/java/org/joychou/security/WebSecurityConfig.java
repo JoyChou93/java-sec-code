@@ -1,5 +1,6 @@
-package org.joychou;
+package org.joychou.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,9 +11,17 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.HashSet;
 
+
+/**
+ * Congifure csrf
+ *
+ */
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Value("${org.joychou.security.csrf}")
+    private Boolean csrfSwitch;  // get csrf switch in application.properties
 
     RequestMatcher csrfRequestMatcher = new RequestMatcher() {
 
@@ -23,6 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public boolean matches(HttpServletRequest request) {
             // return false表示不校验csrf
+            if (!csrfSwitch) {
+                return false;
+            }
             return !this.allowedMethods.contains(request.getMethod());
         }
 
