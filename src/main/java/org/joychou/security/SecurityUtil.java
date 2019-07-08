@@ -55,11 +55,23 @@ public class SecurityUtil {
     /**
      * Suitable for: TTL isn't set to 0 & Redirect is forbidden.
      *
-     * @param url the url needs to check
+     * @param url The url that needs to check.
      * @return Safe url returns true. Dangerous url returns false.
      */
     public static boolean checkSSRFWithoutRedirect(String url) {
         return !SSRFChecker.isInnerIPByUrl(url);
+    }
+
+    /**
+     * Check SSRF by host white list.
+     * This is the simplest and most effective method to fix ssrf vul.
+     *
+     * @param url The url that needs to check.
+     * @param hostWlist host whitelist
+     * @return Safe url returns true. Dangerous url returns false.
+     */
+    public static boolean checkSSRFByHostWlist(String url, String[] hostWlist) {
+        return checkURLbyEndsWith(url, hostWlist);
     }
 
 }
