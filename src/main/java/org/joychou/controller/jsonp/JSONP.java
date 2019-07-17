@@ -57,7 +57,7 @@ public class JSONP {
     /**
      * Adding callback or cback on parameter can automatically return jsonp data.
      * http://localhost:8080/jsonp/advice?callback=test
-     * http://localhost:8080/jsonp/advice?cback=test
+     * http://localhost:8080/jsonp/advice?_callback=test
      *
      * @return Only return object, AbstractJsonpResponseBodyAdvice can be used successfully.
      *         Such as JSONOjbect or JavaBean. String type cannot be used.
