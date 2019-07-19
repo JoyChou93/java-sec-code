@@ -43,6 +43,7 @@
 - [JSONP](https://github.com/JoyChou93/java-sec-code/wiki/JSONP)
 - [SQLI](https://github.com/JoyChou93/java-sec-code/wiki/SQL-Inject)
 - [SSRF](https://github.com/JoyChou93/java-sec-code/wiki/SSRF)
+- [SSTI](https://github.com/JoyChou93/java-sec-code/wiki/SSTI)
 - [URL whitelist Bypass](https://github.com/JoyChou93/java-sec-code/wiki/URL-whtielist-Bypass)
 - [XXE](https://github.com/JoyChou93/java-sec-code/wiki/XXE)
 - [Others](https://github.com/JoyChou93/java-sec-code/wiki/others)
