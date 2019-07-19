@@ -177,6 +177,13 @@
             <version>1.3.2</version>
         </dependency>
 
+        <!-- ssti -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>

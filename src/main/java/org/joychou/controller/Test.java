@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
@@ -13,8 +14,9 @@ public class Test {
 
     @RequestMapping(value = "/")
     @ResponseBody
-    private String Index(HttpServletResponse response) {
+    private String Index(HttpServletResponse response, String empId) {
 
+        System.out.println(empId);
         Cookie cookie = new Cookie("XSRF-TOKEN", "123");
         cookie.setDomain("taobao.com");
         cookie.setMaxAge(-1); // forever time
