@@ -103,6 +103,9 @@ public class SSRF {
      * Download the url file.
      * http://localhost:8080/ssrf/openStream?url=file:///etc/passwd
      *
+     * new URL(String url).openConnection()
+     * new URL(String url).openStream()
+     * new URL(String url).getContent()
      */
     @RequestMapping("/openStream")
     @ResponseBody
