@@ -38,6 +38,7 @@
 - [Actuators to RCE](https://github.com/JoyChou93/java-sec-code/wiki/Actuators-to-RCE)
 - [CORS](https://github.com/JoyChou93/java-sec-code/wiki/CORS)
 - [CSRF](https://github.com/JoyChou93/java-sec-code/wiki/CSRF)
+- [Deserialize](https://github.com/JoyChou93/java-sec-code/wiki/Deserialize)
 - [Fastjson](https://github.com/JoyChou93/java-sec-code/wiki/Fastjson)
 - [Java RMI](https://github.com/JoyChou93/java-sec-code/wiki/Java-RMI)
 - [JSONP](https://github.com/JoyChou93/java-sec-code/wiki/JSONP)
