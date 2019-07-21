@@ -10,6 +10,26 @@
 
 每个漏洞类型代码默认存在安全漏洞（除非本身不存在漏洞），相关修复代码在注释里。具体可查看每个漏洞代码和注释。
 
+## 认证
+
+### 登录
+
+[http://localhost:8080/login](http://localhost:8080/login)
+
+如果未登录，访问任何页面都会重定向到login页面。用户名和密码如下。
+
+```
+admin/admin123
+joychou/joychou123
+```
+### 登出
+
+[http://localhost:8080/logout](http://localhost:8080/logout)
+
+### 记住我
+
+Tomcat默认JSESSION会话有效时间为30分钟，所以30分钟不操作会话将过期。为了解决这一问题，引入rememberMe功能，默认过期时间为2周。
+
 ## 漏洞代码
 
 - [Actuators to RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/resources/logback-online.xml)

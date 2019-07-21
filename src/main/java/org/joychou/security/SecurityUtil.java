@@ -1,7 +1,5 @@
 package org.joychou.security;
 
-
-
 import java.net.URI;
 
 public class SecurityUtil {

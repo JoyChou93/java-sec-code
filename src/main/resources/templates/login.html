@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}" type="text/css" />
+    <script th:src="@{/js/jquery-1.11.1.min.js}"></script>
+</head>
+<body>
+<div class="login-page">
+    <div class="form">
+        <input type="text" placeholder="Username" name="username" required="required"/>
+        <input type="password" placeholder="Password" name="password" required="required"/>
+        <p><input type="checkbox" name="remember-me" />RememberMe</p>
+        <button onclick="login()">Login</button>
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+    var ctx = [[@{/}]];
+        function login() {
+            var username = $("input[name='username']").val();
+            var password = $("input[name='password']").val();
+            var remember_me =$("input[name='remember-me']").is(':checked');
+            $.ajax({
+                type: "post",
+                url: ctx + "login",
+                data: {"username": username, "password": password, "remember-me": remember_me},
+                dataType: "json",
+                success: function (r) {
+                    if (r.code == 1) {
+                        alert(r.message);
+                        location.href = ctx + 'index';
+                    } else {
+                        alert(r.message);
+                    }
+                }
+            });
+        }
+</script>
+</html>

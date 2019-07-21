@@ -1,7 +1,9 @@
 package org.joychou.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -47,15 +49,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // http.csrf().disable()  // 去掉csrf校验
         // 默认token存在session里，用CookieCsrfTokenRepository改为token存在cookie里。
         // 但存在后端多台服务器情况，session不能同步的问题，所以一般使用cookie模式。
         http.csrf()
                 .requireCsrfProtectionMatcher(csrfRequestMatcher)
                 .ignoringAntMatchers(csrfExcludeUrl)  // 不进行csrf校验的uri，多个uri使用逗号分隔
                 .csrfTokenRepository(new CookieCsrfTokenRepository());
-        // 自定义csrf校验失败的代码，默认是返回403错误页面
         http.exceptionHandling().accessDeniedHandler(new CsrfAccessDeniedHandler());
         // http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+
+        // spring security login settings
+        http.authorizeRequests()
+                .antMatchers("/css/**", "/js/**").permitAll() // permit static resources
+                .anyRequest().authenticated().and() // any request authenticated except above static resources
+                .formLogin().loginPage("/login").permitAll() // permit all to access /login page
+                .successHandler(new LoginSuccessHandler())
+                .failureHandler(new LoginFailureHandler()).and()
+                .logout().logoutUrl("/logout").permitAll().and()
+                .rememberMe(); // tomcat默认JSESSION会话有效时间为30分钟，所以30分钟不操作会话将过期。为了解决这一问题，引入rememberMe功能。
     }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .inMemoryAuthentication()
+                .withUser("joychou").password("joychou123").roles("USER").and()
+                .withUser("admin").password("admin123").roles("USER", "ADMIN");
+    }
+
 }
+
+

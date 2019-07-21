@@ -13,7 +13,7 @@ import java.io.*;
  */
 public class AntObjectInputStream extends ObjectInputStream {
 
-    private final Logger logger= LoggerFactory.getLogger(AntObjectInputStream.class);
+    protected final Logger logger= LoggerFactory.getLogger(AntObjectInputStream.class);
 
     public AntObjectInputStream(InputStream inputStream) throws IOException {
         super(inputStream);

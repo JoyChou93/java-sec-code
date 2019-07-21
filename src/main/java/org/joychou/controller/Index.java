@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,11 +19,14 @@ import java.util.Map;
 
 @Controller
 public class Index {
-    @RequestMapping("/")
+    @RequestMapping("/index")
     @ResponseBody
-    public static String index() {
+    public static String index(HttpServletRequest request) {
+        String username = request.getUserPrincipal().getName();
         Map m = new HashMap();
-        m.put("app_name", "java_vul_code");
+        m.put("username", username);
+        m.put("login", "success");
+        m.put("app_name", "java security code");
         m.put("java_version", System.getProperty("java.version"));
         m.put("fastjson_version", JSON.VERSION);
 

@@ -11,6 +11,27 @@ This project can also be called Java vulnerability code.
 
 Each vulnerability type code has a security vulnerability by default unless there is no vulnerability. The relevant fix code is in the comments or code. Specifically, you can view each vulnerability code and comments.
 
+## Authenticate
+
+### Login
+
+[http://localhost:8080/login](http://localhost:8080/login)
+
+If you are not logged in, accessing any page will redirect you to the login page. The username & password are as follows.
+
+```
+admin/admin123
+joychou/joychou123
+```
+
+### Logout
+
+[http://localhost:8080/logout](http://localhost:8080/logout)
+
+### RememberMe
+
+Tomcat's default JSESSION session is valid for 30 minutes, so a 30-minute non-operational session will expire. In order to solve this problem, the rememberMe function is introduced, and the default expiration time is 2 weeks.
+
 ## Vulnerability Code
 
 Sort by letter.

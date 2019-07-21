@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 public class CsrfAccessDeniedHandler implements AccessDeniedHandler {
 
-    private final Logger logger= LoggerFactory.getLogger(CsrfAccessDeniedHandler.class);
+    protected final Logger logger= LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,

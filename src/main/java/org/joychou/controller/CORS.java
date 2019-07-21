@@ -1,10 +1,10 @@
 package org.joychou.controller;
 
 import org.joychou.security.SecurityUtil;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.joychou.controller.jsonp.JSONP;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * @desc    https://github.com/JoyChou93/java-sec-code/wiki/CORS
  */
 
-@Controller
+@RestController
 @RequestMapping("/cors")
 public class CORS {
 
@@ -23,7 +23,6 @@ public class CORS {
     protected static String[] urlwhitelist = {"joychou.com", "joychou.me"};
 
     @RequestMapping("/vuls1")
-    @ResponseBody
     private static String vuls1(HttpServletRequest request, HttpServletResponse response) {
         // 获取Header中的Origin
         String origin = request.getHeader("origin");
@@ -33,7 +32,6 @@ public class CORS {
     }
 
     @RequestMapping("/vuls2")
-    @ResponseBody
     private static String vuls2(HttpServletResponse response) {
         // 不建议设置为*
         // 后端设置Access-Control-Allow-Origin为*的情况下，跨域的时候前端如果设置withCredentials为true会异常
@@ -43,15 +41,13 @@ public class CORS {
 
     @CrossOrigin("*")
     @RequestMapping("/vuls3")
-    @ResponseBody
     private static String vuls3(HttpServletResponse response) {
         return info;
     }
 
 
     @RequestMapping("/sec")
-    @ResponseBody
-    private static String seccode(HttpServletRequest request, HttpServletResponse response) {
+    public String seccode(HttpServletRequest request, HttpServletResponse response) {
         String origin = request.getHeader("Origin");
 
         // 如果origin不为空并且origin不在白名单内，认定为不安全。
@@ -61,7 +57,7 @@ public class CORS {
         }
         response.setHeader("Access-Control-Allow-Origin", origin);
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        return info;
+        return JSONP.getUserInfo(request);
     }
 
 

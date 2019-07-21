@@ -7,7 +7,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -19,10 +21,20 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/jsonp")
 public class JSONP {
 
-    private static String info = "{\"name\": \"JoyChou\", \"phone\": \"18200001111\"}";
     private static String[] urlwhitelist = {"joychou.com", "joychou.org"};
 
 
+    // get current login username
+    public static String getUserInfo(HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+
+        String username = principal.getName();
+
+        Map m = new HashMap();
+        m.put("Username", username);
+
+        return JSON.toJSONString(m);
+    }
     /**
      * Set the response content-type to application/javascript.
      *
@@ -30,9 +42,9 @@ public class JSONP {
      *
      */
     @RequestMapping(value = "/referer", produces = "application/javascript")
-    private static String referer(HttpServletRequest request, HttpServletResponse response) {
+    private String referer(HttpServletRequest request, HttpServletResponse response) {
         String callback = request.getParameter("callback");
-        return callback + "(" + info + ")";
+        return callback + "(" + getUserInfo(request) + ")";
     }
 
     /**
@@ -43,7 +55,7 @@ public class JSONP {
      *
      */
     @RequestMapping(value = "/emptyReferer", produces = "application/javascript")
-    private static String emptyReferer(HttpServletRequest request, HttpServletResponse response) {
+    private String emptyReferer(HttpServletRequest request, HttpServletResponse response) {
         String referer = request.getHeader("referer");
 
         if (null != referer && !SecurityUtil.checkURLbyEndsWith(referer, urlwhitelist)) {
@@ -51,7 +63,7 @@ public class JSONP {
         }
 
         String callback = request.getParameter("callback");
-        return callback + "(" + info + ")";
+        return callback + "(" + getUserInfo(request) + ")";
     }
 
     /**
@@ -63,8 +75,8 @@ public class JSONP {
      *         Such as JSONOjbect or JavaBean. String type cannot be used.
      */
     @RequestMapping(value = "/advice", produces = MediaType.APPLICATION_JSON_VALUE)
-    public JSONObject advice() {
-        return JSON.parseObject(info);
+    public JSONObject advice(HttpServletRequest request) {
+        return JSON.parseObject(getUserInfo(request));
 
     }
 
@@ -73,7 +85,7 @@ public class JSONP {
      * http://localhost:8080/jsonp/sec?callback=test
      */
     @RequestMapping(value = "/sec", produces = "application/javascript")
-    private static String safecode(HttpServletRequest request, HttpServletResponse response) {
+    private String safecode(HttpServletRequest request, HttpServletResponse response) {
         String referer = request.getHeader("referer");
 
         if (!SecurityUtil.checkURLbyEndsWith(referer, urlwhitelist)) {
@@ -81,7 +93,7 @@ public class JSONP {
         }
 
         String callback = request.getParameter("callback");
-        return callback + "(" + info + ")";
+        return callback + "(" + getUserInfo(request) + ")";
     }
 
 
