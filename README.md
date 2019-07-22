@@ -75,6 +75,14 @@ Sort by letter.
 
 ## How to run
 
+The application will use mybatis auto-injection. Please run mysql ahead of time and configure the mysql database.
+
+``` 
+spring.datasource.url=jdbc:mysql://127.0.0.1:3306/java_sec_code
+spring.datasource.username=root
+spring.datasource.password=woshishujukumima
+```
+
 - Tomcat
 - IDEA
 - JAR

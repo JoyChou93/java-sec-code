@@ -72,6 +72,13 @@ Tomcat默认JSESSION会话有效时间为30分钟，所以30分钟不操作会�
 
 ## 如何运行
 
+应用会用到mybatis自动注入，请提前运行mysql，并且进行mysql数据库配置。
+
+``` 
+spring.datasource.url=jdbc:mysql://127.0.0.1:3306/java_sec_code
+spring.datasource.username=root
+spring.datasource.password=woshishujukumima
+```
 
 ### Tomcat
 
