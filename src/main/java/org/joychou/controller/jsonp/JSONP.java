@@ -6,7 +6,6 @@ import org.joychou.security.SecurityUtil;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +29,7 @@ public class JSONP {
 
         String username = principal.getName();
 
-        Map m = new HashMap();
+        Map<String, String> m = new HashMap<>();
         m.put("Username", username);
 
         return JSON.toJSONString(m);
@@ -42,7 +41,7 @@ public class JSONP {
      *
      */
     @RequestMapping(value = "/referer", produces = "application/javascript")
-    private String referer(HttpServletRequest request, HttpServletResponse response) {
+    private String referer(HttpServletRequest request) {
         String callback = request.getParameter("callback");
         return callback + "(" + getUserInfo(request) + ")";
     }
@@ -55,7 +54,7 @@ public class JSONP {
      *
      */
     @RequestMapping(value = "/emptyReferer", produces = "application/javascript")
-    private String emptyReferer(HttpServletRequest request, HttpServletResponse response) {
+    private String emptyReferer(HttpServletRequest request) {
         String referer = request.getHeader("referer");
 
         if (null != referer && !SecurityUtil.checkURLbyEndsWith(referer, urlwhitelist)) {
@@ -85,7 +84,7 @@ public class JSONP {
      * http://localhost:8080/jsonp/sec?callback=test
      */
     @RequestMapping(value = "/sec", produces = "application/javascript")
-    private String safecode(HttpServletRequest request, HttpServletResponse response) {
+    private String safecode(HttpServletRequest request) {
         String referer = request.getHeader("referer");
 
         if (!SecurityUtil.checkURLbyEndsWith(referer, urlwhitelist)) {

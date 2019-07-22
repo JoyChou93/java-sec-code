@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Home Page</title>
+</head>
+<body>
+    <p>Hello <span th:text="${user}"></span>.</p>
+    <p>Welcome to login java-sec-code application.</p>
+    <a th:href="@{/logout}">logout</a>
+
+    <p></p>
+</body>
+</html>

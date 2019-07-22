@@ -26,7 +26,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
                 " password: " + request.getParameter("password") );
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write("{\"code\":0, \"message\":\"Login failed.\"}");
+        response.getWriter().write("{\"code\":1, \"message\":\"Login failed.\"}");
     }
 
 }

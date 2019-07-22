@@ -43,7 +43,7 @@ public class Login {
         }
 
         if (null == request.getUserPrincipal()) {
-            logger.info("User " + username + " logout successfully.");
+            logger.info("USER " + username + " LOGOUT SUCCESS.");
         } else {
             logger.info("User " + username + " logout failed. Please try again.");
         }
@@ -51,8 +51,4 @@ public class Login {
         return "redirect:/login?logout";
     }
 
-    @RequestMapping("/")
-    public String redirect() {
-        return "redirect:/index";
-    }
 }

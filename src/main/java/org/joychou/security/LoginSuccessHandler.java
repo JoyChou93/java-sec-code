@@ -21,10 +21,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                                         HttpServletResponse response, Authentication authentication)
                                         throws ServletException, IOException {
 
-        logger.info("USER : " + authentication.getName()+ " LOGIN success!");
+        logger.info("USER " + authentication.getName()+ " LOGIN SUCCESS.");
 
         // google ajax and sendRedirect
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write("{\"code\":1,\"message\":\"Login success!\"}");
+        response.getWriter().write("{\"code\":0, \"message\":\"Login success\"}");
     }
 }
