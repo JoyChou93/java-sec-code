@@ -9,6 +9,11 @@
     <version>1.0.0</version>
     <packaging>war</packaging>
 
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source> <!-- mvn clean package-->
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -1,9 +1,15 @@
 package org.joychou.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 
 public class SecurityUtil {
 
+    protected static Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
     /**
      * 通过endsWith判断URL是否合法
      *
@@ -72,4 +78,32 @@ public class SecurityUtil {
         return checkURLbyEndsWith(url, hostWlist);
     }
 
+    /**
+     * Filter file path to prevent path traversal vulns.
+     *
+     * @param filepath file path
+     * @return illegal file path return null
+     */
+    public static String pathFilter(String filepath) {
+        String temp = filepath;
+
+        // use while to sovle multi urlencode
+        while (temp.indexOf('%') != -1) {
+            try {
+                temp = URLDecoder.decode(temp, "utf-8");
+            } catch (UnsupportedEncodingException e) {
+                logger.info("Unsupported encoding exception: " + filepath);
+                return null;
+            } catch (Exception e) {
+                logger.info(e.toString());
+                return null;
+            }
+        }
+
+        if (temp.indexOf("..") != -1 || temp.charAt(0) == '/') {
+            return null;
+        }
+
+        return filepath;
+    }
 }

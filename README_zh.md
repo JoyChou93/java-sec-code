@@ -72,7 +72,7 @@ Tomcat默认JSESSION会话有效时间为30分钟，所以30分钟不操作会�
 
 ## 如何运行
 
-应用会用到mybatis自动注入，请提前运行mysql，并且进行mysql数据库配置。
+应用会用到mybatis自动注入，请提前运行mysql服务，并且配置mysql服务的数据库名称和用户名密码。
 
 ``` 
 spring.datasource.url=jdbc:mysql://127.0.0.1:3306/java_sec_code
@@ -135,6 +135,10 @@ Viarus
 mvn clean package -DskipTests 
 java -jar 打包后的jar包路径
 ```
+
+## 贡献者
+
+核心开发者： [JoyChou](https://github.com/JoyChou93).其他开发者：[lightless](https://github.com/lightless233),  [Anemone95](https://github.com/Anemone95)。欢迎各位提交PR。
 
 ## 捐赠
 

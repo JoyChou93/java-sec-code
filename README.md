@@ -75,7 +75,7 @@ Sort by letter.
 
 ## How to run
 
-The application will use mybatis auto-injection. Please run mysql ahead of time and configure the mysql database.
+The application will use mybatis auto-injection. Please run mysql server ahead of time and configure the mysql server database's name and username/password.
 
 ``` 
 spring.datasource.url=jdbc:mysql://127.0.0.1:3306/java_sec_code
@@ -153,6 +153,10 @@ Build package and run.
 mvn clean package -DskipTests 
 java -jar target/java-sec-code-1.0.0.jar
 ```
+## Contributors
+
+Core developers : [JoyChou](https://github.com/JoyChou93).
+Other developers: [lightless](https://github.com/lightless233),  [Anemone95](https://github.com/Anemone95). 
 
 
 ## Donate

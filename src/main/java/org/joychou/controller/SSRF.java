@@ -31,7 +31,6 @@ import java.net.HttpURLConnection;
  * @desc    Java ssrf vuls code.
  */
 
-
 @Controller
 @RequestMapping("/ssrf")
 public class SSRF {
