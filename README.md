@@ -71,7 +71,8 @@ spring.datasource.password=woshishujukumima
 
 ### IDEA
 
-Click `run` button.
+- `git clone https://github.com/JoyChou93/java-sec-code`
+- Open in IDEA and click `run` button.
 
 Example:
 
@@ -87,7 +88,7 @@ Viarus
 
 ### Tomcat
 
-
+- `git clone https://github.com/JoyChou93/java-sec-code` & `cd java-sec-code`
 - Build war package by `mvn clean package`.
 - Copy war package to tomcat webapps directory.
 - Start tomcat application.
@@ -119,6 +120,8 @@ Change `war` to `jar` in `pom.xml`.
 Build package and run.
 
 ```
+git clone https://github.com/JoyChou93/java-sec-code
+cd java-sec-code
 mvn clean package -DskipTests 
 java -jar target/java-sec-code-1.0.0.jar
 ```

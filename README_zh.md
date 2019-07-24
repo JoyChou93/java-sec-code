@@ -70,7 +70,8 @@ spring.datasource.password=woshishujukumima
 
 ### IDEA
 
-直接点击run按钮即可运行。
+- `git clone https://github.com/JoyChou93/java-sec-code`
+- 在IDEA中打开，直接点击run按钮即可运行。
 
 例子：
 
@@ -86,9 +87,10 @@ Viarus
 
 ### Tomcat
 
-1. 生成war包 `mvn clean package`。
-2. 将target目录的war包，cp到Tomcat的webapps目录。
-3. 重启Tomcat应用。
+1. `git clone https://github.com/JoyChou93/java-sec-code & cd java-sec-code`
+2. 生成war包 `mvn clean package`
+3. 将target目录的war包，cp到Tomcat的webapps目录
+4. 重启Tomcat应用
 
 
 例子：
@@ -119,6 +121,8 @@ Viarus
 再打包运行即可。
 
 ```
+git clone https://github.com/JoyChou93/java-sec-code
+cd java-sec-code
 mvn clean package -DskipTests 
 java -jar 打包后的jar包路径
 ```
