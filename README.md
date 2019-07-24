@@ -48,7 +48,7 @@ Sort by letter.
 - [JSONP](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/jsonp/JSONP.java)
 - [PathTraversal](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/PathTraversal.java)
 - [RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Rce.java)
-- [SPEL](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SPEL.java)
+- [SpEL](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SpEL.java)
 - [SQL Injection](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SQLI.java)
 - [SSRF](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SSRF.java)
 - [SSTI](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SSTI.java)
@@ -84,26 +84,29 @@ spring.datasource.username=root
 spring.datasource.password=woshishujukumima
 ```
 
-- Tomcat
 - IDEA
+- Tomcat
 - JAR
+
+
+### IDEA
+
+Click `run` button.
+
+Example:
+
+```
+http://localhost:8080/rce/exec?cmd=whoami
+```
+
+return:
+
+```
+Viarus
+```
 
 ### Tomcat
 
-- Exclude tomcat in pom.xml.
-
-    ```xml
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-        <exclusions>
-            <exclusion>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-tomcat</artifactId>
-            </exclusion>
-        </exclusions>
-    </dependency>
-    ```
 
 - Build war package by `mvn clean package`.
 - Copy war package to tomcat webapps directory.
@@ -121,21 +124,6 @@ return:
 Viarus
 ```
 
-### IDEA
-
-Click `run` button.
-
-Example:
-
-```
-http://localhost:8080/rce/exec?cmd=whoami
-```
-
-return:
-
-```
-Viarus
-```
 
 ### JAR
 
@@ -154,6 +142,7 @@ Build package and run.
 mvn clean package -DskipTests 
 java -jar target/java-sec-code-1.0.0.jar
 ```
+
 ## Contributors
 
 Core developers : [JoyChou](https://github.com/JoyChou93).

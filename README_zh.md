@@ -10,25 +10,6 @@
 
 每个漏洞类型代码默认存在安全漏洞（除非本身不存在漏洞），相关修复代码在注释里。具体可查看每个漏洞代码和注释。
 
-## 认证
-
-### 登录
-
-[http://localhost:8080/login](http://localhost:8080/login)
-
-如果未登录，访问任何页面都会重定向到login页面。用户名和密码如下。
-
-```
-admin/admin123
-joychou/joychou123
-```
-### 登出
-
-[http://localhost:8080/logout](http://localhost:8080/logout)
-
-### 记住我
-
-Tomcat默认JSESSION会话有效时间为30分钟，所以30分钟不操作会话将过期。为了解决这一问题，引入rememberMe功能，默认过期时间为2周。
 
 ## 漏洞代码
 
@@ -44,7 +25,7 @@ Tomcat默认JSESSION会话有效时间为30分钟，所以30分钟不操作会�
 - [JSONP](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/jsonp/JSONP.java)
 - [PathTraversal](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/PathTraversal.java)
 - [RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Rce.java)
-- [SPEL](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SPEL.java)
+- [SpEL](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SpEL.java)
 - [SQL Injection](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SQLI.java)
 - [SSRF](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SSRF.java)
 - [SSTI](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SSTI.java)
@@ -81,6 +62,28 @@ spring.datasource.username=root
 spring.datasource.password=woshishujukumima
 ```
 
+- IDEA
+- Tomcat
+- JAR
+
+
+
+### IDEA
+
+直接点击run按钮即可运行。
+
+例子：
+
+```
+http://localhost:8080/rce/exec?cmd=whoami
+```
+ 
+返回：
+
+``` 
+Viarus
+```
+
 ### Tomcat
 
 1. 生成war包 `mvn clean package`。
@@ -99,23 +102,6 @@ http://localhost:8080/java-sec-code-1.0.0/rce/exec?cmd=whoami
 ``` 
 Viarus
 ```
-
-### IDEA
-
-直接点击run按钮即可运行。
-
-例子：
-
-```
-http://localhost:8080/rce/exec?cmd=whoami
-```
- 
-返回：
-
-``` 
-Viarus
-```
-
 
 
 ### JAR包
@@ -136,6 +122,27 @@ Viarus
 mvn clean package -DskipTests 
 java -jar 打包后的jar包路径
 ```
+
+## 认证
+
+### 登录
+
+[http://localhost:8080/login](http://localhost:8080/login)
+
+如果未登录，访问任何页面都会重定向到login页面。用户名和密码如下。
+
+```
+admin/admin123
+joychou/joychou123
+```
+### 登出
+
+[http://localhost:8080/logout](http://localhost:8080/logout)
+
+### 记住我
+
+Tomcat默认JSESSION会话有效时间为30分钟，所以30分钟不操作会话将过期。为了解决这一问题，引入rememberMe功能，默认过期时间为2周。
+
 
 ## 贡献者
 

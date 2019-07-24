@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import org.apache.commons.lang.StringUtils;
+import org.joychou.config.WebConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
@@ -24,18 +24,6 @@ import org.springframework.util.PathMatcher;
  */
 @WebFilter(filterName = "referFilter", urlPatterns = "/*")
 public class HttpFilter implements Filter {
-
-    @Value("${joychou.security.referer.enabled}")
-    private Boolean referSecEnabled = false;
-
-    @Value("${joychou.security.jsonp.callback}")
-    private String[] callbacks;
-
-    @Value("${joychou.security.referer.hostwhitelist}")
-    private String[] referWhitelist;
-
-    @Value("${joychou.security.referer.uri}")
-    private String[] referUris;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -54,7 +42,7 @@ public class HttpFilter implements Filter {
         String refer = request.getHeader("referer");
         PathMatcher matcher = new AntPathMatcher();
         boolean isMatch = false;
-        for (String uri: referUris) {
+        for (String uri: WebConfig.getReferUris()) {
             if ( matcher.match (uri, request.getRequestURI()) ) {
                 isMatch = true;
                 break;
@@ -62,12 +50,12 @@ public class HttpFilter implements Filter {
         }
 
         if (isMatch) {
-            if (referSecEnabled) {
+            if (WebConfig.getReferSecEnabled()) {
                 // Check referer for all GET requests with callback parameters.
-                for (String callback: callbacks) {
+                for (String callback: WebConfig.getCallbacks()) {
                     if (request.getMethod().equals("GET") && StringUtils.isNotBlank(request.getParameter(callback)) ){
                         // If the check of referer fails, a 403 forbidden error page will be returned.
-                        if (!SecurityUtil.checkURLbyEndsWith(refer, referWhitelist)){
+                        if (!SecurityUtil.checkURLbyEndsWith(refer, WebConfig.getReferWhitelist())){
                             logger.info("[-] URL: " + request.getRequestURL() + "?" + request.getQueryString() + "\t" + "Referer: " + refer);
                             response.sendRedirect("https://test.joychou.org/error3.html");
                             return;
