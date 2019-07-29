@@ -54,7 +54,7 @@
 
 ## 如何运行
 
-应用会用到mybatis自动注入，请提前运行mysql服务，并且配置mysql服务的数据库名称和用户名密码。
+应用会用到mybatis自动注入，请提前运行mysql服务，并且配置mysql服务的数据库名称和用户名密码(除非是Docker环境)。
 
 ``` 
 spring.datasource.url=jdbc:mysql://127.0.0.1:3306/java_sec_code
@@ -62,11 +62,22 @@ spring.datasource.username=root
 spring.datasource.password=woshishujukumima
 ```
 
+- Docker
 - IDEA
 - Tomcat
 - JAR
 
+### Docker
 
+``` 
+docker-compose up
+```
+
+Docker环境：
+
+- Java 1.8.0_102
+- Mysql 8.0.17
+- Tomcat 8.5.11
 
 ### IDEA
 

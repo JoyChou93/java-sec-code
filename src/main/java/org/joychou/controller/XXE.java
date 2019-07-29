@@ -12,6 +12,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.XMLReader;
 import java.io.*;
 import org.xml.sax.InputSource;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
@@ -19,7 +20,7 @@ import javax.xml.parsers.SAXParser;
 import org.xml.sax.helpers.DefaultHandler;
 import org.apache.commons.digester3.Digester;
 import org.jdom2.input.SAXBuilder;
-
+import org.joychou.utils.Tools;
 
 /**
  * Java xxe vul and safe code.
@@ -33,9 +34,9 @@ public class XXE {
 
     @RequestMapping(value = "/xmlReader", method = RequestMethod.POST)
     @ResponseBody
-    public  String xxe_xmlReader(HttpServletRequest request) {
+    public String xxe_xmlReader(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
             xmlReader.parse( new InputSource(new StringReader(xml_con)) );  // parse xml
@@ -51,7 +52,7 @@ public class XXE {
     @ResponseBody
     public  String xxe_xmlReader_fix(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
@@ -74,7 +75,7 @@ public class XXE {
     @ResponseBody
     public  String xxe_SAXBuilder(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             SAXBuilder builder = new SAXBuilder();
@@ -90,7 +91,7 @@ public class XXE {
     @ResponseBody
     public  String xxe_SAXBuilder_fix(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             SAXBuilder builder = new SAXBuilder();
@@ -109,7 +110,7 @@ public class XXE {
     @ResponseBody
     public  String xxe_SAXReader(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             SAXReader reader = new SAXReader();
@@ -126,7 +127,7 @@ public class XXE {
     @ResponseBody
     public  String xxe_SAXReader_fix(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             SAXReader reader = new SAXReader();
@@ -146,7 +147,7 @@ public class XXE {
     @ResponseBody
     public String xxe_SAXParser(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -165,7 +166,7 @@ public class XXE {
     @ResponseBody
     public String xxe_SAXParser_fix(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -186,7 +187,7 @@ public class XXE {
     @ResponseBody
     public String xxe_Digester(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             Digester digester = new Digester();
@@ -203,7 +204,7 @@ public class XXE {
     @ResponseBody
     public String xxe_Digester_fix(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             Digester digester = new Digester();
@@ -225,7 +226,7 @@ public class XXE {
     @ResponseBody
     public String xxeDocumentBuilderReturn(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -259,7 +260,7 @@ public class XXE {
     @ResponseBody
     public String DocumentBuilder(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -296,7 +297,7 @@ public class XXE {
     @ResponseBody
     public String xxe_DocumentBuilder_fix(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -321,7 +322,7 @@ public class XXE {
     @ResponseBody
     public String xxe_xinclude_DocumentBuilder(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -358,7 +359,7 @@ public class XXE {
     @ResponseBody
     public String xxe_xinclude_DocumentBuilder_fix(HttpServletRequest request) {
         try {
-            String xml_con = getBody(request);
+            String xml_con = Tools.getBody(request);
             System.out.println(xml_con);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -393,22 +394,5 @@ public class XXE {
         }
     }
 
-    // 获取body数据
-    private String getBody(HttpServletRequest request) throws IOException {
-        InputStream in = request.getInputStream();
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        StringBuffer sb = new StringBuffer("");
-        String temp;
-        while ((temp = br.readLine()) != null) {
-            sb.append(temp);
-        }
-        if (in != null) {
-            in.close();
-        }
-        if (br != null) {
-            br.close();
-        }
-        return sb.toString();
-    }
 
 }

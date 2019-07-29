@@ -2,4 +2,7 @@
 .DS_Store
 target/
 other-vuls/
+docker/
+poc/
+src/main/java/org/joychou/test/
 *.iml

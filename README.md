@@ -56,7 +56,7 @@ Sort by letter.
 
 ## How to run
 
-The application will use mybatis auto-injection. Please run mysql server ahead of time and configure the mysql server database's name and username/password.
+The application will use mybatis auto-injection. Please run mysql server ahead of time and configure the mysql server database's name and username/password except docker environment.
 
 ``` 
 spring.datasource.url=jdbc:mysql://127.0.0.1:3306/java_sec_code
@@ -64,9 +64,24 @@ spring.datasource.username=root
 spring.datasource.password=woshishujukumima
 ```
 
+- Docker
 - IDEA
 - Tomcat
 - JAR
+
+### Docker
+
+
+
+``` 
+docker-compose up
+```
+
+Docker's environment:
+
+- Java 1.8.0_102
+- Mysql 8.0.17
+- Tomcat 8.5.11
 
 
 ### IDEA

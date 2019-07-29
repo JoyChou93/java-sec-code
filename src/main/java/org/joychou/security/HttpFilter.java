@@ -56,7 +56,8 @@ public class HttpFilter implements Filter {
                     if (request.getMethod().equals("GET") && StringUtils.isNotBlank(request.getParameter(callback)) ){
                         // If the check of referer fails, a 403 forbidden error page will be returned.
                         if (!SecurityUtil.checkURLbyEndsWith(refer, WebConfig.getReferWhitelist())){
-                            logger.info("[-] URL: " + request.getRequestURL() + "?" + request.getQueryString() + "\t" + "Referer: " + refer);
+                            logger.info("[-] URL: " + request.getRequestURL() + "?" + request.getQueryString() + "\t"
+                                    + "Referer: " + refer);
                             response.sendRedirect("https://test.joychou.org/error3.html");
                             return;
                         }

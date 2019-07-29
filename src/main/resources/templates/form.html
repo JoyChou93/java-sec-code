@@ -1,18 +1,27 @@
 
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <script th:src="@{https://code.jquery.com/jquery-3.4.1.min.js}"></script>
+</head>
+
+
 
 <body>
 
 
 <div>
-    <form name="f" th:action="@{/csrf/post}" method="post">
+    <!-- th:action with Spring 3.2+ and Thymeleaf 2.1+ can automatically force Thymeleaf to include the CSRF token as a hidden field -->
+    <!-- <form name="f" th:action="@{/csrf/post}" method="post"> -->
+    <form name="f" action="/csrf/post" method="post">
         <input type="text" name="input" />
         <input type="submit" value="Submit" />
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     </form>
 </div>
 
 
 </body>
+
 
 
 

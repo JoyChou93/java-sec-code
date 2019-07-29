@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.joychou.security.SecurityUtil;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -95,6 +96,16 @@ public class JSONP {
         return callback + "(" + getUserInfo(request) + ")";
     }
 
+
+    /**
+     * http://localhost:8080/jsonp/getToken
+     * @return token {"token":"115329a7-3a85-4c31-9c02-02fa1bd1fdf8","parameterName":"_csrf","headerName":"X-XSRF-TOKEN"}
+     *
+     */
+    @RequestMapping("/getToken")
+    public CsrfToken csrf(CsrfToken token) {
+        return token;
+    }
 
 
 }
