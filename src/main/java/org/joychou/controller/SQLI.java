@@ -21,7 +21,7 @@ import java.sql.*;
 public class SQLI {
 
     private static String driver = "com.mysql.jdbc.Driver";
-    private static String url = "jdbc:mysql://localhost:3306/java_sec_code";
+    private static String url = "jdbc:mysql://127.0.0.1:3306/java_sec_code";
     private static String user = "root";
     private static String password = "woshishujukumima";
 

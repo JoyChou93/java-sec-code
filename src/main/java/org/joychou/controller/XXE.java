@@ -2,7 +2,6 @@ package org.joychou.controller;
 
 
 import org.dom4j.io.SAXReader;
-import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import org.w3c.dom.Document;
@@ -28,12 +27,11 @@ import org.joychou.utils.Tools;
  * @author JoyChou @2017-12-22
  */
 
-@Controller
+@RestController
 @RequestMapping("/xxe")
 public class XXE {
 
     @RequestMapping(value = "/xmlReader", method = RequestMethod.POST)
-    @ResponseBody
     public String xxe_xmlReader(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -49,7 +47,6 @@ public class XXE {
 
 
     @RequestMapping(value = "/xmlReader_fix", method = RequestMethod.POST)
-    @ResponseBody
     public  String xxe_xmlReader_fix(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -72,7 +69,6 @@ public class XXE {
 
 
     @RequestMapping(value = "/SAXBuilder", method = RequestMethod.POST)
-    @ResponseBody
     public  String xxe_SAXBuilder(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -88,7 +84,6 @@ public class XXE {
     }
 
     @RequestMapping(value = "/SAXBuilder_fix", method = RequestMethod.POST)
-    @ResponseBody
     public  String xxe_SAXBuilder_fix(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -107,7 +102,6 @@ public class XXE {
     }
 
     @RequestMapping(value = "/SAXReader", method = RequestMethod.POST)
-    @ResponseBody
     public  String xxe_SAXReader(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -124,7 +118,6 @@ public class XXE {
     }
 
     @RequestMapping(value = "/SAXReader_fix", method = RequestMethod.POST)
-    @ResponseBody
     public  String xxe_SAXReader_fix(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -144,7 +137,6 @@ public class XXE {
     }
 
     @RequestMapping(value = "/SAXParser", method = RequestMethod.POST)
-    @ResponseBody
     public String xxe_SAXParser(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -163,7 +155,6 @@ public class XXE {
 
 
     @RequestMapping(value = "/SAXParser_fix", method = RequestMethod.POST)
-    @ResponseBody
     public String xxe_SAXParser_fix(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -184,7 +175,6 @@ public class XXE {
 
 
     @RequestMapping(value = "/Digester", method = RequestMethod.POST)
-    @ResponseBody
     public String xxe_Digester(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -201,7 +191,6 @@ public class XXE {
     }
 
     @RequestMapping(value = "/Digester_fix", method = RequestMethod.POST)
-    @ResponseBody
     public String xxe_Digester_fix(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -223,7 +212,6 @@ public class XXE {
 
     // 有回显的XXE
     @RequestMapping(value = "/DocumentBuilder_return", method = RequestMethod.POST)
-    @ResponseBody
     public String xxeDocumentBuilderReturn(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -257,7 +245,6 @@ public class XXE {
 
 
     @RequestMapping(value = "/DocumentBuilder", method = RequestMethod.POST)
-    @ResponseBody
     public String DocumentBuilder(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -294,7 +281,6 @@ public class XXE {
 
 
     @RequestMapping(value = "/DocumentBuilder_fix", method = RequestMethod.POST)
-    @ResponseBody
     public String xxe_DocumentBuilder_fix(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -319,7 +305,6 @@ public class XXE {
 
 
     @RequestMapping(value = "/DocumentBuilder_xinclude", method = RequestMethod.POST)
-    @ResponseBody
     public String xxe_xinclude_DocumentBuilder(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -356,7 +341,6 @@ public class XXE {
 
 
     @RequestMapping(value = "/DocumentBuilder_xinclude_fix", method = RequestMethod.POST)
-    @ResponseBody
     public String xxe_xinclude_DocumentBuilder_fix(HttpServletRequest request) {
         try {
             String xml_con = Tools.getBody(request);
@@ -394,5 +378,41 @@ public class XXE {
         }
     }
 
+
+    @PostMapping("/XMLReader/vul")
+    public String XMLReaderVul(HttpServletRequest request) {
+        try {
+            String xml_con = Tools.getBody(request);
+            System.out.println(xml_con);
+            SAXParserFactory spf = SAXParserFactory.newInstance();
+            SAXParser saxParser = spf.newSAXParser();
+            XMLReader xmlReader = saxParser.getXMLReader();
+            xmlReader.parse( new InputSource(new StringReader(xml_con)) );
+            return "test";
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return "except";
+        }
+    }
+
+
+    @PostMapping("/XMLReader/fixed")
+    public String XMLReaderSec(HttpServletRequest request) {
+        try {
+            String xml_con = Tools.getBody(request);
+            System.out.println(xml_con);
+            SAXParserFactory spf = SAXParserFactory.newInstance();
+            SAXParser saxParser = spf.newSAXParser();
+            XMLReader xmlReader = saxParser.getXMLReader();
+            xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            xmlReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            xmlReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            xmlReader.parse( new InputSource(new StringReader(xml_con)) );
+            return "test";
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return "except";
+        }
+    }
 
 }

@@ -10,6 +10,8 @@
 
 每个漏洞类型代码默认存在安全漏洞（除非本身不存在漏洞），相关修复代码在注释里。具体可查看每个漏洞代码和注释。
 
+[在线Demo](http://118.25.15.216:8080)
+
 
 ## 漏洞代码
 
@@ -70,8 +72,17 @@ spring.datasource.password=woshishujukumima
 
 ### Docker
 
+开启应用：
+
 ``` 
+docker-compose pull
 docker-compose up
+```
+
+关闭应用：
+
+```
+docker-compose down
 ```
 
 Docker环境：

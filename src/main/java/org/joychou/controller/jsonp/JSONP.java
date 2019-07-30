@@ -2,10 +2,13 @@ package org.joychou.controller.jsonp;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+
 import org.joychou.security.SecurityUtil;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.HashMap;
@@ -35,11 +38,11 @@ public class JSONP {
 
         return JSON.toJSONString(m);
     }
+
     /**
      * Set the response content-type to application/javascript.
-     *
+     * <p>
      * http://localhost:8080/jsonp/referer?callback=test
-     *
      */
     @RequestMapping(value = "/referer", produces = "application/javascript")
     private String referer(HttpServletRequest request) {
@@ -50,9 +53,8 @@ public class JSONP {
     /**
      * Direct access does not check Referer, non-direct access check referer.
      * Developer like to do jsonp testing like this.
-     *
+     * <p>
      * http://localhost:8080/jsonp/emptyReferer?callback=test
-     *
      */
     @RequestMapping(value = "/emptyReferer", produces = "application/javascript")
     private String emptyReferer(HttpServletRequest request) {
@@ -72,7 +74,7 @@ public class JSONP {
      * http://localhost:8080/jsonp/advice?_callback=test
      *
      * @return Only return object, AbstractJsonpResponseBodyAdvice can be used successfully.
-     *         Such as JSONOjbect or JavaBean. String type cannot be used.
+     * Such as JSONOjbect or JavaBean. String type cannot be used.
      */
     @RequestMapping(value = "/advice", produces = MediaType.APPLICATION_JSON_VALUE)
     public JSONObject advice(HttpServletRequest request) {
@@ -99,13 +101,12 @@ public class JSONP {
 
     /**
      * http://localhost:8080/jsonp/getToken
-     * @return token {"token":"115329a7-3a85-4c31-9c02-02fa1bd1fdf8","parameterName":"_csrf","headerName":"X-XSRF-TOKEN"}
      *
+     * @return token {"token":"115329a7-3a85-4c31-9c02-02fa1bd1fdf8","parameterName":"_csrf","headerName":"X-XSRF-TOKEN"}
      */
     @RequestMapping("/getToken")
     public CsrfToken csrf(CsrfToken token) {
         return token;
     }
-
 
 }
