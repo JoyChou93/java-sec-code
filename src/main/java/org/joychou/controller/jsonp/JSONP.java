@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONObject;
 import org.joychou.security.SecurityUtil;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;

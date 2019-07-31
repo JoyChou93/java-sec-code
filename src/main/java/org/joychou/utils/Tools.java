@@ -1,29 +1,20 @@
 package org.joychou.utils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class Tools {
 
-    // get body
-    public static String getBody(HttpServletRequest request) throws IOException {
+    // Get request body.
+    public static String getRequestBody(HttpServletRequest request) throws IOException {
         InputStream in = request.getInputStream();
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        StringBuffer sb = new StringBuffer("");
-        String temp;
-        while ((temp = br.readLine()) != null) {
-            sb.append(temp);
-        }
-        if (in != null) {
-            in.close();
-        }
-        if (br != null) {
-            br.close();
-        }
-        return sb.toString();
+        return convertStreamToString(in);
     }
 
+    // https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
+    public static String convertStreamToString(java.io.InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
 }

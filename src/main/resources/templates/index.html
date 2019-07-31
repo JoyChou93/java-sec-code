@@ -7,6 +7,15 @@
 <body>
     <p>Hello <span th:text="${user}"></span>.</p>
     <p>Welcome to login java-sec-code application. <a th:href="@{/appInfo}">Application Infomation</a></p>
+    <p>
+        <a th:href="@{/codeinject?filepath=/tmp;pwd}">CmdInject</a>&nbsp;&nbsp;
+        <a th:href="@{/jsonp/getToken?_callback=test}">JSONP</a>&nbsp;&nbsp;
+        <a th:href="@{/path_traversal/vul?filepath=../../../../../etc/passwd}">PathTraversal</a>&nbsp;&nbsp;
+        <a th:href="@{/sqli/jdbc/vul?username=joychou}">SqlInject</a>&nbsp;&nbsp;
+        <a th:href="@{/ssrf/urlConnection?url=file:///etc/passwd}">SSRF</a>&nbsp;&nbsp;
+        <a th:href="@{/rce/exec?cmd=whoami}">RCE</a>
+    </p>
+    <p>...</p>
     <a th:href="@{/logout}">logout</a>
 </body>
 </html>

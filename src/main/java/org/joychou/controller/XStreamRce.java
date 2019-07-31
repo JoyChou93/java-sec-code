@@ -22,7 +22,7 @@ public class XStreamRce {
      */
     @PostMapping("/xstream")
     public String parseXml(HttpServletRequest request) throws Exception{
-        String xml = Tools.getBody(request);
+        String xml = Tools.getRequestBody(request);
         XStream xstream = new XStream(new DomDriver());
         xstream.fromXML(xml);
         return "xstream";
