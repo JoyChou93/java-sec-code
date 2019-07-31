@@ -22,6 +22,7 @@ joychou/joychou123
 ## 漏洞代码
 
 - [Actuators to RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/resources/logback-online.xml)
+- [CommandInject](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/CommandInject.java)
 - [CORS](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/CORS.java)
 - [CRLF Injection](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/CRLFInjection.java)
 - [CSRF](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/security/WebSecurityConfig.java)
