@@ -10,10 +10,19 @@
 
 每个漏洞类型代码默认存在安全漏洞（除非本身不存在漏洞），相关修复代码在注释里。具体可查看每个漏洞代码和注释。
 
+[在线Demo](http://118.25.15.216:8080)
+
+登录用户名密码：
+
+```
+admin/admin123
+joychou/joychou123
+```
 
 ## 漏洞代码
 
 - [Actuators to RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/resources/logback-online.xml)
+- [CommandInject](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/CommandInject.java)
 - [CORS](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/CORS.java)
 - [CRLF Injection](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/CRLFInjection.java)
 - [CSRF](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/security/WebSecurityConfig.java)
@@ -32,6 +41,7 @@
 - [URL Redirect](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/URLRedirect.java)
 - [URL whitelist Bypass](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/URLWhiteList.java)
 - [XSS](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XSS.java)
+- [XStream](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XStreamRce.java)
 - [XXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XXE.java)
 
 
@@ -54,7 +64,7 @@
 
 ## 如何运行
 
-应用会用到mybatis自动注入，请提前运行mysql服务，并且配置mysql服务的数据库名称和用户名密码。
+应用会用到mybatis自动注入，请提前运行mysql服务，并且配置mysql服务的数据库名称和用户名密码(除非是Docker环境)。
 
 ``` 
 spring.datasource.url=jdbc:mysql://127.0.0.1:3306/java_sec_code
@@ -62,11 +72,31 @@ spring.datasource.username=root
 spring.datasource.password=woshishujukumima
 ```
 
+- Docker
 - IDEA
 - Tomcat
 - JAR
 
+### Docker
 
+开启应用：
+
+``` 
+docker-compose pull
+docker-compose up
+```
+
+关闭应用：
+
+```
+docker-compose down
+```
+
+Docker环境：
+
+- Java 1.8.0_102
+- Mysql 8.0.17
+- Tomcat 8.5.11
 
 ### IDEA
 

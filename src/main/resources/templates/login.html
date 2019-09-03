@@ -1,41 +1,64 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8" />
     <title>Login</title>
+    <meta charset="UTF-8" />
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_headerName" th:content="${_csrf.headerName}" />
+    <meta name="_csrf_parameterName" th:content="${_csrf.parameterName}" />
     <link rel="stylesheet" th:href="@{/css/login.css}" type="text/css" />
-    <script th:src="@{/js/jquery-1.11.1.min.js}"></script>
+    <script th:src="@{https://code.jquery.com/jquery-3.4.1.min.js}"></script>
+
+    <script>
+        window.csrfToken = {
+            "tokenName" : $("meta[name='_csrf_headerName']").attr("content"),
+            "tokenValue" : $("meta[name='_csrf']").attr("content")
+        };
+        console.log(csrfToken.tokenName);
+        console.log(csrfToken.tokenValue);
+
+    </script>
+
 </head>
+
+
 <body>
 <div class="login-page">
     <div class="form">
         <input type="text" placeholder="Username" name="username" required="required"/>
         <input type="password" placeholder="Password" name="password" required="required"/>
-        <p><input type="checkbox" name="remember-me" />RememberMe</p>
+        <p><input type="checkbox" name="remember-me" checked="checked"/>RememberMe</p>
         <button onclick="login()">Login</button>
     </div>
 </div>
 </body>
 <script th:inline="javascript">
     var ctx = [[@{/}]];
-        function login() {
-            var username = $("input[name='username']").val();
-            var password = $("input[name='password']").val();
-            var remember_me =$("input[name='remember-me']").is(':checked');
-            $.ajax({
-                type: "post",
-                url: ctx + "login",
-                data: {"username": username, "password": password, "remember-me": remember_me},
-                dataType: "json",
-                success: function (r) {
-                    if (r.code == 0) {
-                        // alert(r.message);
-                        location.href = ctx + 'index';
-                    } else {
-                        alert(r.message);
-                    }
+    var tokenHeader = {};
+    tokenHeader[csrfToken.tokenName] = csrfToken.tokenValue;  // header must be a object
+
+    function login() {
+        var username = $("input[name='username']").val();
+        var password = $("input[name='password']").val();
+        var remember_me =$("input[name='remember-me']").is(':checked');
+        $.ajax({
+            type: "post",
+            url: ctx + "login",
+            // headers: {csrfToken.tokenName: csrfToken.tokenValue}  not ok
+            // headers: { "X-XSRF-TOKEN" : csrfToken}   ok
+            headers: tokenHeader,
+            data: { "username": username, "password": password, "remember-me": remember_me},
+            dataType: "json",
+            success: function (r) {
+                if (r.code == 0) {
+                    // alert(r.message);
+                    location.href = ctx + 'index';
+                } else {
+                    alert(r.message);
                 }
-            });
-        }
+            }
+        });
+    }
 </script>
 </html>

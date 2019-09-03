@@ -1,0 +1,13 @@
+version : '2'
+services:
+    jsc:
+        image: joychou/jsc:latest
+        ports:
+            - "8080:8080"
+        links:
+            - j_mysql
+
+    j_mysql:
+        image: joychou/jsc_mysql:latest
+        ports:
+            - "3306:3306"

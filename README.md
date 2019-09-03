@@ -11,12 +11,22 @@ This project can also be called Java vulnerability code.
 
 Each vulnerability type code has a security vulnerability by default unless there is no vulnerability. The relevant fix code is in the comments or code. Specifically, you can view each vulnerability code and comments.
 
+[Online demo](http://118.25.15.216:8080)
+
+Login username & password:
+
+```
+admin/admin123
+joychou/joychou123
+```
+
 
 ## Vulnerability Code
 
 Sort by letter.
 
 - [Actuators to RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/resources/logback-online.xml)
+- [CommandInject](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/CommandInject.java)
 - [CORS](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/CORS.java)
 - [CRLF Injection](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/CRLFInjection.java)
 - [CSRF](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/security/WebSecurityConfig.java)
@@ -35,6 +45,7 @@ Sort by letter.
 - [URL Redirect](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/URLRedirect.java)
 - [URL whitelist Bypass](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/URLWhiteList.java)
 - [XSS](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XSS.java)
+- [XStream](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XStreamRce.java)
 - [XXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XXE.java)
 
 
@@ -56,7 +67,7 @@ Sort by letter.
 
 ## How to run
 
-The application will use mybatis auto-injection. Please run mysql server ahead of time and configure the mysql server database's name and username/password.
+The application will use mybatis auto-injection. Please run mysql server ahead of time and configure the mysql server database's name and username/password except docker environment.
 
 ``` 
 spring.datasource.url=jdbc:mysql://127.0.0.1:3306/java_sec_code
@@ -64,9 +75,33 @@ spring.datasource.username=root
 spring.datasource.password=woshishujukumima
 ```
 
+- Docker
 - IDEA
 - Tomcat
 - JAR
+
+### Docker
+
+
+Start docker:
+
+``` 
+docker-compose pull
+docker-compose up
+```
+
+
+Stop docker:
+
+```
+docker-compose down
+```
+
+Docker's environment:
+
+- Java 1.8.0_102
+- Mysql 8.0.17
+- Tomcat 8.5.11
 
 
 ### IDEA

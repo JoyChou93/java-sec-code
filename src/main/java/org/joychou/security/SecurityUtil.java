@@ -6,8 +6,11 @@ import org.slf4j.LoggerFactory;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
+import java.util.regex.Pattern;
 
 public class SecurityUtil {
+
+    private static final Pattern FILTER_PATTERN = Pattern.compile("^[a-zA-Z0-9_/\\.-]+$") ;
 
     protected static Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
     /**
@@ -105,5 +108,14 @@ public class SecurityUtil {
         }
 
         return filepath;
+    }
+
+
+    public static String cmdFilter(String input) {
+        if (!FILTER_PATTERN.matcher(input).matches()) {
+            return null;
+        }
+
+        return input;
     }
 }
