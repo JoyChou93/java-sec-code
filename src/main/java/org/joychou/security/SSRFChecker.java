@@ -82,7 +82,7 @@ public class SSRFChecker {
      */
     private static boolean isInnerIp(String strIP){
 
-        String blackSubnetlist[] = {"10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8"};
+        String blackSubnetlist[] = {"10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "0.0.0.0/32"};
 
         for (String subnet: blackSubnetlist) {
             SubnetUtils utils = new SubnetUtils(subnet);
