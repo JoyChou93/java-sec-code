@@ -43,6 +43,9 @@ joychou/joychou123
 - [XSS](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XSS.java)
 - [XStream](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XStreamRce.java)
 - [XXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XXE.java)
+- [ooxmlXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/ooxmlXXE.java)
+- [xlsxStreamerXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/xlsxStreamerXXE.java)
+
 
 
 ## 漏洞说明
