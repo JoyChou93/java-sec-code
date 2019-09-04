@@ -51,9 +51,9 @@
             data: { "username": username, "password": password, "remember-me": remember_me},
             dataType: "json",
             success: function (r) {
-                if (r.code == 0) {
+                if (r.code == "0") {
                     // alert(r.message);
-                    location.href = ctx + 'index';
+                    location.href = ctx + "index";
                 } else {
                     alert(r.message);
                 }

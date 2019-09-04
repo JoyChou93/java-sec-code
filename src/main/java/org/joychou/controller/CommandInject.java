@@ -16,7 +16,7 @@ public class CommandInject {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
-     * http://localhost:8080/codeinject?filepath=/tmp;pwd
+     * http://localhost:8080/codeinject?filepath=/tmp;cat /etc/passwd
      *
      * @param filepath filepath
      * @return result
@@ -33,7 +33,7 @@ public class CommandInject {
 
     /**
      * Host Injection
-     * host: Host: hacked by joychou;curl ssrf.http.joychou.org
+     * Host: hacked by joychou;cat /etc/passwd
      * http://localhost:8080/codeinject/host
      *
      */

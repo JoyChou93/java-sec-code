@@ -1,9 +1,9 @@
 package org.joychou.controller;
 
-
 import org.dom4j.io.SAXReader;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -37,7 +37,7 @@ public class XXE {
             String xml_con = Tools.getRequestBody(request);
             System.out.println(xml_con);
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
-            xmlReader.parse( new InputSource(new StringReader(xml_con)) );  // parse xml
+            xmlReader.parse(new InputSource(new StringReader(xml_con)));  // parse xml
             return "ok";
         } catch (Exception e) {
             System.out.println(e);
@@ -47,7 +47,7 @@ public class XXE {
 
 
     @RequestMapping(value = "/xmlReader_fix", method = RequestMethod.POST)
-    public  String xxe_xmlReader_fix(HttpServletRequest request) {
+    public String xxe_xmlReader_fix(HttpServletRequest request) {
         try {
             String xml_con = Tools.getRequestBody(request);
             System.out.println(xml_con);
@@ -58,7 +58,7 @@ public class XXE {
             xmlReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
             xmlReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             //fix code end
-            xmlReader.parse( new InputSource(new StringReader(xml_con)) );  // parse xml
+            xmlReader.parse(new InputSource(new StringReader(xml_con)));  // parse xml
 
             return "ok";
         } catch (Exception e) {
@@ -69,13 +69,13 @@ public class XXE {
 
 
     @RequestMapping(value = "/SAXBuilder", method = RequestMethod.POST)
-    public  String xxe_SAXBuilder(HttpServletRequest request) {
+    public String xxe_SAXBuilder(HttpServletRequest request) {
         try {
             String xml_con = Tools.getRequestBody(request);
             System.out.println(xml_con);
 
             SAXBuilder builder = new SAXBuilder();
-            org.jdom2.Document document = builder.build( new InputSource(new StringReader(xml_con)) );  // cause xxe
+            org.jdom2.Document document = builder.build(new InputSource(new StringReader(xml_con)));  // cause xxe
             return "ok";
         } catch (Exception e) {
             System.out.println(e);
@@ -84,7 +84,7 @@ public class XXE {
     }
 
     @RequestMapping(value = "/SAXBuilder_fix", method = RequestMethod.POST)
-    public  String xxe_SAXBuilder_fix(HttpServletRequest request) {
+    public String xxe_SAXBuilder_fix(HttpServletRequest request) {
         try {
             String xml_con = Tools.getRequestBody(request);
             System.out.println(xml_con);
@@ -93,7 +93,7 @@ public class XXE {
             builder.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             builder.setFeature("http://xml.org/sax/features/external-general-entities", false);
             builder.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-            org.jdom2.Document document = builder.build( new InputSource(new StringReader(xml_con)) );
+            org.jdom2.Document document = builder.build(new InputSource(new StringReader(xml_con)));
 
             return "ok";
         } catch (Exception e) {
@@ -102,13 +102,13 @@ public class XXE {
     }
 
     @RequestMapping(value = "/SAXReader", method = RequestMethod.POST)
-    public  String xxe_SAXReader(HttpServletRequest request) {
+    public String xxe_SAXReader(HttpServletRequest request) {
         try {
             String xml_con = Tools.getRequestBody(request);
             System.out.println(xml_con);
 
             SAXReader reader = new SAXReader();
-            org.dom4j.Document document = reader.read(  new InputSource(new StringReader(xml_con)) ); // cause xxe
+            org.dom4j.Document document = reader.read(new InputSource(new StringReader(xml_con))); // cause xxe
 
             return "ok";
         } catch (Exception e) {
@@ -118,7 +118,7 @@ public class XXE {
     }
 
     @RequestMapping(value = "/SAXReader_fix", method = RequestMethod.POST)
-    public  String xxe_SAXReader_fix(HttpServletRequest request) {
+    public String xxe_SAXReader_fix(HttpServletRequest request) {
         try {
             String xml_con = Tools.getRequestBody(request);
             System.out.println(xml_con);
@@ -127,7 +127,7 @@ public class XXE {
             reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
             reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-            org.dom4j.Document document = reader.read(  new InputSource(new StringReader(xml_con)) );
+            org.dom4j.Document document = reader.read(new InputSource(new StringReader(xml_con)));
 
             return "ok";
         } catch (Exception e) {
@@ -231,7 +231,7 @@ public class XXE {
                 NodeList child = rootNode.getChildNodes();
                 for (int j = 0; j < child.getLength(); j++) {
                     Node node = child.item(j);
-                    buf.append( node.getNodeName() + ": " + node.getTextContent() + "\n" );
+                    buf.append(node.getNodeName() + ": " + node.getTextContent() + "\n");
                 }
             }
             sr.close();
@@ -265,8 +265,8 @@ public class XXE {
                 for (int j = 0; j < child.getLength(); j++) {
                     Node node = child.item(j);
                     // 正常解析XML，需要判断是否是ELEMENT_NODE类型。否则会出现多余的的节点。
-                    if(child.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                        result.append( node.getNodeName() + ": " + node.getFirstChild().getNodeValue() + "\n" );
+                    if (child.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                        result.append(node.getNodeName() + ": " + node.getFirstChild().getNodeValue() + "\n");
                     }
                 }
             }
@@ -387,7 +387,7 @@ public class XXE {
             SAXParserFactory spf = SAXParserFactory.newInstance();
             SAXParser saxParser = spf.newSAXParser();
             XMLReader xmlReader = saxParser.getXMLReader();
-            xmlReader.parse( new InputSource(new StringReader(xml_con)) );
+            xmlReader.parse(new InputSource(new StringReader(xml_con)));
             return "test";
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -407,12 +407,17 @@ public class XXE {
             xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             xmlReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
             xmlReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-            xmlReader.parse( new InputSource(new StringReader(xml_con)) );
+            xmlReader.parse(new InputSource(new StringReader(xml_con)));
             return "test";
         } catch (Exception e) {
             System.out.println(e.toString());
             return "except";
         }
+    }
+
+
+    public static void main(String[] args) throws Exception {
+
     }
 
 }
