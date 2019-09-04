@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h3>xlsx xxe test page</h3>
+
+<form method="POST" action="readxlsx" enctype="multipart/form-data">
+    <input type="file" name="file" /><br/><br/>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <input type="submit" value="Submit" />
+</form>
+
+</body>
+</html>
