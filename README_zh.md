@@ -32,6 +32,7 @@ joychou/joychou123
 - [IP Forge](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/IPForge.java)
 - [Java RMI](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/RMI/Server.java)
 - [JSONP](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/jsonp/JSONP.java)
+- [ooxmlXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/ooxmlXXE.java)
 - [PathTraversal](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/PathTraversal.java)
 - [RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Rce.java)
 - [SpEL](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SpEL.java)
@@ -40,12 +41,10 @@ joychou/joychou123
 - [SSTI](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SSTI.java)
 - [URL Redirect](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/URLRedirect.java)
 - [URL whitelist Bypass](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/URLWhiteList.java)
+- [xlsxStreamerXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/xlsxStreamerXXE.java)
 - [XSS](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XSS.java)
 - [XStream](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XStreamRce.java)
 - [XXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XXE.java)
-- [ooxmlXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/ooxmlXXE.java)
-- [xlsxStreamerXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/xlsxStreamerXXE.java)
-
 
 
 ## 漏洞说明
@@ -57,6 +56,7 @@ joychou/joychou123
 - [Fastjson](https://github.com/JoyChou93/java-sec-code/wiki/Fastjson)
 - [Java RMI](https://github.com/JoyChou93/java-sec-code/wiki/Java-RMI)
 - [JSONP](https://github.com/JoyChou93/java-sec-code/wiki/JSONP)
+- [POI-OOXML XXE](https://github.com/JoyChou93/java-sec-code/wiki/Poi-ooxml-XXE)
 - [SQLI](https://github.com/JoyChou93/java-sec-code/wiki/SQL-Inject)
 - [SSRF](https://github.com/JoyChou93/java-sec-code/wiki/SSRF)
 - [SSTI](https://github.com/JoyChou93/java-sec-code/wiki/SSTI)

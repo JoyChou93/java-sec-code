@@ -36,6 +36,7 @@ Sort by letter.
 - [IP Forge](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/IPForge.java)
 - [Java RMI](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/RMI/Server.java)
 - [JSONP](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/jsonp/JSONP.java)
+- [ooxmlXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/ooxmlXXE.java)
 - [PathTraversal](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/PathTraversal.java)
 - [RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Rce.java)
 - [SpEL](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SpEL.java)
@@ -44,11 +45,10 @@ Sort by letter.
 - [SSTI](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SSTI.java)
 - [URL Redirect](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/URLRedirect.java)
 - [URL whitelist Bypass](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/URLWhiteList.java)
+- [xlsxStreamerXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/xlsxStreamerXXE.java)
 - [XSS](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XSS.java)
 - [XStream](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XStreamRce.java)
 - [XXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XXE.java)
-- [ooxmlXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/ooxmlXXE.java)
-- [xlsxStreamerXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/xlsxStreamerXXE.java)
 
 
 
@@ -61,6 +61,7 @@ Sort by letter.
 - [Fastjson](https://github.com/JoyChou93/java-sec-code/wiki/Fastjson)
 - [Java RMI](https://github.com/JoyChou93/java-sec-code/wiki/Java-RMI)
 - [JSONP](https://github.com/JoyChou93/java-sec-code/wiki/JSONP)
+- [POI-OOXML XXE](https://github.com/JoyChou93/java-sec-code/wiki/Poi-ooxml-XXE)
 - [SQLI](https://github.com/JoyChou93/java-sec-code/wiki/SQL-Inject)
 - [SSRF](https://github.com/JoyChou93/java-sec-code/wiki/SSRF)
 - [SSTI](https://github.com/JoyChou93/java-sec-code/wiki/SSTI)
@@ -189,7 +190,7 @@ Tomcat's default JSESSION session is valid for 30 minutes, so a 30-minute non-op
 ## Contributors
 
 Core developers : [JoyChou](https://github.com/JoyChou93).
-Other developers: [lightless](https://github.com/lightless233),  [Anemone95](https://github.com/Anemone95). 
+Other developers: [lightless](https://github.com/lightless233),  [Anemone95](https://github.com/Anemone95), [waderwu](https://github.com/waderwu). 
 
 
 ## Donate

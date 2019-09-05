@@ -20,10 +20,10 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**
  * Desc:   poi-ooxml xxe vuln code
- * Usage:  [Content_Type].xml
+ * Usage:  [Content_Type].xml  http://localhost:8080/ooxml/upload
  * Ref:    https://www.itread01.com/hkpcyyp.html
  * Fix:    Update poi-ooxml to 3.15 or above.
- * Vuln:   3.10 or below exist xxe vuln. 3.14 or above exist dos vuln. So 3.15 or above is safe version.
+ * Vuln:   3.10 or below exist xxe vuln. 3.14 or below exist dos vuln. So 3.15 or above is safe version.
  *
  * @author JoyChou @2019-09-05
  */
