@@ -12,4 +12,5 @@ public class JSONPAdvice extends AbstractJsonpResponseBodyAdvice {
     public JSONPAdvice(@Value("${joychou.security.jsonp.callback}") String[] callback) {
         super(callback);  // Can set multiple paramNames
     }
+
 }

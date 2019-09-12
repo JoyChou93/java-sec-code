@@ -3,10 +3,13 @@ package org.joychou.controller.jsonp;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import com.netflix.ribbon.proxy.annotation.Http;
 import org.joychou.security.SecurityUtil;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -27,7 +30,7 @@ public class JSONP {
 
 
     // get current login username
-    public static String getUserInfo(HttpServletRequest request) {
+    public static String getUserInfo2JsonStr(HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
 
         String username = principal.getName();
@@ -46,7 +49,7 @@ public class JSONP {
     @RequestMapping(value = "/referer", produces = "application/javascript")
     private String referer(HttpServletRequest request) {
         String callback = request.getParameter("callback");
-        return callback + "(" + getUserInfo(request) + ")";
+        return callback + "(" + getUserInfo2JsonStr(request) + ")";
     }
 
     /**
@@ -64,7 +67,7 @@ public class JSONP {
         }
 
         String callback = request.getParameter("callback");
-        return callback + "(" + getUserInfo(request) + ")";
+        return callback + "(" + getUserInfo2JsonStr(request) + ")";
     }
 
     /**
@@ -77,9 +80,25 @@ public class JSONP {
      */
     @RequestMapping(value = "/advice", produces = MediaType.APPLICATION_JSON_VALUE)
     public JSONObject advice(HttpServletRequest request) {
-        return JSON.parseObject(getUserInfo(request));
-
+        return JSON.parseObject(getUserInfo2JsonStr(request));
     }
+
+
+    /**
+     * http://localhost:8080/jsonp/mappingJackson2JsonView?callback=test
+     * Reference: https://p0sec.net/index.php/archives/122/ from p0
+     * Affected version:  java-sec-code test case version: 4.3.6
+     *     - Spring Framework 5.0 to 5.0.6
+     *     - Spring Framework 4.1 to 4.3.17
+     */
+    @RequestMapping(value = "/mappingJackson2JsonView", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView mappingJackson2JsonView(HttpServletRequest req) {
+        ModelAndView view = new ModelAndView(new MappingJackson2JsonView());
+        Principal principal = req.getUserPrincipal();
+        view.addObject("username", principal.getName() );
+        return view;
+    }
+
 
     /**
      * Safe code.
@@ -94,7 +113,7 @@ public class JSONP {
         }
 
         String callback = request.getParameter("callback");
-        return callback + "(" + getUserInfo(request) + ")";
+        return callback + "(" + getUserInfo2JsonStr(request) + ")";
     }
 
 

@@ -57,7 +57,7 @@ public class CORS {
         }
         response.setHeader("Access-Control-Allow-Origin", origin);
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        return JSONP.getUserInfo(request);
+        return JSONP.getUserInfo2JsonStr(request);
     }
 
 
