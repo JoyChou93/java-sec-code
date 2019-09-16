@@ -1,10 +1,10 @@
-package org.joychou.utils;
+package org.joychou.util;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class Tools {
+public class WebUtils {
 
     // Get request body.
     public static String getRequestBody(HttpServletRequest request) throws IOException {

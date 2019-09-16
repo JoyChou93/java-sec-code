@@ -3,7 +3,7 @@ package org.joychou.controller;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.joychou.dao.User;
-import org.joychou.utils.Tools;
+import org.joychou.util.WebUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +22,7 @@ public class XStreamRce {
      */
     @PostMapping("/xstream")
     public String parseXml(HttpServletRequest request) throws Exception{
-        String xml = Tools.getRequestBody(request);
+        String xml = WebUtils.getRequestBody(request);
         XStream xstream = new XStream(new DomDriver());
         xstream.fromXML(xml);
         return "xstream";

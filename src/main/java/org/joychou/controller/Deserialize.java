@@ -1,6 +1,5 @@
 package org.joychou.controller;
 
-import org.apache.commons.lang.StringUtils;
 import org.joychou.security.AntObjectInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +10,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.util.Base64;
+
+import static org.springframework.web.util.WebUtils.getCookie;
 
 /**
  * Deserialize RCE using Commons-Collections gadget.
@@ -23,8 +25,8 @@ import java.util.Base64;
 @RequestMapping("/deserialize")
 public class Deserialize {
 
-
-    private static Logger logger= LoggerFactory.getLogger(Deserialize.class);
+    private static String cookieName = "rememberMe";
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * java -jar ysoserial.jar CommonsCollections5 "open -a Calculator" | base64
@@ -33,27 +35,18 @@ public class Deserialize {
      * http://localhost:8080/deserialize/rememberMe/vul
      */
     @RequestMapping("/rememberMe/vul")
-    public static String rememberMeVul(HttpServletRequest request)
+    public String rememberMeVul(HttpServletRequest request)
             throws IOException, ClassNotFoundException {
 
-        Cookie[] cookies = request.getCookies();
-        String rememberMe = "";
+        Cookie cookie = getCookie(request, cookieName);
 
-        if (null == cookies) {
-            logger.info("No cookies.");
-        } else {
-            for (Cookie cookie : cookies) {
-                if ( cookie.getName().equals("rememberMe") ) {
-                    rememberMe = cookie.getValue();
-                }
-            }
-        }
-
-        if (StringUtils.isBlank(rememberMe) ) {
+        if (null == cookie){
             return "No rememberMe cookie. Right?";
         }
 
+        String rememberMe = cookie.getValue();
         byte[] decoded = Base64.getDecoder().decode(rememberMe);
+
         ByteArrayInputStream bytes = new ByteArrayInputStream(decoded);
         ObjectInputStream in = new ObjectInputStream(bytes);
         in.readObject();
@@ -68,32 +61,29 @@ public class Deserialize {
      * http://localhost:8080/deserialize/rememberMe/security
      */
     @RequestMapping("/rememberMe/security")
-    public static String rememberMeBlackClassCheck(HttpServletRequest request)
+    public String rememberMeBlackClassCheck(HttpServletRequest request)
             throws IOException, ClassNotFoundException {
 
-        Cookie[] cookies = request.getCookies();
-        String rememberMe = "";
+        Cookie cookie = getCookie(request, cookieName);
 
-        if (null == cookies) {
-            logger.info("No cookies in /rememberMe/security");
-        } else {
-            for (Cookie cookie : cookies) {
-                if ( cookie.getName().equals("rememberMe") ) {
-                    rememberMe = cookie.getValue();
-                }
-            }
-        }
-
-        if (StringUtils.isBlank(rememberMe) ) {
+        if (null == cookie){
             return "No rememberMe cookie. Right?";
         }
-
+        String rememberMe = cookie.getValue();
         byte[] decoded = Base64.getDecoder().decode(rememberMe);
+
         ByteArrayInputStream bytes = new ByteArrayInputStream(decoded);
-        AntObjectInputStream in = new AntObjectInputStream(bytes);
-        in.readObject();
-        in.close();
+
+        try{
+            AntObjectInputStream in = new AntObjectInputStream(bytes);  // throw InvalidClassException
+            in.readObject();
+            in.close();
+        } catch (InvalidClassException e) {
+            logger.info(e.toString());
+            return e.toString();
+        }
 
         return "I'm very OK.";
     }
+
 }

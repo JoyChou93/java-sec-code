@@ -19,7 +19,7 @@ import javax.xml.parsers.SAXParser;
 import org.xml.sax.helpers.DefaultHandler;
 import org.apache.commons.digester3.Digester;
 import org.jdom2.input.SAXBuilder;
-import org.joychou.utils.Tools;
+import org.joychou.util.WebUtils;
 
 /**
  * Java xxe vul and safe code.
@@ -34,7 +34,7 @@ public class XXE {
     @RequestMapping(value = "/xmlReader", method = RequestMethod.POST)
     public String xxe_xmlReader(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
             xmlReader.parse(new InputSource(new StringReader(xml_con)));  // parse xml
@@ -49,7 +49,7 @@ public class XXE {
     @RequestMapping(value = "/xmlReader_fix", method = RequestMethod.POST)
     public String xxe_xmlReader_fix(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
@@ -71,7 +71,7 @@ public class XXE {
     @RequestMapping(value = "/SAXBuilder", method = RequestMethod.POST)
     public String xxe_SAXBuilder(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             SAXBuilder builder = new SAXBuilder();
@@ -86,7 +86,7 @@ public class XXE {
     @RequestMapping(value = "/SAXBuilder_fix", method = RequestMethod.POST)
     public String xxe_SAXBuilder_fix(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             SAXBuilder builder = new SAXBuilder();
@@ -104,7 +104,7 @@ public class XXE {
     @RequestMapping(value = "/SAXReader", method = RequestMethod.POST)
     public String xxe_SAXReader(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             SAXReader reader = new SAXReader();
@@ -120,7 +120,7 @@ public class XXE {
     @RequestMapping(value = "/SAXReader_fix", method = RequestMethod.POST)
     public String xxe_SAXReader_fix(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             SAXReader reader = new SAXReader();
@@ -139,7 +139,7 @@ public class XXE {
     @RequestMapping(value = "/SAXParser", method = RequestMethod.POST)
     public String xxe_SAXParser(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -157,7 +157,7 @@ public class XXE {
     @RequestMapping(value = "/SAXParser_fix", method = RequestMethod.POST)
     public String xxe_SAXParser_fix(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -177,7 +177,7 @@ public class XXE {
     @RequestMapping(value = "/Digester", method = RequestMethod.POST)
     public String xxe_Digester(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             Digester digester = new Digester();
@@ -193,7 +193,7 @@ public class XXE {
     @RequestMapping(value = "/Digester_fix", method = RequestMethod.POST)
     public String xxe_Digester_fix(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             Digester digester = new Digester();
@@ -214,7 +214,7 @@ public class XXE {
     @RequestMapping(value = "/DocumentBuilder_return", method = RequestMethod.POST)
     public String xxeDocumentBuilderReturn(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -247,7 +247,7 @@ public class XXE {
     @RequestMapping(value = "/DocumentBuilder", method = RequestMethod.POST)
     public String DocumentBuilder(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -283,7 +283,7 @@ public class XXE {
     @RequestMapping(value = "/DocumentBuilder_fix", method = RequestMethod.POST)
     public String xxe_DocumentBuilder_fix(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -307,7 +307,7 @@ public class XXE {
     @RequestMapping(value = "/DocumentBuilder_xinclude", method = RequestMethod.POST)
     public String xxe_xinclude_DocumentBuilder(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -343,7 +343,7 @@ public class XXE {
     @RequestMapping(value = "/DocumentBuilder_xinclude_fix", method = RequestMethod.POST)
     public String xxe_xinclude_DocumentBuilder_fix(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -382,7 +382,7 @@ public class XXE {
     @PostMapping("/XMLReader/vul")
     public String XMLReaderVul(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
             SAXParserFactory spf = SAXParserFactory.newInstance();
             SAXParser saxParser = spf.newSAXParser();
@@ -399,7 +399,7 @@ public class XXE {
     @PostMapping("/XMLReader/fixed")
     public String XMLReaderSec(HttpServletRequest request) {
         try {
-            String xml_con = Tools.getRequestBody(request);
+            String xml_con = WebUtils.getRequestBody(request);
             System.out.println(xml_con);
             SAXParserFactory spf = SAXParserFactory.newInstance();
             SAXParser saxParser = spf.newSAXParser();
