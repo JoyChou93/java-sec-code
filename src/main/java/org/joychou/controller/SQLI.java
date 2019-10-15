@@ -4,10 +4,13 @@ package org.joychou.controller;
 import org.joychou.mapper.UserMapper;
 import org.joychou.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.*;
+import java.util.List;
 
 
 /**
@@ -16,14 +19,18 @@ import java.sql.*;
  * @desc    SQL Injection
  */
 
+@SuppressWarnings("Duplicates")
 @RestController
 @RequestMapping("/sqli")
 public class SQLI {
 
     private static String driver = "com.mysql.jdbc.Driver";
-    private static String url = "jdbc:mysql://localhost:3306/java_sec_code";
-    private static String user = "root";
-    private static String password = "woshishujukumima";
+    @Value("${spring.datasource.url}")
+    private String url;
+    @Value("${spring.datasource.username}")
+    private String user;
+    @Value("${spring.datasource.password}")
+    private String password;
 
     @Autowired
     private UserMapper userMapper;
@@ -36,7 +43,7 @@ public class SQLI {
      * @param username username
      */
     @RequestMapping("/jdbc/vul")
-    public static String jdbc_sqli_vul(@RequestParam("username") String username){
+    public String jdbc_sqli_vul(@RequestParam("username") String username){
         String result = "";
         try {
             Class.forName(driver);
@@ -88,7 +95,7 @@ public class SQLI {
      * @param username username
      */
     @RequestMapping("/jdbc/sec")
-    public static String jdbc_sqli_sec(@RequestParam("username") String username){
+    public String jdbc_sqli_sec(@RequestParam("username") String username){
 
         String result = "";
         try {
@@ -134,6 +141,28 @@ public class SQLI {
         return result;
     }
 
+    /**
+     * vul code
+     * http://localhost:8080/sqli/mybatis/vul01?username=joychou' or '1'='1
+     *
+     * @param username username
+     */
+    @GetMapping("/mybatis/vul01")
+    public List<User> mybatis_vul1(@RequestParam("username") String username) {
+        return userMapper.findByUserNameVul(username);
+    }
+
+    /**
+     * vul code
+     * http://localhost:8080/sqli/mybatis/vul02?username=joychou' or '1'='1' %23
+     *
+     * @param username username
+     */
+    @GetMapping("/mybatis/vul02")
+    public List<User> mybatis_vul2(@RequestParam("username") String username) {
+        return userMapper.findByUserNameVul2(username);
+    }
+
 
     /**
      * security code
@@ -142,11 +171,9 @@ public class SQLI {
      * @param username username
      */
     @GetMapping("/mybatis/sec01")
-    public User mybatis_vul1(@RequestParam("username") String username) {
+    public User mybatis_sec1(@RequestParam("username") String username) {
         return userMapper.findByUserName(username);
     }
-
-
 
     /**
      * security code
@@ -155,7 +182,7 @@ public class SQLI {
      * @param id id
      */
     @GetMapping("/mybatis/sec02")
-    public User mybatis_v(@RequestParam("id") Integer id) {
+    public User mybatis_sec2(@RequestParam("id") Integer id) {
         return userMapper.findById(id);
     }
 
@@ -165,7 +192,7 @@ public class SQLI {
      * http://localhost:8080/sqli/mybatis/sec03
      **/
     @GetMapping("/mybatis/sec03")
-    public User mybatis_vul2() {
+    public User mybatis_sec3() {
         return userMapper.OrderByUsername();
     }
 
