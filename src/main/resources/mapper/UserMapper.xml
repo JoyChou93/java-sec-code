@@ -13,9 +13,14 @@
 	    <!--select * from users where username = #{username}-->
     <!--</select>-->
 
+    <select id="findByUserNameVul2" parameterType="String" resultMap="User">
+        select * from users where username like '%${_parameter}%'
+    </select>
+
     <select id="findById" resultMap="User">
         select * from users where id = #{id}
     </select>
+
 
     <select id="OrderByUsername" resultMap="User">
         select * from users order by id asc limit 1
