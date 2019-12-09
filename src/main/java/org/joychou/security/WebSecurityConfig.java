@@ -2,6 +2,7 @@ package org.joychou.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,7 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -58,6 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().accessDeniedHandler(new CsrfAccessDeniedHandler());
         // http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
+        http.cors();
+
         // spring security login settings
         http.authorizeRequests()
                 .antMatchers("/css/**", "/js/**").permitAll() // permit static resources
@@ -67,6 +75,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(new LoginFailureHandler()).and()
                 .logout().logoutUrl("/logout").permitAll().and()
                 .rememberMe(); // tomcat默认JSESSION会话有效时间为30分钟，所以30分钟不操作会话将过期。为了解决这一问题，引入rememberMe功能。
+    }
+
+    /**
+     * Global cors configure
+     */
+    @Bean
+    CorsConfigurationSource corsConfigurationSource()
+    {
+        // Set cors origin white list
+        ArrayList<String> allowOrigins = new ArrayList<String>();
+        allowOrigins.add("http://test.joychou.org");
+        allowOrigins.add("https://test.joychou.org"); // 区分http和https，并且默认不会拦截同域请求。
+
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(allowOrigins);
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/cors/sec/httpCors", configuration); // ant style
+        return source;
     }
 
     @Autowired
