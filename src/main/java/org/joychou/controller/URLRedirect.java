@@ -82,7 +82,7 @@ public class URLRedirect {
     public static void sendRedirect_seccode(HttpServletRequest request, HttpServletResponse response) throws IOException{
         String url = request.getParameter("url");
         String urlwhitelist[] = {"joychou.org", "joychou.com"};
-        if (!SecurityUtil.checkURLbyEndsWith(url, urlwhitelist)) {
+        if (SecurityUtil.checkURLbyEndsWith(url, urlwhitelist) == null) {
             // Redirect to error page.
             response.sendRedirect("https://test.joychou.org/error3.html");
             return;

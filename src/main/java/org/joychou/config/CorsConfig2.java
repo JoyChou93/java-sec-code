@@ -7,6 +7,7 @@
 //import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 //import org.springframework.web.filter.CorsFilter;
 //
+//// https://spring.io/blog/2015/06/08/cors-support-in-spring-framework
 //@Configuration
 //public class CorsConfig2 {
 //

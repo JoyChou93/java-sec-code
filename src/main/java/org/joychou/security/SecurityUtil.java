@@ -18,29 +18,29 @@ public class SecurityUtil {
      *
      * @param url 需要check的url
      * @param urlwhitelist url白名单list
-     * @return 安全url返回true，危险url返回false
+     * @return 安全url返回url，危险url返回null
      */
-    public static Boolean checkURLbyEndsWith(String url, String[] urlwhitelist) {
+    public static String checkURLbyEndsWith(String url, String[] urlwhitelist) {
         if (null == url) {
-            return false;
+            return null;
         }
         try {
             URI uri = new URI(url);
 
             if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                return false;
+                return null;
             }
 
             String host = uri.getHost().toLowerCase();
             for (String whitelist: urlwhitelist){
                 if (host.endsWith("." + whitelist)) {
-                    return true;
+                    return url;
                 }
             }
 
-            return false;
+            return null;
         } catch (Exception e) {
-            return false;
+            return null;
         }
     }
 
@@ -75,9 +75,9 @@ public class SecurityUtil {
      *
      * @param url The url that needs to check.
      * @param hostWlist host whitelist
-     * @return Safe url returns true. Dangerous url returns false.
+     * @return Safe url returns url. Dangerous url returns null.
      */
-    public static boolean checkSSRFByHostWlist(String url, String[] hostWlist) {
+    public static String checkSSRFByHostWlist(String url, String[] hostWlist) {
         return checkURLbyEndsWith(url, hostWlist);
     }
 

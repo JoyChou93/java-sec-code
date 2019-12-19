@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/cors")
-public class CORS {
+public class Cors {
 
     protected static String info = "{\"name\": \"JoyChou\", \"phone\": \"18200001111\"}";
     protected static String[] urlwhitelist = {"joychou.com", "joychou.me"};
@@ -46,30 +46,30 @@ public class CORS {
     }
 
 
-    /**
-     * http://localhost:8080/cors/sec/webMvcConfigurer
-     * https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/config/webMvcConfigurer.java
-     */
+    // https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/config/webMvcConfigurer.java
     @RequestMapping("/sec/webMvcConfigurer")
     public CsrfToken getCsrfToken_01(CsrfToken token) {
         return token;
     }
 
 
-    /**
-     * https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/security/WebSecurityConfig.java
-     */
+    // https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/security/WebSecurityConfig.java
     @RequestMapping("/sec/httpCors")
     public CsrfToken getCsrfToken_02(CsrfToken token) {
         return token;
     }
 
 
-    /**
-     * https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/filter/SecCorsFilter.java
-     */
+    // https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/filter/SecCorsFilter.java
     @RequestMapping("/sec/corsFitler")
     public CsrfToken getCsrfToken_03(CsrfToken token) {
+        return token;
+    }
+
+
+    // https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/filter/CorsFilter.java
+    @RequestMapping("/sec/Filter")
+    public CsrfToken getCsrfToken_04(CsrfToken token) {
         return token;
     }
 
@@ -81,7 +81,7 @@ public class CORS {
 
         // 如果origin不为空并且origin不在白名单内，认定为不安全。
         // 如果origin为空，表示是同域过来的请求或者浏览器直接发起的请求。
-        if ( origin != null && !SecurityUtil.checkURLbyEndsWith(origin, urlwhitelist) ) {
+        if ( origin != null && SecurityUtil.checkURLbyEndsWith(origin, urlwhitelist) == null ) {
             return "Origin is not safe.";
         }
         response.setHeader("Access-Control-Allow-Origin", origin);

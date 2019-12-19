@@ -1,4 +1,4 @@
-package org.joychou.security;
+package org.joychou.filter;
 
 
 import javax.servlet.*;
@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import org.apache.commons.lang.StringUtils;
 import org.joychou.config.WebConfig;
+import org.joychou.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.AntPathMatcher;
@@ -30,7 +31,7 @@ public class HttpFilter implements Filter {
 
     }
 
-    private final Logger logger= LoggerFactory.getLogger(HttpFilter.class);
+    private final Logger logger= LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
@@ -49,13 +50,15 @@ public class HttpFilter implements Filter {
             }
         }
 
+        // logger.info("[+] Referer: " + refer);
+
         if (isMatch) {
             if (WebConfig.getReferSecEnabled()) {
                 // Check referer for all GET requests with callback parameters.
                 for (String callback: WebConfig.getCallbacks()) {
                     if (request.getMethod().equals("GET") && StringUtils.isNotBlank(request.getParameter(callback)) ){
                         // If the check of referer fails, a 403 forbidden error page will be returned.
-                        if (!SecurityUtil.checkURLbyEndsWith(refer, WebConfig.getReferWhitelist())){
+                        if (SecurityUtil.checkURLbyEndsWith(refer, WebConfig.getReferWhitelist()) == null ){
                             logger.info("[-] URL: " + request.getRequestURL() + "?" + request.getQueryString() + "\t"
                                     + "Referer: " + refer);
                             response.sendRedirect("https://test.joychou.org/error3.html");

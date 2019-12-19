@@ -62,7 +62,7 @@ public class JSONP {
     private String emptyReferer(HttpServletRequest request) {
         String referer = request.getHeader("referer");
 
-        if (null != referer && !SecurityUtil.checkURLbyEndsWith(referer, urlwhitelist)) {
+        if (null != referer && SecurityUtil.checkURLbyEndsWith(referer, urlwhitelist) == null) {
             return "error";
         }
 
@@ -108,7 +108,7 @@ public class JSONP {
     private String safecode(HttpServletRequest request) {
         String referer = request.getHeader("referer");
 
-        if (!SecurityUtil.checkURLbyEndsWith(referer, urlwhitelist)) {
+        if (SecurityUtil.checkURLbyEndsWith(referer, urlwhitelist) == null) {
             return "error";
         }
 
