@@ -62,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .ignoringAntMatchers(csrfExcludeUrl)  // 不进行csrf校验的uri，多个uri使用逗号分隔
                 .csrfTokenRepository(new CookieCsrfTokenRepository());
         http.exceptionHandling().accessDeniedHandler(new CsrfAccessDeniedHandler());
-        // http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+        // http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());«
 
         http.cors();
 
@@ -85,8 +85,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     {
         // Set cors origin white list
         ArrayList<String> allowOrigins = new ArrayList<String>();
-        allowOrigins.add("http://test.joychou.org");
-        allowOrigins.add("https://test.joychou.org"); // 区分http和https，并且默认不会拦截同域请求。
+        allowOrigins.add("joychou.org");
+        allowOrigins.add("https://test.joychou.me"); // 区分http和https，并且默认不会拦截同域请求。
 
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(allowOrigins);

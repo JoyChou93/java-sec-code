@@ -9,27 +9,26 @@ import org.springframework.web.filter.CorsFilter;
 
 /**
  * 由于CorsFilter和spring security冲突，所以改为下面的代码。
- * CorsFilter可以参考config/CorsConfig2的代码。
  */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class SecCorsFilter extends CorsFilter {
+public class BaseCorsFilter extends CorsFilter {
 
-    public SecCorsFilter() {
+    public BaseCorsFilter() {
         super(configurationSource());
     }
 
     private static UrlBasedCorsConfigurationSource configurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://test.joychou.org");
-        config.addAllowedOrigin("https://test.joychou.org");
+        config.addAllowedOrigin("joychou.org"); // 不支持
+        config.addAllowedOrigin("http://test.joychou.me");
         config.addAllowedHeader("*");
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/cors/sec/corsFitler", config);
+        source.registerCorsConfiguration("/cors/sec/corsFilter", config);
 
         return source;
     }

@@ -11,20 +11,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author  JoyChou (joychou@joychou.org)
- * @date    2018.10.24
- * @desc    https://github.com/JoyChou93/java-sec-code/wiki/CORS
+ * @author  JoyChou (joychou@joychou.org) @2018.10.24
+ * https://github.com/JoyChou93/java-sec-code/wiki/CORS
  */
 
 @RestController
 @RequestMapping("/cors")
 public class Cors {
 
-    protected static String info = "{\"name\": \"JoyChou\", \"phone\": \"18200001111\"}";
-    protected static String[] urlwhitelist = {"joychou.com", "joychou.me"};
+    private static String info = "{\"name\": \"JoyChou\", \"phone\": \"18200001111\"}";
+    private static String[] urlwhitelist = {"joychou.org", "joychou.me"};
+
 
     @RequestMapping("/vuln/origin")
-    private static String vuls1(HttpServletRequest request, HttpServletResponse response) {
+    public static String vuls1(HttpServletRequest request, HttpServletResponse response) {
         String origin = request.getHeader("origin");
         response.setHeader("Access-Control-Allow-Origin", origin); // 设置Origin值为Header中获取到的
         response.setHeader("Access-Control-Allow-Credentials", "true");  // cookie
@@ -32,7 +32,7 @@ public class Cors {
     }
 
     @RequestMapping("/vuln/setHeader")
-    private static String vuls2(HttpServletResponse response) {
+    public static String vuls2(HttpServletResponse response) {
         // 后端设置Access-Control-Allow-Origin为*的情况下，跨域的时候前端如果设置withCredentials为true会异常
         response.setHeader("Access-Control-Allow-Origin", "*");
         return info;
@@ -41,40 +41,67 @@ public class Cors {
 
     @CrossOrigin("*")
     @RequestMapping("/vuln/crossOrigin")
-    private static String vuls3(HttpServletResponse response) {
+    public static String vuls3() {
         return info;
     }
 
 
-    // https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/config/webMvcConfigurer.java
+    /**
+     * 重写Cors的checkOrigin校验方法
+     * 支持自定义checkOrigin，让其额外支持一级域名
+     * 代码：org/joychou/security/CustomCorsProcessor
+     */
+    @CrossOrigin(origins = {"joychou.org", "http://test.joychou.me"})
+    @RequestMapping("/sec/crossOrigin")
+    public static String secCrossOrigin() {
+        return info;
+    }
+
+
+    /**
+     * WebMvcConfigurer设置Cors
+     * 支持自定义checkOrigin
+     * 代码：org/joychou/config/CorsConfig.java
+     */
     @RequestMapping("/sec/webMvcConfigurer")
     public CsrfToken getCsrfToken_01(CsrfToken token) {
         return token;
     }
 
 
-    // https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/security/WebSecurityConfig.java
+    /**
+     * spring security设置cors
+     * 不支持自定义checkOrigin，因为spring security优先于setCorsProcessor执行
+     * 代码：org/joychou/security/WebSecurityConfig.java
+     */
     @RequestMapping("/sec/httpCors")
     public CsrfToken getCsrfToken_02(CsrfToken token) {
         return token;
     }
 
 
-    // https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/filter/SecCorsFilter.java
-    @RequestMapping("/sec/corsFitler")
+    /**
+     * 自定义filter设置cors
+     * 支持自定义checkOrigin
+     * 代码：org/joychou/filter/OriginFilter.java
+     */
+    @RequestMapping("/sec/originFilter")
     public CsrfToken getCsrfToken_03(CsrfToken token) {
         return token;
     }
 
 
-    // https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/filter/CorsFilter.java
-    @RequestMapping("/sec/Filter")
+    /**
+     * CorsFilter设置cors。
+     * 不支持自定义checkOrigin，因为corsFilter优先于setCorsProcessor执行
+     * 代码：org/joychou/filter/BaseCorsFilter.java
+     */
+    @RequestMapping("/sec/corsFilter")
     public CsrfToken getCsrfToken_04(CsrfToken token) {
         return token;
     }
 
 
-    // http://localhost:8080/cors/sec/checkOrigin
     @RequestMapping("/sec/checkOrigin")
     public String seccode(HttpServletRequest request, HttpServletResponse response) {
         String origin = request.getHeader("Origin");

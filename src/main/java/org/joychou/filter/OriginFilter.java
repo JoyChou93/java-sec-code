@@ -11,13 +11,13 @@ import org.joychou.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  * 推荐使用该全局方案修复Cors跨域漏洞，因为可以校验一级域名。
  * @author JoyChou @ 2019.12.19
- *
+ * 
  */
-
-@WebFilter(filterName = "OriginFilter", urlPatterns = "/cors/sec/Filter")
+@WebFilter(filterName = "OriginFilter", urlPatterns = "/cors/sec/originFilter")
 public class OriginFilter implements Filter {
 
     private static String[] urlwhitelist = {"joychou.org", "joychou.me"};
@@ -41,7 +41,10 @@ public class OriginFilter implements Filter {
 
         // 以file协议访问html，origin为字符串的null，所以依然会走安全check逻辑
         if ( origin != null && SecurityUtil.checkURLbyEndsWith(origin, urlwhitelist) == null) {
-            logger.error("[-] Origin check error.");
+            logger.error("[-] Origin check error. " + "Origin: " + origin +
+                    "\tCurrent url:" + request.getRequestURL());
+            response.setStatus(response.SC_FORBIDDEN);
+            response.getWriter().println("Invaid cors config by joychou.");
             return;
         }
 
