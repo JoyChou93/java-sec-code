@@ -1,6 +1,5 @@
 package org.joychou.filter;
 
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +23,7 @@ import org.springframework.util.PathMatcher;
  *
  */
 @WebFilter(filterName = "referFilter", urlPatterns = "/*")
-public class HttpFilter implements Filter {
+public class ReferFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -39,10 +38,10 @@ public class HttpFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-
         String refer = request.getHeader("referer");
         PathMatcher matcher = new AntPathMatcher();
         boolean isMatch = false;
+
         for (String uri: WebConfig.getReferUris()) {
             if ( matcher.match (uri, request.getRequestURI()) ) {
                 isMatch = true;
@@ -50,22 +49,28 @@ public class HttpFilter implements Filter {
             }
         }
 
-        // logger.info("[+] Referer: " + refer);
+        if (!isMatch) {
+            filterChain.doFilter(req, res);
+            return;
+        }
 
-        if (isMatch) {
-            if (WebConfig.getReferSecEnabled()) {
-                // Check referer for all GET requests with callback parameters.
-                for (String callback: WebConfig.getCallbacks()) {
-                    if (request.getMethod().equals("GET") && StringUtils.isNotBlank(request.getParameter(callback)) ){
-                        // If the check of referer fails, a 403 forbidden error page will be returned.
-                        if (SecurityUtil.checkURLbyEndsWith(refer, WebConfig.getReferWhitelist()) == null ){
-                            logger.info("[-] URL: " + request.getRequestURL() + "?" + request.getQueryString() + "\t"
-                                    + "Referer: " + refer);
-                            response.sendRedirect("https://test.joychou.org/error3.html");
-                            return;
-                        }
-                    }
-                }
+        if (!WebConfig.getReferSecEnabled()) {
+            filterChain.doFilter(req, res);
+            return;
+        }
+
+        // Check referer for all GET requests with callback parameters.
+
+        String reqCallback = request.getParameter(WebConfig.getBusinessCallback());
+        if ("GET".equals(request.getMethod()) && StringUtils.isNotBlank(reqCallback) ){
+            // If the check of referer fails, a 403 forbidden error page will be returned.
+            if (SecurityUtil.checkURLbyEndsWith(refer, WebConfig.getReferWhitelist()) == null ){
+                logger.info("[-] URL: " + request.getRequestURL() + "?" + request.getQueryString() + "\t"
+                        + "Referer: " + refer);
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                response.getWriter().write("forbidden");
+                response.flushBuffer();
+                return;
             }
         }
 

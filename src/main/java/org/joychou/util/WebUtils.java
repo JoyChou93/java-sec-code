@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.springframework.web.util.HtmlUtils;
+
 public class WebUtils {
 
     // Get request body.
@@ -22,5 +24,10 @@ public class WebUtils {
     public static String getCookieValueByName(HttpServletRequest request, String cookieName) {
         Cookie cookie = org.springframework.web.util.WebUtils.getCookie(request, cookieName);
         return cookie == null ? null : cookie.getValue();
+    }
+
+
+    public static String json2Jsonp(String callback, String jsonStr) {
+        return HtmlUtils.htmlEscape(callback) + "(" + jsonStr + ")";
     }
 }

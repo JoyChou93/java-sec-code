@@ -1,6 +1,8 @@
 package org.joychou.controller;
 
 import com.fasterxml.uuid.Generators;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +25,7 @@ import java.util.UUID;
 /**
  * @author  JoyChou (joychou@joychou.org)
  * @date    2018.08.15
- * @desc    Java file upload
+ * @desc    File upload
  */
 
 @Controller
@@ -32,6 +34,7 @@ public class FileUpload {
 
     // Save the uploaded file to this folder
     private static String UPLOADED_FOLDER = "/tmp/";
+    private final Logger logger= LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/")
     public String index() {
@@ -80,14 +83,13 @@ public class FileUpload {
             return "redirect:/file/status";
         }
 
-        // get suffix
         String fileName = multifile.getOriginalFilename();
-        String Suffix = fileName.substring(fileName.lastIndexOf("."));
-
+        String Suffix = fileName.substring(fileName.lastIndexOf(".")); // 获取文件后缀名
+        String mimeType = multifile.getContentType(); // 获取MIME类型
         File excelFile = convert(multifile);
 
-        // security check
-        String picSuffixList[] = {".jpg", ".png", ".jpeg", ".gif", ".bmp"};
+        // 判断文件后缀名是否在白名单内
+        String picSuffixList[] = {".jpg", ".png", ".jpeg", ".gif", ".bmp"};  // 后缀名白名单
         Boolean suffixFlag = false;
         for (String white_suffix : picSuffixList) {
             if (Suffix.toLowerCase().equals(white_suffix)) {
@@ -95,7 +97,28 @@ public class FileUpload {
                 break;
             }
         }
-        if ( !suffixFlag || !isImage(excelFile) ) {
+
+        if (!suffixFlag) {
+            logger.error("[-] Suffix error: " + Suffix);
+        }
+
+        String mimeTypeBlackList[] = {"text/html"}; // 不允许传html
+
+        Boolean mimeBlackFlag = false;
+        for (String blackMimeType : mimeTypeBlackList) {
+            if (mimeType.equalsIgnoreCase(blackMimeType) ) {
+                mimeBlackFlag = true;
+                logger.error("[-] Mime type error: " + mimeType);
+                break;
+            }
+        }
+
+        boolean isImageFlag = isImage(excelFile);
+
+        if( !isImageFlag ){
+            logger.error("[-] File is not Image");
+        }
+        if ( !suffixFlag || mimeBlackFlag || !isImageFlag ) {
             redirectAttributes.addFlashAttribute("message", "illeagl picture");
             deleteFile(excelFile);
             return "redirect:/file/status";

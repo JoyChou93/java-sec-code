@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 推荐使用该全局方案修复Cors跨域漏洞，因为可以校验一级域名。
  * @author JoyChou @ 2019.12.19
- * 
+ *
  */
 @WebFilter(filterName = "OriginFilter", urlPatterns = "/cors/sec/originFilter")
 public class OriginFilter implements Filter {
