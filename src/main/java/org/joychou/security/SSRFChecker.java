@@ -5,11 +5,13 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import org.apache.commons.net.util.SubnetUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SSRFChecker {
 
     private static int connectTime = 5*1000;  // 设置连接超时时间5s
-
+    private static Logger logger = LoggerFactory.getLogger(SSRFChecker.class);
     /**
      * 解析url的ip，判断ip是否是内网ip，所以TTL设置为0的情况不适用。
      * url只允许https或者http，并且设置默认连接超时时间。
@@ -27,6 +29,7 @@ public class SSRFChecker {
                 // 判断当前请求的URL是否是内网ip
                 Boolean bRet = isInnerIPByUrl(finalUrl);
                 if (bRet) {
+                    logger.error("[-] SSRF check failed. Dangerous url: " + finalUrl);
                     return false;  // 内网ip直接return，非内网ip继续判断是否有重定向
                 }
 
@@ -87,6 +90,7 @@ public class SSRFChecker {
         for (String subnet: blackSubnetlist) {
             SubnetUtils utils = new SubnetUtils(subnet);
             if (utils.getInfo().isInRange(strIP)) {
+                logger.error("[-] SSRF check failed. Inner Ip: " + strIP);
                 return true;
             }
         }

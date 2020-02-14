@@ -4,6 +4,7 @@ import com.google.common.io.Files;
 import com.squareup.okhttp.OkHttpClient;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.fluent.Request;
@@ -11,18 +12,21 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.joychou.security.SecurityUtil;
-import org.springframework.stereotype.Controller;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.HttpURLConnection;
+import java.net.*;
 
 
 /**
@@ -31,12 +35,13 @@ import java.net.HttpURLConnection;
  * @desc    Java ssrf vuls code.
  */
 
-@Controller
+@RestController
 @RequestMapping("/ssrf")
 public class SSRF {
 
+    private static Logger logger = LoggerFactory.getLogger(SSRF.class);
+
     @RequestMapping("/urlConnection")
-    @ResponseBody
     public static String ssrf_URLConnection(HttpServletRequest request)
     {
         try {
@@ -169,9 +174,7 @@ public class SSRF {
      */
     @RequestMapping("/HttpClient")
     @ResponseBody
-    public static String ssrf_HttpClient(HttpServletRequest request) {
-
-        String url = request.getParameter("url");
+    public static String ssrf_HttpClient(@RequestParam String url) {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(url);
         try {
@@ -193,26 +196,18 @@ public class SSRF {
 
     /**
      * Safe code.
-     * http://localhost:8080/ssrf/commonsHttpClient?url=http://www.baidu.com
+     * http://localhost:8080/ssrf/commonsHttpClient/sec?url=http://www.baidu.com
      *
      */
-    @RequestMapping("/commonsHttpClient")
+    @RequestMapping("/commonsHttpClient/sec")
     @ResponseBody
-    public static String commonsHttpClient(HttpServletRequest request) {
-
-        String url = request.getParameter("url");
-
-        // Security check
+    public static String commonsHttpClient(@RequestParam String url) {
         if (!SecurityUtil.checkSSRFWithoutRedirect(url)) {
             return "Bad man. I got u.";
         }
-        // Create an instance of HttpClient.
+
         HttpClient client = new HttpClient();
-
-        // Create a method instance.
         GetMethod method = new GetMethod(url);
-
-        // forbid 302 redirection
         method.setFollowRedirects(false);
 
         try {
@@ -238,19 +233,63 @@ public class SSRF {
 
     }
 
+    /**
+     * jsoup是一款Java的HTML解析器，可直接解析某个URL地址、HTML文本内容。
+     * http://localhost:8080/ssrf/Jsoup?url=http://www.baidu.com
+     *
+     */
+    @RequestMapping("/Jsoup")
+    @ResponseBody
+    public static String Jsoup(@RequestParam String url) {
+        try {
+            Document doc = Jsoup.connect(url)
+                    .userAgent(
+                            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) "
+                                    + "Chrome/64.0.3282.167 Safari/537.36")
+                    .timeout(3000)
+                    .cookie("name", "joychou") // request请求带的cookie
+                    .followRedirects(false)
+                    .execute().parse();
+        } catch (MalformedURLException e) {
+            return "exception: " + e.toString();
+        } catch (Exception e) {
+            return "exception: " + e.toString();
+        }
+
+        return "Jsoup ssrf";
+    }
+
+
+    /**
+     * 用途：IOUtils可远程获取URL图片
+     * 默认重定向：是
+     * 封装类：URLConnection
+     * http://localhost:8080/ssrf/IOUtils?url=http://www.baidu.com
+     */
+    @RequestMapping("/IOUtils")
+    public static String IOUtils(@RequestParam String url) {
+        try {
+            // IOUtils.toByteArray内部用URLConnection进行了封装
+            byte[] b = IOUtils.toByteArray(URI.create(url));
+        } catch (Exception e) {
+            return "exception: " + e.toString();
+        }
+
+        return "IOUtils ssrf";
+    }
+
 
     /**
      * Safe code.
-     * http://localhost:8080/ssrf/ImageIO_safe?url=http://www.baidu.com
+     * http://localhost:8080/ssrf/ImageIO/sec?url=http://www.baidu.com
      *
      */
-    @RequestMapping("/ImageIO_safe")
-    @ResponseBody
-    public static String ssrf_ImageIO_safecode(HttpServletRequest request) {
-        String url = request.getParameter("url");
+    @RequestMapping("/ImageIO/sec")
+    public static String ImageIOSec(@RequestParam String url) {
         try {
             URL u = new URL(url);
             if (!SecurityUtil.checkSSRF(url)) {
+                logger.error("[-] SSRF check failed. Original Url: "+ url);
                 return "SSRF check failed.";
             }
             ImageIO.read(u); // send request

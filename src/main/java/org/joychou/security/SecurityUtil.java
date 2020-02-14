@@ -1,5 +1,6 @@
 package org.joychou.security;
 
+import com.google.common.net.InternetDomainName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,8 +12,9 @@ import java.util.regex.Pattern;
 public class SecurityUtil {
 
     private static final Pattern FILTER_PATTERN = Pattern.compile("^[a-zA-Z0-9_/\\.-]+$") ;
+    private static Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
 
-    protected static Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
+
     /**
      * 通过endsWith判断URL是否合法
      *
@@ -40,6 +42,44 @@ public class SecurityUtil {
 
             return null;
         } catch (Exception e) {
+            logger.error(e.toString());
+            return null;
+        }
+    }
+
+    /**
+     * 通过google guava判断URL是否合法。默认认为localhost合法
+     *
+     * @param url 需要check的url
+     * @param urlwhitelist 根域名白名单
+     * @return 安全url返回url，危险url返回null
+     */
+    public static String checkUrlByGuava(String url, String[] urlwhitelist){
+        final String localhost = "localhost";
+
+        if (null == url) {
+            return null;
+        }
+
+        try {
+            URI u = new URI(url);
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                return null;
+            }
+            String host = u.getHost().toLowerCase();
+            if (localhost.equals(host)) {
+                return url;
+            }
+            String rootDomain = InternetDomainName.from(host).topPrivateDomain().toString();
+
+            for (String whiteurl: urlwhitelist){
+                if (rootDomain.equals(whiteurl)) {
+                    return url;
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            logger.error(e.toString());
             return null;
         }
     }
@@ -118,4 +158,5 @@ public class SecurityUtil {
 
         return input;
     }
+
 }

@@ -49,9 +49,9 @@ public class JsonpFilter implements Filter {
             return ;
         }
 
-        // 校验jsonp逻辑，如果不安全，返回403页面
-        if (SecurityUtil.checkURLbyEndsWith(refer, jsonpReferWhitelist) == null ){
-            logger.info("[-] URL: " + url + "?" + query + "\t" + "Referer: " + refer);
+        // 校验jsonp逻辑，如果不安全，返回forbidden
+        if (SecurityUtil.checkUrlByGuava(refer, jsonpReferWhitelist) == null ){
+            logger.error("[-] URL: " + url + "?" + query + "\t" + "Referer: " + refer);
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("forbidden");
             response.flushBuffer();
