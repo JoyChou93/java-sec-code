@@ -195,9 +195,10 @@ public class SSRF {
 
 
     /**
-     * Safe code.
-     * http://localhost:8080/ssrf/commonsHttpClient/sec?url=http://www.baidu.com
+     * https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient
+     * UserAgent: Jakarta Commons-HttpClient/3.1 (2007.08 publish)
      *
+     * http://localhost:8080/ssrf/commonsHttpClient/sec?url=http://www.baidu.com
      */
     @RequestMapping("/commonsHttpClient/sec")
     @ResponseBody

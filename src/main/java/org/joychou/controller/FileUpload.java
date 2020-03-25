@@ -4,10 +4,7 @@ import com.fasterxml.uuid.Generators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -20,6 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
+
+import org.joychou.security.SecurityUtil;
 
 
 /**
@@ -35,6 +34,7 @@ public class FileUpload {
     // Save the uploaded file to this folder
     private static String UPLOADED_FOLDER = "/tmp/";
     private final Logger logger= LoggerFactory.getLogger(this.getClass());
+    private final String mimeChars = "/abcdefghijklmnopqrstuvwxyz-.0123456789";
 
     @GetMapping("/")
     public String index() {
@@ -73,14 +73,13 @@ public class FileUpload {
         return "redirect:/file/status";
     }
 
+
     // only upload picture
     @PostMapping("/upload/picture")
-    public String uploadPicture(@RequestParam("file") MultipartFile multifile,
-                                   RedirectAttributes redirectAttributes) throws Exception{
+    @ResponseBody
+    public String uploadPicture(@RequestParam("file") MultipartFile multifile) throws Exception{
         if (multifile.isEmpty()) {
-            // 赋值给uploadStatus.html里的动态参数message
-            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-            return "redirect:/file/status";
+            return "Please select a file to upload";
         }
 
         String fileName = multifile.getOriginalFilename();
@@ -88,40 +87,48 @@ public class FileUpload {
         String mimeType = multifile.getContentType(); // 获取MIME类型
         File excelFile = convert(multifile);
 
-        // 判断文件后缀名是否在白名单内
-        String picSuffixList[] = {".jpg", ".png", ".jpeg", ".gif", ".bmp"};  // 后缀名白名单
-        Boolean suffixFlag = false;
+
+        // 判断文件后缀名是否在白名单内  校验1
+        String picSuffixList[] = {".jpg", ".png", ".jpeg", ".gif", ".bmp", ".ico"};
+        boolean suffixFlag = false;
         for (String white_suffix : picSuffixList) {
             if (Suffix.toLowerCase().equals(white_suffix)) {
                 suffixFlag = true;
                 break;
             }
         }
-
         if (!suffixFlag) {
             logger.error("[-] Suffix error: " + Suffix);
+            deleteFile(excelFile);
+            return "Upload failed. Illeagl picture.";
         }
 
-        String mimeTypeBlackList[] = {"text/html"}; // 不允许传html
 
-        Boolean mimeBlackFlag = false;
+        // 判断MIME类型是否在黑名单内 校验2
+        String mimeTypeBlackList[] = {
+                "text/html",
+                "text/javascript",
+                "application/javascript",
+                "application/ecmascript",
+                "text/xml",
+                "application/xml"
+        };
         for (String blackMimeType : mimeTypeBlackList) {
-            if (mimeType.equalsIgnoreCase(blackMimeType) ) {
-                mimeBlackFlag = true;
+            // 用contains是为了防止text/html;charset=UTF-8绕过
+            if (SecurityUtil.replaceSpecialStr(mimeType).toLowerCase().contains(blackMimeType) ) {
                 logger.error("[-] Mime type error: " + mimeType);
-                break;
+                deleteFile(excelFile);
+                return "Upload failed. Illeagl picture.";
             }
         }
 
+        // 判断文件内容是否是图片 校验3
         boolean isImageFlag = isImage(excelFile);
 
-        if( !isImageFlag ){
+        if( !isImage(excelFile) ){
             logger.error("[-] File is not Image");
-        }
-        if ( !suffixFlag || mimeBlackFlag || !isImageFlag ) {
-            redirectAttributes.addFlashAttribute("message", "illeagl picture");
             deleteFile(excelFile);
-            return "redirect:/file/status";
+            return "Upload failed. Illeagl picture.";
         }
 
 
@@ -130,24 +137,16 @@ public class FileUpload {
             byte[] bytes = multifile.getBytes();
             Path path = Paths.get(UPLOADED_FOLDER + multifile.getOriginalFilename());
             Files.write(path, bytes);
-
-            redirectAttributes.addFlashAttribute("message",
-                    "You successfully uploaded '" + UPLOADED_FOLDER + multifile.getOriginalFilename() + "'");
-
         } catch (IOException e) {
-            redirectAttributes.addFlashAttribute("message", "upload failed");
-            e.printStackTrace();
+            logger.error(e.toString());
             deleteFile(excelFile);
-            return "redirect:/file/status";
+            return "Upload failed";
         }
 
         deleteFile(excelFile);
-        return "redirect:/file/status";
-    }
-
-    @GetMapping("/status")
-    public String uploadStatus() {
-        return "uploadStatus";
+        logger.info("[+] Safe file. Suffix: {}, MIME: {}", Suffix, mimeType);
+        logger.info("[+] Successfully uploaded {}{}", UPLOADED_FOLDER, multifile.getOriginalFilename());
+        return "Upload success";
     }
 
     private void deleteFile(File... files) {

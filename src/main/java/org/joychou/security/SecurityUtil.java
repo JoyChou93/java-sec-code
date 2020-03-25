@@ -159,4 +159,50 @@ public class SecurityUtil {
         return input;
     }
 
+
+    /**
+     * 过滤mybatis中order by不能用#的情况。
+     * 严格限制用户输入只能包含<code>a-zA-Z0-9_-.</code>字符。
+     *
+     * @param sql sql
+     * @return 安全sql，否则返回null
+     */
+    public static String sqlFilter(String sql) {
+        if (!FILTER_PATTERN.matcher(sql).matches()) {
+            return null;
+        }
+        return sql;
+    }
+
+    /**
+     * 将非<code>0-9a-zA-Z/-.</code>的字符替换为空
+     *
+     * @param str 字符串
+     * @return 被过滤的字符串
+     */
+    public static String replaceSpecialStr(String str) {
+        StringBuilder sb = new StringBuilder();
+        str = str.toLowerCase();
+        for(int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            // 如果是0-9
+            if (ch >= 48 && ch <= 57 ){
+                sb.append(ch);
+            }
+            // 如果是a-z
+            else if(ch >= 97 && ch <= 122) {
+                sb.append(ch);
+            }
+            else if(ch == '/' || ch == '.' || ch == '-'){
+                sb.append(ch);
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.print(replaceSpecialStr("text/ html&(&(asdf"));
+    }
+
 }

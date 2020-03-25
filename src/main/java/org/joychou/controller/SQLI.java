@@ -3,6 +3,9 @@ package org.joychou.controller;
 
 import org.joychou.mapper.UserMapper;
 import org.joychou.dao.User;
+import org.joychou.security.SecurityUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +15,8 @@ import java.util.List;
 
 
 /**
- * @author  JoyChou (joychou@joychou.org)
- * @date    2018.08.22
- * @desc    SQL Injection
+ * SQL Injection
+ * @author  JoyChou @2018.08.22
  */
 
 @SuppressWarnings("Duplicates")
@@ -22,11 +24,15 @@ import java.util.List;
 @RequestMapping("/sqli")
 public class SQLI {
 
+    private static Logger logger = LoggerFactory.getLogger(SQLI.class);
     private static String driver = "com.mysql.jdbc.Driver";
+
     @Value("${spring.datasource.url}")
     private String url;
+
     @Value("${spring.datasource.username}")
     private String user;
+
     @Value("${spring.datasource.password}")
     private String password;
 
@@ -35,12 +41,12 @@ public class SQLI {
 
 
     /**
-     * Vul Code.
+     * Vuln Code.
      * http://localhost:8080/sqli/jdbc/vul?username=joychou
      *
      * @param username username
      */
-    @RequestMapping("/jdbc/vul")
+    @RequestMapping("/jdbc/vuln")
     public String jdbc_sqli_vul(@RequestParam("username") String username){
         String result = "";
         try {
@@ -50,37 +56,28 @@ public class SQLI {
             if(!con.isClosed())
                 System.out.println("Connecting to Database successfully.");
 
-            // sqli vuln code 漏洞代码
+            // sqli vuln code
              Statement statement = con.createStatement();
              String sql = "select * from users where username = '" + username + "'";
-             System.out.println(sql);
+             logger.info(sql);
              ResultSet rs = statement.executeQuery(sql);
-
-
-            System.out.println("-----------------");
 
             while(rs.next()){
                 String res_name = rs.getString("username");
                 String res_pwd = rs.getString("password");
                 result +=  res_name + ": " + res_pwd + "\n";
-                System.out.println(res_name + ": " + res_pwd);
-
+                logger.info(res_name + ": " + res_pwd);
             }
             rs.close();
             con.close();
 
 
         }catch (ClassNotFoundException e) {
-            System.out.println("Sorry,can`t find the Driver!");
-            e.printStackTrace();
+            logger.error("Sorry,can`t find the Driver!");
         }catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }catch (Exception e) {
-            e.printStackTrace();
-
-        }finally{
-            System.out.println("-----------------");
-            System.out.println("Connect database done.");
+            logger.error(e.toString());
         }
         return result;
     }
@@ -103,62 +100,60 @@ public class SQLI {
             if(!con.isClosed())
                 System.out.println("Connecting to Database successfully.");
 
-
             // fix code
             String sql = "select * from users where username = ?";
             PreparedStatement st = con.prepareStatement(sql);
             st.setString(1, username);
-            System.out.println(st.toString());  // sql after prepare statement
+            logger.info(st.toString());  // sql after prepare statement
             ResultSet rs = st.executeQuery();
-
-            System.out.println("-----------------");
 
             while(rs.next()){
                 String res_name = rs.getString("username");
                 String res_pwd = rs.getString("password");
                 result +=  res_name + ": " + res_pwd + "\n";
-                System.out.println(res_name + ": " + res_pwd);
-
+                logger.info(res_name + ": " + res_pwd);
             }
+
             rs.close();
             con.close();
 
-
         }catch (ClassNotFoundException e) {
-            System.out.println("Sorry,can`t find the Driver!");
+            logger.error("Sorry,can`t find the Driver!");
             e.printStackTrace();
         }catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }catch (Exception e) {
-            e.printStackTrace();
-
-        }finally{
-            System.out.println("-----------------");
-            System.out.println("Connect database done.");
+            logger.error(e.toString());
         }
         return result;
     }
 
     /**
-     * vul code
-     * http://localhost:8080/sqli/mybatis/vul01?username=joychou' or '1'='1
+     * vuln code
+     * http://localhost:8080/sqli/mybatis/vuln01?username=joychou' or '1'='1
      *
      * @param username username
      */
-    @GetMapping("/mybatis/vul01")
-    public List<User> mybatis_vul1(@RequestParam("username") String username) {
-        return userMapper.findByUserNameVul(username);
+    @GetMapping("/mybatis/vuln01")
+    public List<User> mybatisVuln01(@RequestParam("username") String username) {
+        return userMapper.findByUserNameVuln01(username);
     }
 
     /**
      * vul code
-     * http://localhost:8080/sqli/mybatis/vul02?username=joychou' or '1'='1' %23
+     * http://localhost:8080/sqli/mybatis/vuln02?username=joychou' or '1'='1' %23
      *
      * @param username username
      */
-    @GetMapping("/mybatis/vul02")
-    public List<User> mybatis_vul2(@RequestParam("username") String username) {
-        return userMapper.findByUserNameVul2(username);
+    @GetMapping("/mybatis/vuln02")
+    public List<User> mybatisVuln02(@RequestParam("username") String username) {
+        return userMapper.findByUserNameVuln02(username);
+    }
+
+    // http://localhost:8080/sqli/mybatis/orderby/vuln03?sort=1 desc%23
+    @GetMapping("/mybatis/orderby/vuln03")
+    public List<User> mybatisVuln03(@RequestParam("sort") String sort) {
+        return userMapper.findByUserNameVuln03(sort);
     }
 
 
@@ -169,7 +164,7 @@ public class SQLI {
      * @param username username
      */
     @GetMapping("/mybatis/sec01")
-    public User mybatis_sec1(@RequestParam("username") String username) {
+    public User mybatisSec01(@RequestParam("username") String username) {
         return userMapper.findByUserName(username);
     }
 
@@ -180,7 +175,7 @@ public class SQLI {
      * @param id id
      */
     @GetMapping("/mybatis/sec02")
-    public User mybatis_sec2(@RequestParam("id") Integer id) {
+    public User mybatisSec02(@RequestParam("id") Integer id) {
         return userMapper.findById(id);
     }
 
@@ -190,9 +185,14 @@ public class SQLI {
      * http://localhost:8080/sqli/mybatis/sec03
      **/
     @GetMapping("/mybatis/sec03")
-    public User mybatis_sec3() {
+    public User mybatisSec03() {
         return userMapper.OrderByUsername();
     }
 
+
+    @GetMapping("/mybatis/orderby/sec04")
+    public List<User> mybatisOrderBySec04(@RequestParam("sort") String sort) {
+        return userMapper.findByUserNameVuln03(SecurityUtil.sqlFilter(sort));
+    }
 
 }

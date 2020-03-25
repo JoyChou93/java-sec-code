@@ -18,9 +18,10 @@ public interface UserMapper {
     User findByUserName(@Param("username") String username);
 
     @Select("select * from users where username = '${username}'")
-    List<User> findByUserNameVul(@Param("username") String username);
+    List<User> findByUserNameVuln01(@Param("username") String username);
 
-    List<User> findByUserNameVul2(String username);
+    List<User> findByUserNameVuln02(String username);
+    List<User> findByUserNameVuln03(@Param("order") String order);
 
     User findById(Integer id);
 

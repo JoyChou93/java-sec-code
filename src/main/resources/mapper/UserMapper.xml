@@ -13,8 +13,15 @@
 	    <!--select * from users where username = #{username}-->
     <!--</select>-->
 
-    <select id="findByUserNameVul2" parameterType="String" resultMap="User">
+    <select id="findByUserNameVuln02" parameterType="String" resultMap="User">
         select * from users where username like '%${_parameter}%'
+    </select>
+
+    <select id="findByUserNameVuln03" parameterType="String" resultMap="User">
+        select * from users
+        <if test="order != null">
+            order by ${order} asc
+        </if>
     </select>
 
     <select id="findById" resultMap="User">
