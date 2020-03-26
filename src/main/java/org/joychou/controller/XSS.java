@@ -1,35 +1,24 @@
 package org.joychou.controller;
 
 import org.apache.commons.lang.StringUtils;
-import org.joychou.dao.User;
-import org.joychou.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
+
 
 /**
- * @author   JoyChou (joychou@joychou.org)
- * @date     2018.01.02
- * @desc     XSS vuls code
+ * @author JoyChou @2018-01-02
  */
-
 @Controller
 @RequestMapping("/xss")
 public class XSS {
 
     /**
-     * Vul Code.
+     * Vuln Code.
      * ReflectXSS
      * http://localhost:8080/xss/reflect?xss=<script>alert(1)</script>
      *
@@ -71,6 +60,7 @@ public class XSS {
     {
         return xss;
     }
+
     /**
      * safe Code.
      * http://localhost:8080/xss/safe
@@ -82,7 +72,7 @@ public class XSS {
         return encode(xss);
     }
 
-    public static String encode(String origin) {
+    private static String encode(String origin) {
         origin = StringUtils.replace(origin, "&", "&amp;");
         origin = StringUtils.replace(origin, "<", "&lt;");
         origin = StringUtils.replace(origin, ">", "&gt;");

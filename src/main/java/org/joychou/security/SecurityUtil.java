@@ -91,11 +91,8 @@ public class SecurityUtil {
      * @return 安全返回true，危险返回false
      */
     public static Boolean checkSSRF(String url) {
-        if (SSRFChecker.checkSSRF(url)) {
-            return true;
-        } else {
-            return false;
-        }
+        int checkTimes = 10;
+        return SSRFChecker.checkSSRF(url, checkTimes);
     }
 
 
@@ -143,7 +140,7 @@ public class SecurityUtil {
             }
         }
 
-        if (temp.indexOf("..") != -1 || temp.charAt(0) == '/') {
+        if (temp.contains("..") || temp.charAt(0) == '/') {
             return null;
         }
 

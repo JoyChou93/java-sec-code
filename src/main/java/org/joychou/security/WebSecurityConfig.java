@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         public boolean matches(HttpServletRequest request) {
 
             // 配置需要CSRF校验的请求方式，
-            HashSet<String> allowedMethods = new HashSet<String>(Arrays.asList(csrfMethod));
+            HashSet<String> allowedMethods = new HashSet<>(Arrays.asList(csrfMethod));
             // return false表示不校验csrf
             if (!csrfEnabled) {
                 return false;
@@ -74,7 +74,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(new LoginSuccessHandler())
                 .failureHandler(new LoginFailureHandler()).and()
                 .logout().logoutUrl("/logout").permitAll().and()
-                .rememberMe(); // tomcat默认JSESSION会话有效时间为30分钟，所以30分钟不操作会话将过期。为了解决这一问题，引入rememberMe功能。
+                // tomcat默认JSESSION会话有效时间为30分钟，所以30分钟不操作会话将过期。为了解决这一问题，引入rememberMe功能。
+                .rememberMe();
     }
 
     /**
@@ -84,7 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource()
     {
         // Set cors origin white list
-        ArrayList<String> allowOrigins = new ArrayList<String>();
+        ArrayList<String> allowOrigins = new ArrayList<>();
         allowOrigins.add("joychou.org");
         allowOrigins.add("https://test.joychou.me"); // 区分http和https，并且默认不会拦截同域请求。
 

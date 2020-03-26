@@ -8,21 +8,24 @@ import org.apache.commons.net.util.SubnetUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SSRFChecker {
+class SSRFChecker {
 
-    private static int connectTime = 5*1000;  // 设置连接超时时间5s
     private static Logger logger = LoggerFactory.getLogger(SSRFChecker.class);
+
     /**
      * 解析url的ip，判断ip是否是内网ip，所以TTL设置为0的情况不适用。
      * url只允许https或者http，并且设置默认连接超时时间。
      * 该修复方案会主动请求重定向后的链接。最好用Hook方式获取到所有url后，进行判断，代码待续…
      *
      * @param url check的url
+     * @param checkTimes 设置重定向检测的最大次数，建议设置为10次
      * @return 安全返回true，危险返回false
      */
-    public static Boolean checkSSRF(String url) {
+    static Boolean checkSSRF(String url, int checkTimes) {
 
         HttpURLConnection connection;
+        int connectTime = 5*1000;  // 设置连接超时时间5s
+        int i = 1;
         String finalUrl = url;
         try {
             do {
@@ -45,7 +48,11 @@ public class SSRFChecker {
                     if (null == redirectedUrl)
                         break;
                     finalUrl = redirectedUrl;
-                    // System.out.println("redirected url: " + finalUrl);
+                    i += 1;  // 重定向次数加1
+                    logger.info("redirected url: " + finalUrl);
+                    if(i == checkTimes) {
+                        return false;
+                    }
                 } else
                     break;
             } while (connection.getResponseCode() != HttpURLConnection.HTTP_OK);
@@ -62,7 +69,7 @@ public class SSRFChecker {
      *
      * @return 如果是内网IP，返回true；非内网IP，返回false。
      */
-    public static Boolean isInnerIPByUrl(String url) {
+     static Boolean isInnerIPByUrl(String url) {
         String host = url2host(url);
         if (host.equals("")) {
             return true; // 异常URL当成内网IP等非法URL处理

@@ -23,16 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.*;
 
 
 /**
- * @author  JoyChou (joychou@joychou.org)
- * @date    2017.12.28
- * @desc    Java ssrf vuls code.
+ * Java SSRF vuln or security code.
+ *
+ * @author JoyChou @2017-12-28
  */
 
 @RestController
@@ -42,15 +41,14 @@ public class SSRF {
     private static Logger logger = LoggerFactory.getLogger(SSRF.class);
 
     @RequestMapping("/urlConnection")
-    public static String ssrf_URLConnection(HttpServletRequest request)
+    public static String ssrf_URLConnection(@RequestParam String url)
     {
         try {
-            String url = request.getParameter("url");
             URL u = new URL(url);
             URLConnection urlConnection = u.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream())); //send request
             String inputLine;
-            StringBuffer html = new StringBuffer();
+            StringBuilder html = new StringBuilder();
 
             while ((inputLine = in.readLine()) != null) {
                 html.append(inputLine);
@@ -58,7 +56,7 @@ public class SSRF {
             in.close();
             return html.toString();
         }catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
             return "fail";
         }
     }
@@ -66,16 +64,15 @@ public class SSRF {
 
     @RequestMapping("/HttpURLConnection")
     @ResponseBody
-    public static String ssrf_httpURLConnection(HttpServletRequest request)
+    public static String ssrf_httpURLConnection(@RequestParam String url)
     {
         try {
-            String url = request.getParameter("url");
             URL u = new URL(url);
             URLConnection urlConnection = u.openConnection();
             HttpURLConnection httpUrl = (HttpURLConnection)urlConnection;
             BufferedReader in = new BufferedReader(new InputStreamReader(httpUrl.getInputStream())); //send request
             String inputLine;
-            StringBuffer html = new StringBuffer();
+            StringBuilder html = new StringBuilder();
 
             while ((inputLine = in.readLine()) != null) {
                 html.append(inputLine);
@@ -83,7 +80,7 @@ public class SSRF {
             in.close();
             return html.toString();
         }catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
             return "fail";
         }
     }
@@ -91,13 +88,12 @@ public class SSRF {
 
     @RequestMapping("/Request")
     @ResponseBody
-    public static String ssrf_Request(HttpServletRequest request)
+    public static String ssrf_Request(@RequestParam String url)
     {
         try {
-            String url = request.getParameter("url");
             return Request.Get(url).execute().returnContent().toString();
         }catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
             return "fail";
         }
     }
@@ -113,10 +109,9 @@ public class SSRF {
      */
     @RequestMapping("/openStream")
     @ResponseBody
-    public static void ssrf_openStream (HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static void ssrf_openStream (@RequestParam String url, HttpServletResponse response) throws IOException {
         InputStream inputStream = null;
         OutputStream outputStream = null;
-        String url = request.getParameter("url");
         try {
             String downLoadImgFileName = Files.getNameWithoutExtension(url) + "." + Files.getFileExtension(url);
             // download
@@ -132,7 +127,7 @@ public class SSRF {
             }
 
         }catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }finally {
             if (inputStream != null) {
                 inputStream.close();
@@ -147,20 +142,19 @@ public class SSRF {
 
     @RequestMapping("/ImageIO")
     @ResponseBody
-    public static void ssrf_ImageIO(HttpServletRequest request) {
-        String url = request.getParameter("url");
+    public static void ssrf_ImageIO(@RequestParam String url) {
         try {
             URL u = new URL(url);
             ImageIO.read(u); // send request
         } catch (Exception e) {
+            logger.error(e.toString());
         }
     }
 
 
     @RequestMapping("/okhttp")
     @ResponseBody
-    public static void ssrf_okhttp(HttpServletRequest request) throws IOException {
-        String url = request.getParameter("url");
+    public static void ssrf_okhttp(@RequestParam String url) throws IOException {
         OkHttpClient client = new OkHttpClient();
         com.squareup.okhttp.Request ok_http = new com.squareup.okhttp.Request.Builder().url(url).build();
         client.newCall(ok_http).execute();
@@ -180,8 +174,8 @@ public class SSRF {
         try {
             HttpResponse httpResponse = client.execute(httpGet); // send request
             BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
-            StringBuffer result = new StringBuffer();
-            String line = "";
+            StringBuilder result = new StringBuilder();
+            String line = null;
             while ((line = rd.readLine()) != null) {
                 result.append(line);
             }
@@ -236,8 +230,8 @@ public class SSRF {
 
     /**
      * jsoup是一款Java的HTML解析器，可直接解析某个URL地址、HTML文本内容。
-     * http://localhost:8080/ssrf/Jsoup?url=http://www.baidu.com
      *
+     * http://localhost:8080/ssrf/Jsoup?url=http://www.baidu.com
      */
     @RequestMapping("/Jsoup")
     @ResponseBody
@@ -251,9 +245,11 @@ public class SSRF {
                     .cookie("name", "joychou") // request请求带的cookie
                     .followRedirects(false)
                     .execute().parse();
+            logger.info(doc.html());
         } catch (MalformedURLException e) {
             return "exception: " + e.toString();
-        } catch (Exception e) {
+        } catch (IOException e) {
+            logger.error(e.toString());
             return "exception: " + e.toString();
         }
 
@@ -271,7 +267,7 @@ public class SSRF {
     public static String IOUtils(@RequestParam String url) {
         try {
             // IOUtils.toByteArray内部用URLConnection进行了封装
-            byte[] b = IOUtils.toByteArray(URI.create(url));
+            IOUtils.toByteArray(URI.create(url));
         } catch (Exception e) {
             return "exception: " + e.toString();
         }
