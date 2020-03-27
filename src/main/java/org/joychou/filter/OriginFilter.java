@@ -20,8 +20,6 @@ import org.slf4j.LoggerFactory;
 @WebFilter(filterName = "OriginFilter", urlPatterns = "/cors/sec/originFilter")
 public class OriginFilter implements Filter {
 
-    private static String[] urlwhitelist = {"joychou.org", "joychou.me"};
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -40,7 +38,7 @@ public class OriginFilter implements Filter {
         logger.info("[+] Origin: " + origin + "\tCurrent url:" + request.getRequestURL());
 
         // 以file协议访问html，origin为字符串的null，所以依然会走安全check逻辑
-        if ( origin != null && SecurityUtil.checkURLbyEndsWith(origin, urlwhitelist) == null) {
+        if ( origin != null && SecurityUtil.checkURL(origin) == null) {
             logger.error("[-] Origin check error. " + "Origin: " + origin +
                     "\tCurrent url:" + request.getRequestURL());
             response.setStatus(response.SC_FORBIDDEN);

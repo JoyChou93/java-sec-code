@@ -75,14 +75,14 @@ public class URLRedirect {
 
     /**
      * Safe code of sendRedirect.
-     * http://localhost:8080/urlRedirect/sendRedirect_seccode?url=http://www.baidu.com
+     * http://localhost:8080/urlRedirect/sendRedirect/sec?url=http://www.baidu.com
      */
-    @RequestMapping("/sendRedirect_seccode")
+    @RequestMapping("/sendRedirect/sec")
     @ResponseBody
-    public static void sendRedirect_seccode(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    public void sendRedirect_seccode(HttpServletRequest request, HttpServletResponse response)
+            throws IOException{
         String url = request.getParameter("url");
-        String urlwhitelist[] = {"joychou.org", "joychou.com"};
-        if (SecurityUtil.checkURLbyEndsWith(url, urlwhitelist) == null) {
+        if (SecurityUtil.checkURL(url) == null) {
             // Redirect to error page.
             response.sendRedirect("https://test.joychou.org/error3.html");
             return;

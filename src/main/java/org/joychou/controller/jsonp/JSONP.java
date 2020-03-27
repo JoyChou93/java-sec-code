@@ -24,13 +24,11 @@ import java.util.Map;
  * https://github.com/JoyChou93/java-sec-code/wiki/JSONP
  */
 
-
 @RestController
 @RequestMapping("/jsonp")
 public class JSONP {
 
-    private static String[] urlwhitelist = {"joychou.com", "joychou.org"};
-    private static String callback = WebConfig.getBusinessCallback();
+    private String callback = WebConfig.getBusinessCallback();
 
     // get current login username
     public static String getUserInfo2JsonStr(HttpServletRequest request) {
@@ -65,7 +63,7 @@ public class JSONP {
     public String emptyReferer(HttpServletRequest request) {
         String referer = request.getHeader("referer");
 
-        if (null != referer && SecurityUtil.checkURLbyEndsWith(referer, urlwhitelist) == null) {
+        if (null != referer && SecurityUtil.checkURL(referer) == null) {
             return "error";
         }
         String callback = request.getParameter(this.callback);
@@ -110,7 +108,7 @@ public class JSONP {
     public String safecode(HttpServletRequest request) {
         String referer = request.getHeader("referer");
 
-        if (SecurityUtil.checkURLbyEndsWith(referer, urlwhitelist) == null) {
+        if (SecurityUtil.checkURL(referer) == null) {
             return "error";
         }
         String callback = request.getParameter(this.callback);

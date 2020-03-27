@@ -3,6 +3,8 @@ package org.joychou.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 
 /**
  * Solve can't get value in filter by @Value when not using embed tomcat.
@@ -19,6 +21,7 @@ public class WebConfig {
     private static String[] referUris;
     private static Boolean referSecEnabled = false;
     private static String businessCallback;
+    private static ArrayList<String> safeDomains= new ArrayList<>();
 
     /**
      * application.properties里object自动转jsonp的referer校验开关
@@ -91,4 +94,11 @@ public class WebConfig {
         return businessCallback;
     }
 
+
+    public void setSafeDomains(ArrayList<String> safeDomains){
+        WebConfig.safeDomains = safeDomains;
+    }
+    public static ArrayList<String> getSafeDomains(){
+        return safeDomains;
+    }
 }

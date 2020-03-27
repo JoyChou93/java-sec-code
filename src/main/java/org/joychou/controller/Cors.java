@@ -20,8 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 public class Cors {
 
     private static String info = "{\"name\": \"JoyChou\", \"phone\": \"18200001111\"}";
-    private static String[] urlwhitelist = {"joychou.org", "joychou.me"};
-
 
     @RequestMapping("/vuln/origin")
     public static String vuls1(HttpServletRequest request, HttpServletResponse response) {
@@ -108,7 +106,7 @@ public class Cors {
 
         // 如果origin不为空并且origin不在白名单内，认定为不安全。
         // 如果origin为空，表示是同域过来的请求或者浏览器直接发起的请求。
-        if ( origin != null && SecurityUtil.checkURLbyEndsWith(origin, urlwhitelist) == null ) {
+        if ( origin != null && SecurityUtil.checkURL(origin) == null ) {
             return "Origin is not safe.";
         }
         response.setHeader("Access-Control-Allow-Origin", origin);

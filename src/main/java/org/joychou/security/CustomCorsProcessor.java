@@ -29,26 +29,21 @@ public class CustomCorsProcessor extends DefaultCorsProcessor {
         if (result != null) {
             return result;
         }
-
-        List<String> allowedOrigins = config.getAllowedOrigins();
-        if (StringUtils.isBlank(requestOrigin)
-                || CollectionUtils.isEmpty(allowedOrigins)) {
+        // List<String> allowedOrigins = config.getAllowedOrigins();
+        if (StringUtils.isBlank(requestOrigin)) {
             return null;
         }
 
-        return customCheckOrigin(allowedOrigins, requestOrigin);
+        return customCheckOrigin(requestOrigin);
     }
 
 
     /**
-     * 用host的endsWith来校验requestOrigin
+     * 校验requestOrigin
      */
-    private String customCheckOrigin(List<String> allowedOrigins, String requestOrigin) {
+    private String customCheckOrigin(String requestOrigin) {
 
-        // list转String[]
-        String[] arrayAllowOrigins = allowedOrigins.toArray(new String[allowedOrigins.size()]);
-
-        if ( SecurityUtil.checkURLbyEndsWith(requestOrigin, arrayAllowOrigins) != null) {
+        if ( SecurityUtil.checkURL(requestOrigin) != null) {
             logger.info("[+] Origin: "  + requestOrigin );
             return requestOrigin;
         }

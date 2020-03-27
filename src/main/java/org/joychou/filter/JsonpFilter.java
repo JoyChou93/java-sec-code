@@ -39,7 +39,6 @@ public class JsonpFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
 
         String refer = request.getHeader("referer");
-        String[] jsonpReferWhitelist = WebConfig.getJsonpReferWhitelist();
         StringBuffer url = request.getRequestURL();
         String query = request.getQueryString();
 
@@ -50,7 +49,7 @@ public class JsonpFilter implements Filter {
         }
 
         // 校验jsonp逻辑，如果不安全，返回forbidden
-        if (SecurityUtil.checkUrlByGuava(refer, jsonpReferWhitelist) == null ){
+        if (SecurityUtil.checkURL(refer) == null ){
             logger.error("[-] URL: " + url + "?" + query + "\t" + "Referer: " + refer);
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("forbidden");
@@ -87,7 +86,7 @@ public class JsonpFilter implements Filter {
                 break;
             }
         }
-        if (StringUtils.isBlank(reqCallback)){
+        if(StringUtils.isBlank(reqCallback)){
             return false;
         }
 

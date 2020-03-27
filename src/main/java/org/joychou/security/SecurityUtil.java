@@ -1,79 +1,51 @@
 package org.joychou.security;
 
-import com.google.common.net.InternetDomainName;
+import org.joychou.config.WebConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
+
 
 public class SecurityUtil {
 
     private static final Pattern FILTER_PATTERN = Pattern.compile("^[a-zA-Z0-9_/\\.-]+$") ;
     private static Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
 
-
     /**
-     * 通过endsWith判断URL是否合法
+     * 同时支持一级域名和多级域名，相关配置在resources目录下url/safe_domain.xml文件
      *
-     * @param url 需要check的url
-     * @param urlwhitelist url白名单list
-     * @return 安全url返回url，危险url返回null
+     * @param url the url need to check
+     * @return Safe url returns original url; Illegal url returns null;
      */
-    public static String checkURLbyEndsWith(String url, String[] urlwhitelist) {
-        if (null == url) {
+    public static String checkURL(String url) {
+
+        if (null == url){
             return null;
         }
+
+        ArrayList<String> safeDomains = WebConfig.getSafeDomains();
         try {
             URI uri = new URI(url);
-
-            if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                return null;
-            }
-
             String host = uri.getHost().toLowerCase();
-            for (String whitelist: urlwhitelist){
-                if (host.endsWith("." + whitelist)) {
-                    return url;
-                }
-            }
 
-            return null;
-        } catch (Exception e) {
-            logger.error(e.toString());
-            return null;
-        }
-    }
-
-    /**
-     * 通过google guava判断URL是否合法。默认认为localhost合法
-     *
-     * @param url 需要check的url
-     * @param urlwhitelist 根域名白名单
-     * @return 安全url返回url，危险url返回null
-     */
-    public static String checkUrlByGuava(String url, String[] urlwhitelist){
-        final String localhost = "localhost";
-
-        if (null == url) {
-            return null;
-        }
-
-        try {
-            URI u = new URI(url);
+            // 必须http/https
             if (!url.startsWith("http://") && !url.startsWith("https://")) {
                 return null;
             }
-            String host = u.getHost().toLowerCase();
-            if (localhost.equals(host)) {
+
+            // 支持多级域名
+            if (safeDomains.contains(host)){
                 return url;
             }
-            String rootDomain = InternetDomainName.from(host).topPrivateDomain().toString();
 
-            for (String whiteurl: urlwhitelist){
-                if (rootDomain.equals(whiteurl)) {
+            // 支持一级域名
+            for(String safedomain: safeDomains) {
+                if(host.endsWith("." + safedomain)) {
                     return url;
                 }
             }
@@ -114,8 +86,8 @@ public class SecurityUtil {
      * @param hostWlist host whitelist
      * @return Safe url returns url. Dangerous url returns null.
      */
-    public static String checkSSRFByHostWlist(String url, String[] hostWlist) {
-        return checkURLbyEndsWith(url, hostWlist);
+    public static String checkSSRFByHost(String url) {
+        return checkURL(url);
     }
 
     /**
@@ -199,7 +171,6 @@ public class SecurityUtil {
     }
 
     public static void main(String[] args) {
-        System.out.print(replaceSpecialStr("text/ html&(&(asdf"));
     }
 
 }

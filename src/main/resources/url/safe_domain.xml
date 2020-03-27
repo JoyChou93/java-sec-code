@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<safedomain>
+    <!-- 支持一级域名或多级域名 -->
+    <domain>joychou.com</domain>
+    <domain>test.joychou.org</domain>
+</safedomain>
