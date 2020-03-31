@@ -17,7 +17,7 @@ public class SecurityUtil {
     private static Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
 
     /**
-     * 同时支持一级域名和多级域名，相关配置在resources目录下url/safe_domain.xml文件。
+     * 同时支持一级域名和多级域名，相关配置在resources目录下url/url_safe_domain.xml文件。
      * 优先判断黑名单，如果满足黑名单return null。
      *
      * @param url the url need to check

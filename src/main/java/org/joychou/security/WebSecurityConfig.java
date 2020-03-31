@@ -1,6 +1,5 @@
 package org.joychou.security;
 
-import org.joychou.interceptor.JsonpInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +13,6 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -39,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${joychou.security.csrf.method}")
     private String[] csrfMethod = {"POST"};
 
-    RequestMatcher csrfRequestMatcher = new RequestMatcher() {
+    private RequestMatcher csrfRequestMatcher = new RequestMatcher() {
 
         @Override
         public boolean matches(HttpServletRequest request) {
