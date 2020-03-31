@@ -197,7 +197,7 @@ public class SSRF {
     @RequestMapping("/commonsHttpClient/sec")
     @ResponseBody
     public static String commonsHttpClient(@RequestParam String url) {
-        if (!SecurityUtil.checkSSRFWithoutRedirect(url)) {
+        if (!SecurityUtil.checkSSRFByWhitehosts(url)) {
             return "Bad man. I got u.";
         }
 
@@ -285,7 +285,7 @@ public class SSRF {
     public static String ImageIOSec(@RequestParam String url) {
         try {
             URL u = new URL(url);
-            if (!SecurityUtil.checkSSRF(url)) {
+            if (!SecurityUtil.checkSSRFWithoutRedirect(url)) {
                 logger.error("[-] SSRF check failed. Original Url: "+ url);
                 return "SSRF check failed.";
             }

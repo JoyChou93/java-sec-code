@@ -1,5 +1,6 @@
 package org.joychou.security;
 
+import org.joychou.interceptor.JsonpInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -105,7 +107,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("joychou").password("joychou123").roles("USER").and()
                 .withUser("admin").password("admin123").roles("USER", "ADMIN");
     }
-
 }
 
 

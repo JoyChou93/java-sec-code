@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ssrfsafeconfig>
+
+    <!-- 域名支持一级或者多级，如果在白名单。SecurityUtil.checkSSRFByWhitehosts()方法的域名配置 -->
+    <safedomains>
+        <domain>img.alicdn.com</domain>
+    </safedomains>
+
+    <blockips>
+        <ip>10.0.0.0/8</ip>
+        <ip>172.16.0.0/12</ip>
+        <ip>192.168.0.0/16</ip>
+        <ip>127.0.0.0/8</ip>
+        <ip>0.0.0.0/32</ip>
+    </blockips>
+
+    <blockdomains>
+        <domain>joychou-inc.com</domain>
+    </blockdomains>
+
+</ssrfsafeconfig>

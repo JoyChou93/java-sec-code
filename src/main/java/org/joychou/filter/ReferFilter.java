@@ -42,6 +42,7 @@ public class ReferFilter implements Filter {
         PathMatcher matcher = new AntPathMatcher();
         boolean isMatch = false;
 
+        // 获取要校验Referer的Uri
         for (String uri: WebConfig.getReferUris()) {
             if ( matcher.match (uri, request.getRequestURI()) ) {
                 isMatch = true;

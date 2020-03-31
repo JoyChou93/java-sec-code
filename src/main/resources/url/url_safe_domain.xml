@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<domains>
+    <safedomains>
+        <!-- 支持一级域名或多级域名 -->
+        <domain>joychou.com</domain>
+        <domain>joychou.org</domain>
+        <domain>test.joychou.org</domain>
+        <domain>localhost</domain>
+    </safedomains>
+
+    <!-- 支持一级域名或多级域名 -->
+    <blockdomains>
+        <domain>baidu.com</domain>
+        <domain>evil.joychou.org</domain>
+    </blockdomains>
+
+</domains>

@@ -18,10 +18,13 @@ public class SafeDomainParser {
 
     public SafeDomainParser(){
 
-        String safeTag = "safedomain";
-        String domainSafeTag = "domain";
-        String safeDomainClassPath = "url" + File.separator + "safe_domain.xml";
+        String rootTag = "domains";
+        String safeDomainTag = "safedomains";
+        String blockDomainTag = "blockdomains";
+        String finalTag = "domain";
+        String safeDomainClassPath = "url" + File.separator + "url_safe_domain.xml";
         ArrayList<String> safeDomains = new ArrayList<>();
+        ArrayList<String> blockDomains = new ArrayList<>();
 
         try {
             // 读取resources目录下的文件
@@ -32,23 +35,104 @@ public class SafeDomainParser {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);  // parse xml
 
-            NodeList rootNode = doc.getElementsByTagName(safeTag);
+            NodeList rootNode = doc.getElementsByTagName(rootTag);  // 解析根节点domains
             Node domainsNode = rootNode.item(0);
             NodeList child = domainsNode.getChildNodes();
             
             for (int i = 0; i < child.getLength(); i++){
                 Node node = child.item(i);
-                if (node.getNodeName().equals(domainSafeTag)) {
-                    safeDomains.add(node.getTextContent());
+                // 解析safeDomains节点
+                if (node.getNodeName().equals(safeDomainTag)) {
+                    NodeList tagChild = node.getChildNodes();
+                    for (int j = 0; j < tagChild.getLength(); j++) {
+                        Node finalTagNode = tagChild.item(j);
+                        // 解析safeDomains节点里的domain节点
+                        if (finalTagNode.getNodeName().equals(finalTag)) {
+                            safeDomains.add(finalTagNode.getTextContent());
+                        }
+                    }
+                }else if (node.getNodeName().equals(blockDomainTag)) {
+                    NodeList finalTagNode = node.getChildNodes();
+                    for (int j = 0; j < finalTagNode.getLength(); j++) {
+                        Node tagNode = finalTagNode.item(j);
+                        // 解析blockDomains节点里的domain节点
+                        if (tagNode.getNodeName().equals(finalTag)) {
+                            blockDomains.add(tagNode.getTextContent());
+                        }
+                    }
                 }
             }
-
         }catch (Exception e){
             logger.error(e.toString());
         }
 
         WebConfig wc = new WebConfig();
         wc.setSafeDomains(safeDomains);
+        wc.setBlockDomains(blockDomains);
+
+        // 解析SSRF配置
+        String ssrfRootTag = "ssrfsafeconfig";
+        String ssrfSafeDomainTag = "safedomains";
+        String ssrfBlockDomainTag = "blockdomains";
+        String ssrfBlockIpsTag = "blockips";
+        String ssrfFinalTag = "domain";
+        String ssrfIpFinalTag = "ip";
+        String ssrfSafeDomainClassPath = "url" + File.separator + "ssrf_safe_domain.xml";
+
+        ArrayList<String> ssrfSafeDomains = new ArrayList<>();
+        ArrayList<String> ssrfBlockDomains = new ArrayList<>();
+        ArrayList<String> ssrfBlockIps = new ArrayList<>();
+
+        try {
+            // 读取resources目录下的文件
+            ClassPathResource resource = new ClassPathResource(ssrfSafeDomainClassPath);
+            File file = resource.getFile();
+
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(file);  // parse xml
+
+            NodeList rootNode = doc.getElementsByTagName(ssrfRootTag);  // 解析根节点
+            Node domainsNode = rootNode.item(0);
+            NodeList child = domainsNode.getChildNodes();
+
+            for (int i = 0; i < child.getLength(); i++){
+                Node node = child.item(i);
+                // 解析safeDomains节点
+                if (node.getNodeName().equals(ssrfSafeDomainTag)) {
+                    NodeList tagChild = node.getChildNodes();
+                    for (int j = 0; j < tagChild.getLength(); j++) {
+                        Node tagFinalNode = tagChild.item(j);
+                        if (tagFinalNode.getNodeName().equals(ssrfFinalTag)) {
+                            ssrfSafeDomains.add(tagFinalNode.getTextContent());
+                        }
+                    }
+                }else if (node.getNodeName().equals(ssrfBlockDomainTag)) {
+                    NodeList tagChild = node.getChildNodes();
+                    for (int j = 0; j < tagChild.getLength(); j++) {
+                        Node tagFinalNode = tagChild.item(j);
+                        if (tagFinalNode.getNodeName().equals(ssrfFinalTag)) {
+                            ssrfBlockDomains.add(tagFinalNode.getTextContent());
+                        }
+                    }
+                }else if(node.getNodeName().equals(ssrfBlockIpsTag)){
+                    NodeList tagChild = node.getChildNodes();
+                    for (int j = 0; j < tagChild.getLength(); j++) {
+                        Node tagFinalNode = tagChild.item(j);
+                        // 解析 blockIps 节点里的 ip 节点
+                        if (tagFinalNode.getNodeName().equals(ssrfIpFinalTag)) {
+                            ssrfBlockIps.add(tagFinalNode.getTextContent());
+                        }
+                    }
+                }
+            }
+        }catch (Exception e){
+            logger.error(e.toString());
+        }
+
+        wc.setSsrfBlockDomains(ssrfBlockDomains);
+        wc.setSsrfBlockIps(ssrfBlockIps);
+        wc.setSsrfSafeDomains(ssrfSafeDomains);
     }
 }
 

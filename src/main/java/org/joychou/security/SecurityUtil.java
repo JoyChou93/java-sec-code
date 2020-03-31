@@ -13,11 +13,12 @@ import java.util.regex.Pattern;
 
 public class SecurityUtil {
 
-    private static final Pattern FILTER_PATTERN = Pattern.compile("^[a-zA-Z0-9_/\\.-]+$") ;
+    private static final Pattern FILTER_PATTERN = Pattern.compile("^[a-zA-Z0-9_/\\.-]+$");
     private static Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
 
     /**
-     * 同时支持一级域名和多级域名，相关配置在resources目录下url/safe_domain.xml文件
+     * 同时支持一级域名和多级域名，相关配置在resources目录下url/safe_domain.xml文件。
+     * 优先判断黑名单，如果满足黑名单return null。
      *
      * @param url the url need to check
      * @return Safe url returns original url; Illegal url returns null;
@@ -29,6 +30,8 @@ public class SecurityUtil {
         }
 
         ArrayList<String> safeDomains = WebConfig.getSafeDomains();
+        ArrayList<String> blockDomains = WebConfig.getBlockDomains();
+
         try {
             URI uri = new URI(url);
             String host = uri.getHost().toLowerCase();
@@ -36,6 +39,16 @@ public class SecurityUtil {
             // 必须http/https
             if (!url.startsWith("http://") && !url.startsWith("https://")) {
                 return null;
+            }
+
+            // 如果满足黑名单返回null
+            if (blockDomains.contains(host)){
+                return null;
+            }
+            for(String blockDomain: blockDomains) {
+                if(host.endsWith("." + blockDomain)) {
+                    return null;
+                }
             }
 
             // 支持多级域名
@@ -56,39 +69,55 @@ public class SecurityUtil {
         }
     }
 
+
     /**
-     * 解析url的ip，判断ip是否是内网ip，所以TTL设置为0的情况不适用。
+     * 通过自定义白名单域名处理SSRF漏洞。如果URL范围收敛，强烈建议使用该方案。
+     * 这是最简单也最有效的修复方式。因为SSRF都是发起URL请求时造成，大多数场景是图片场景，一般图片的域名都是CDN或者OSS等，所以限定域名白名单即可完成SSRF漏洞修复。
+     *
+     * @author JoyChou @ 2020-03-30
+     * @param url 需要校验的url
+     * @return Safe url returns true. Dangerous url returns false.
+     */
+    public static boolean checkSSRFByWhitehosts(String url) {
+        return SSRFChecker.checkURLFckSSRF(url);
+    }
+
+
+    /**
+     * 解析URL的IP，判断IP是否是内网IP。如果有重定向跳转，循环解析重定向跳转的IP。不建议使用该方案。
+     *
+     * 存在的问题：
+     *   1、会主动发起请求，可能会有性能问题
+     *   2、设置重定向跳转为第一次302不跳转，第二次302跳转到内网IP 即可绕过该防御方案
+     *   3、TTL设置为0会被绕过
      *
      * @param url check的url
      * @return 安全返回true，危险返回false
      */
-    public static Boolean checkSSRF(String url) {
+    @Deprecated
+    public static boolean checkSSRF(String url) {
         int checkTimes = 10;
         return SSRFChecker.checkSSRF(url, checkTimes);
     }
 
 
     /**
-     * Suitable for: TTL isn't set to 0 & Redirect is forbidden.
+     * 不能使用白名单的情况下建议使用该方案。前提是禁用重定向并且TTL默认不为0。
+     *
+     * 存在问题：
+     *  1、TTL为0会被绕过
+     *  2、使用重定向可绕过
      *
      * @param url The url that needs to check.
      * @return Safe url returns true. Dangerous url returns false.
      */
     public static boolean checkSSRFWithoutRedirect(String url) {
+        if(url == null) {
+            return false;
+        }
         return !SSRFChecker.isInnerIPByUrl(url);
     }
 
-    /**
-     * Check SSRF by host white list.
-     * This is the simplest and most effective method to fix ssrf vul.
-     *
-     * @param url The url that needs to check.
-     * @param hostWlist host whitelist
-     * @return Safe url returns url. Dangerous url returns null.
-     */
-    public static String checkSSRFByHost(String url) {
-        return checkURL(url);
-    }
 
     /**
      * Filter file path to prevent path traversal vulns.

@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author JoyChou @2019-07-24
  */
-@Component
+@Component // 注解@Component表明WebConfig类将被SpringIoC容器扫描装配，并且Bean名称为webConfig
 public class WebConfig {
 
     private static String[] callbacks;
@@ -22,7 +22,10 @@ public class WebConfig {
     private static Boolean referSecEnabled = false;
     private static String businessCallback;
     private static ArrayList<String> safeDomains= new ArrayList<>();
-
+    private static ArrayList<String> blockDomains= new ArrayList<>();
+    private static ArrayList<String> ssrfSafeDomains = new ArrayList<>();
+    private static ArrayList<String> ssrfBlockDomains= new ArrayList<>();
+    private static ArrayList<String> ssrfBlockIps = new ArrayList<>();
     /**
      * application.properties里object自动转jsonp的referer校验开关
      * @param jsonpReferCheckEnabled jsonp校验开关
@@ -42,19 +45,6 @@ public class WebConfig {
     }
     public static String[] getJsonpCallbacks(){
         return callbacks;
-    }
-
-
-    /**
-     * application.properties里object自动转jsonp的referer白名单域名
-     * @param jsonpRefererHost 白名单域名，仅支持一级域名
-     */
-    @Value("${joychou.security.jsonp.referer.host}")
-    public void setJsonpReferWhitelist(String[] jsonpRefererHost){
-        WebConfig.jsonpRefererHost = jsonpRefererHost;
-    }
-    public static String[] getJsonpReferWhitelist(){
-        return jsonpRefererHost;
     }
 
 
@@ -95,10 +85,42 @@ public class WebConfig {
     }
 
 
-    public void setSafeDomains(ArrayList<String> safeDomains){
+    void setSafeDomains(ArrayList<String> safeDomains){
         WebConfig.safeDomains = safeDomains;
     }
     public static ArrayList<String> getSafeDomains(){
         return safeDomains;
+    }
+
+
+    void setBlockDomains(ArrayList<String> blockDomains){
+        WebConfig.blockDomains = blockDomains;
+    }
+    public static ArrayList<String> getBlockDomains(){
+        return blockDomains;
+    }
+
+
+    void setSsrfSafeDomains(ArrayList<String> ssrfSafeDomains){
+        WebConfig.ssrfSafeDomains = ssrfSafeDomains;
+    }
+    public static ArrayList<String> getSsrfSafeDomains(){
+        return ssrfSafeDomains;
+    }
+
+
+    void setSsrfBlockDomains(ArrayList<String> ssrfBlockDomains){
+        WebConfig.ssrfBlockDomains = ssrfBlockDomains;
+    }
+    public static ArrayList<String> getSsrfBlockDomainsDomains(){
+        return ssrfBlockDomains;
+    }
+
+
+    void setSsrfBlockIps(ArrayList<String> ssrfBlockIps){
+        WebConfig.ssrfBlockIps = ssrfBlockIps;
+    }
+    public static ArrayList<String> getSsrfBlockIps(){
+        return ssrfBlockIps;
     }
 }

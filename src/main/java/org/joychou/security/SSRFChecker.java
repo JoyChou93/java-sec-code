@@ -4,13 +4,46 @@ import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
+
 import org.apache.commons.net.util.SubnetUtils;
+import org.joychou.config.WebConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 class SSRFChecker {
 
     private static Logger logger = LoggerFactory.getLogger(SSRFChecker.class);
+
+    static boolean checkURLFckSSRF(String url) {
+        if (null == url){
+            return false;
+        }
+
+        ArrayList<String> ssrfSafeDomains = WebConfig.getSsrfSafeDomains();
+        try {
+            URI uri = new URI(url);
+            String host = uri.getHost().toLowerCase();
+
+            // 必须http/https
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                return false;
+            }
+
+            if (ssrfSafeDomains.contains(host)) {
+                return true;
+            }
+            for (String ssrfSafeDomain : ssrfSafeDomains) {
+                if(host.endsWith("." + ssrfSafeDomain)) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return false;
+        }
+        return false;
+    }
 
     /**
      * 解析url的ip，判断ip是否是内网ip，所以TTL设置为0的情况不适用。
@@ -21,7 +54,7 @@ class SSRFChecker {
      * @param checkTimes 设置重定向检测的最大次数，建议设置为10次
      * @return 安全返回true，危险返回false
      */
-    static Boolean checkSSRF(String url, int checkTimes) {
+    static boolean checkSSRF(String url, int checkTimes) {
 
         HttpURLConnection connection;
         int connectTime = 5*1000;  // 设置连接超时时间5s
@@ -69,7 +102,7 @@ class SSRFChecker {
      *
      * @return 如果是内网IP，返回true；非内网IP，返回false。
      */
-     static Boolean isInnerIPByUrl(String url) {
+     static boolean isInnerIPByUrl(String url) {
         String host = url2host(url);
         if (host.equals("")) {
             return true; // 异常URL当成内网IP等非法URL处理
@@ -92,9 +125,9 @@ class SSRFChecker {
      */
     private static boolean isInnerIp(String strIP){
 
-        String blackSubnetlist[] = {"10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "0.0.0.0/32"};
+        ArrayList<String> blackSubnets= WebConfig.getSsrfBlockIps();
 
-        for (String subnet: blackSubnetlist) {
+        for (String subnet: blackSubnets) {
             SubnetUtils utils = new SubnetUtils(subnet);
             if (utils.getInfo().isInRange(strIP)) {
                 logger.error("[-] SSRF check failed. Inner Ip: " + strIP);
