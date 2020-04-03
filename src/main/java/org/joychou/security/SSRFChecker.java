@@ -5,6 +5,8 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.net.util.SubnetUtils;
 import org.joychou.config.WebConfig;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 class SSRFChecker {
 
     private static Logger logger = LoggerFactory.getLogger(SSRFChecker.class);
+    private final static Pattern IP_PATTERN = Pattern.compile("((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)");
 
     static boolean checkURLFckSSRF(String url) {
         if (null == url){
@@ -122,7 +125,7 @@ class SSRFChecker {
      * @param strIP ip字符串
      * @return 如果是内网ip，返回true，否则返回false。
      */
-    private static boolean isInnerIp(String strIP){
+     static boolean isInnerIp(String strIP){
 
         ArrayList<String> blackSubnets= WebConfig.getSsrfBlockIps();
 
@@ -175,5 +178,15 @@ class SSRFChecker {
             return "";
         }
 
+    }
+
+    /**
+     * 匹配ip
+     * @return
+     */
+     static String getIpFromStr(String ipStr){
+        Matcher matcher = IP_PATTERN.matcher(ipStr);
+        System.out.println(matcher.find());
+        return matcher.group();
     }
 }

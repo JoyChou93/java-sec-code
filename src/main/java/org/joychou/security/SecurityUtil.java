@@ -4,6 +4,7 @@ import org.joychou.config.WebConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -117,6 +118,29 @@ public class SecurityUtil {
         }
         return !SSRFChecker.isInnerIPByUrl(url);
     }
+
+    /**
+     * @Author liergou
+     * @Description 基于Socket hook 进行SSRF检测拦截
+     * @Date 2:15 2020/4/4
+     * @Param []
+     * @return void
+     **/
+    public static void startSSRFHook() throws NoSuchFieldException, IOException {
+        SocketHook.startHook();
+    }
+
+    /**
+     * @Author liergou
+     * @Description 关闭Socket hook
+     * @Date 2:15 2020/4/4
+     * @Param []
+     * @return void
+     **/
+    public static void stopSSRFHook(){
+        SocketHook.stopHook();
+    }
+
 
 
     /**
