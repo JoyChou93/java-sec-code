@@ -1,10 +1,10 @@
 package org.joychou.controller;
 
 import org.joychou.security.SecurityUtil;
+import org.joychou.util.LoginUtils;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.joychou.controller.jsonp.JSONP;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -111,7 +111,7 @@ public class Cors {
         }
         response.setHeader("Access-Control-Allow-Origin", origin);
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        return JSONP.getUserInfo2JsonStr(request);
+        return LoginUtils.getUserInfo2JsonStr(request);
     }
 
 

@@ -16,14 +16,14 @@ public class Cookies {
     private static String NICK = "nick";
 
     @RequestMapping(value = "/vuln01")
-    private String vuln01(HttpServletRequest req) {
+    public String vuln01(HttpServletRequest req) {
         String nick = WebUtils.getCookieValueByName(req, NICK); // key code
         return "Cookie nick: " + nick;
     }
 
 
     @RequestMapping(value = "/vuln02")
-    private String vuln02(HttpServletRequest req) {
+    public String vuln02(HttpServletRequest req) {
         String nick = null;
         Cookie[] cookie = req.getCookies();
 
@@ -36,7 +36,7 @@ public class Cookies {
 
 
     @RequestMapping(value = "/vuln03")
-    private String vuln03(HttpServletRequest req) {
+    public String vuln03(HttpServletRequest req) {
         String nick = null;
         Cookie cookies[] = req.getCookies();
         if (cookies != null) {
@@ -52,7 +52,7 @@ public class Cookies {
 
 
     @RequestMapping(value = "/vuln04")
-    private String vuln04(HttpServletRequest req) {
+    public String vuln04(HttpServletRequest req) {
         String nick = null;
         Cookie cookies[] = req.getCookies();
         if (cookies != null) {
@@ -68,13 +68,13 @@ public class Cookies {
 
 
     @RequestMapping(value = "/vuln05")
-    private String vuln05(@CookieValue("nick") String nick) {
+    public String vuln05(@CookieValue("nick") String nick) {
         return "Cookie nick: " + nick;
     }
 
 
     @RequestMapping(value = "/vuln06")
-    private String vuln06(@CookieValue(value = "nick") String nick) {
+    public String vuln06(@CookieValue(value = "nick") String nick) {
         return "Cookie nick: " + nick;
     }
 

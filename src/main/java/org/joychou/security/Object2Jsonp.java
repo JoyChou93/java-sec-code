@@ -1,8 +1,7 @@
-package org.joychou.controller.jsonp;
+package org.joychou.security;
 
 import org.apache.commons.lang.StringUtils;
 import org.joychou.config.WebConfig;
-import org.joychou.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,14 +24,14 @@ import javax.servlet.http.HttpServletResponse;
  * Since Spring Framework 4.1. Springboot 2.1.0 RELEASE use spring framework 5.1.2
  */
 @ControllerAdvice
-public class JSONPAdvice extends AbstractJsonpResponseBodyAdvice {
+public class Object2Jsonp extends AbstractJsonpResponseBodyAdvice {
 
     private final String[] callbacks;
     private final Logger logger= LoggerFactory.getLogger(this.getClass());
 
 
     // method of using @Value in constructor
-    public JSONPAdvice(@Value("${joychou.security.jsonp.callback}") String[] callbacks) {
+    public Object2Jsonp(@Value("${joychou.security.jsonp.callback}") String[] callbacks) {
         super(callbacks);  // Can set multiple paramNames
         this.callbacks = callbacks;
     }

@@ -1,5 +1,6 @@
 package org.joychou.controller;
 
+import org.joychou.config.Constants;
 import org.joychou.security.AntObjectInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,20 +26,19 @@ import static org.springframework.web.util.WebUtils.getCookie;
 @RequestMapping("/deserialize")
 public class Deserialize {
 
-    private static String cookieName = "rememberMe";
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * java -jar ysoserial.jar CommonsCollections5 "open -a Calculator" | base64
      * Add the result to rememberMe cookie.
      *
-     * http://localhost:8080/deserialize/rememberMe/vul
+     * http://localhost:8080/deserialize/rememberMe/vuln
      */
-    @RequestMapping("/rememberMe/vul")
+    @RequestMapping("/rememberMe/vuln")
     public String rememberMeVul(HttpServletRequest request)
             throws IOException, ClassNotFoundException {
 
-        Cookie cookie = getCookie(request, cookieName);
+        Cookie cookie = getCookie(request, Constants.REMEMBER_ME_COOKIE);
 
         if (null == cookie){
             return "No rememberMe cookie. Right?";
@@ -64,7 +64,7 @@ public class Deserialize {
     public String rememberMeBlackClassCheck(HttpServletRequest request)
             throws IOException, ClassNotFoundException {
 
-        Cookie cookie = getCookie(request, cookieName);
+        Cookie cookie = getCookie(request, Constants.REMEMBER_ME_COOKIE);
 
         if (null == cookie){
             return "No rememberMe cookie. Right?";

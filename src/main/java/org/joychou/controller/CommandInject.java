@@ -22,7 +22,7 @@ public class CommandInject {
      * @return result
      */
     @GetMapping("/codeinject")
-    public static String codeInject(String filepath) throws IOException {
+    public String codeInject(String filepath) throws IOException {
 
         String[] cmdList = new String[]{"sh", "-c", "ls -la " + filepath};
         ProcessBuilder builder = new ProcessBuilder(cmdList);
@@ -50,7 +50,7 @@ public class CommandInject {
     }
 
     @GetMapping("/codeinject/sec")
-    public static String codeInjectSec(String filepath) throws IOException {
+    public String codeInjectSec(String filepath) throws IOException {
         String filterFilePath = SecurityUtil.cmdFilter(filepath);
         if (null == filterFilePath) {
             return "Bad boy. I got u.";

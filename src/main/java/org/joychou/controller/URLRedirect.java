@@ -83,8 +83,8 @@ public class URLRedirect {
             throws IOException{
         String url = request.getParameter("url");
         if (SecurityUtil.checkURL(url) == null) {
-            // Redirect to error page.
-            response.sendRedirect("https://test.joychou.org/error3.html");
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("url forbidden");
             return;
         }
         response.sendRedirect(url);
