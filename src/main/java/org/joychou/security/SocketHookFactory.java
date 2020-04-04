@@ -44,7 +44,7 @@ public class SocketHookFactory implements SocketImplFactory
      * @Param []
      * @return void
      **/
-    public static void initSocket() throws NoSuchFieldException {
+    public static void initSocket() {
         if ( socketConstructor != null ) { return; }
 
         Socket  socket = new Socket();

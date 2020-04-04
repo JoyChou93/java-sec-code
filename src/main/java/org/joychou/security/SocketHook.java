@@ -10,7 +10,7 @@ import java.net.SocketException;
  * @Date 2:12 2020/4/4
  **/
 public class SocketHook {
-    static void startHook() throws NoSuchFieldException, IOException {
+    static void startHook() throws IOException {
         SocketHookFactory.initSocket();
         SocketHookFactory.setHook(true);
         try{

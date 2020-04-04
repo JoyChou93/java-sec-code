@@ -48,7 +48,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions
      * @Param [initSocketImpl]
      * @return
      **/
-    public static void initSocketImpl(Class<?> initSocketImpl) throws IllegalAccessException {
+    public static void initSocketImpl(Class<?> initSocketImpl) {
 
         if ( initSocketImpl == null){
             SocketHookFactory.setHook(false);
