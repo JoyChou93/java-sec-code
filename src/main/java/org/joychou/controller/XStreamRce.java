@@ -21,14 +21,14 @@ public class XStreamRce {
      * @author JoyChou @2019-07-26
      */
     @PostMapping("/xstream")
-    public String parseXml(HttpServletRequest request) throws Exception{
+    public String parseXml(HttpServletRequest request) throws Exception {
         String xml = WebUtils.getRequestBody(request);
         XStream xstream = new XStream(new DomDriver());
         xstream.fromXML(xml);
         return "xstream";
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         User user = new User();
         user.setId(0);
         user.setUsername("admin");
@@ -37,7 +37,7 @@ public class XStreamRce {
         String xml = xstream.toXML(user); // Serialize
         System.out.println(xml);
 
-        user = (User)xstream.fromXML(xml); // Deserialize
-        System.out.println(user.getId() + ": " + user.getUsername() );
+        user = (User) xstream.fromXML(xml); // Deserialize
+        System.out.println(user.getId() + ": " + user.getUsername());
     }
 }

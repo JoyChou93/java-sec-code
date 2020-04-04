@@ -1,6 +1,5 @@
 package org.joychou.controller;
 
-import com.google.common.io.Files;
 import com.squareup.okhttp.OkHttpClient;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -12,6 +11,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.joychou.security.SecurityUtil;
+import org.joychou.util.WebUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -41,8 +41,7 @@ public class SSRF {
     private static Logger logger = LoggerFactory.getLogger(SSRF.class);
 
     @RequestMapping("/urlConnection")
-    public static String ssrf_URLConnection(@RequestParam String url)
-    {
+    public static String ssrf_URLConnection(@RequestParam String url) {
         try {
             URL u = new URL(url);
             URLConnection urlConnection = u.openConnection();
@@ -55,7 +54,7 @@ public class SSRF {
             }
             in.close();
             return html.toString();
-        }catch(Exception e) {
+        } catch (Exception e) {
             logger.error(e.toString());
             return "fail";
         }
@@ -64,12 +63,11 @@ public class SSRF {
 
     @RequestMapping("/HttpURLConnection")
     @ResponseBody
-    public static String ssrf_httpURLConnection(@RequestParam String url)
-    {
+    public static String ssrf_httpURLConnection(@RequestParam String url) {
         try {
             URL u = new URL(url);
             URLConnection urlConnection = u.openConnection();
-            HttpURLConnection httpUrl = (HttpURLConnection)urlConnection;
+            HttpURLConnection httpUrl = (HttpURLConnection) urlConnection;
             BufferedReader in = new BufferedReader(new InputStreamReader(httpUrl.getInputStream())); //send request
             String inputLine;
             StringBuilder html = new StringBuilder();
@@ -79,7 +77,7 @@ public class SSRF {
             }
             in.close();
             return html.toString();
-        }catch(Exception e) {
+        } catch (Exception e) {
             logger.error(e.toString());
             return "fail";
         }
@@ -88,11 +86,10 @@ public class SSRF {
 
     @RequestMapping("/Request")
     @ResponseBody
-    public static String ssrf_Request(@RequestParam String url)
-    {
+    public static String ssrf_Request(@RequestParam String url) {
         try {
             return Request.Get(url).execute().returnContent().toString();
-        }catch(Exception e) {
+        } catch (Exception e) {
             logger.error(e.toString());
             return "fail";
         }
@@ -102,18 +99,18 @@ public class SSRF {
     /**
      * Download the url file.
      * http://localhost:8080/ssrf/openStream?url=file:///etc/passwd
-     *
+     * <p>
      * new URL(String url).openConnection()
      * new URL(String url).openStream()
      * new URL(String url).getContent()
      */
     @RequestMapping("/openStream")
     @ResponseBody
-    public static void ssrf_openStream (@RequestParam String url, HttpServletResponse response) throws IOException {
+    public static void ssrf_openStream(@RequestParam String url, HttpServletResponse response) throws IOException {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
-            String downLoadImgFileName = Files.getNameWithoutExtension(url) + "." + Files.getFileExtension(url);
+            String downLoadImgFileName = WebUtils.getNameWithoutExtension(url) + "." + WebUtils.getFileExtension(url);
             // download
             response.setHeader("content-disposition", "attachment;fileName=" + downLoadImgFileName);
 
@@ -126,16 +123,15 @@ public class SSRF {
                 outputStream.write(bytes, 0, length);
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error(e.toString());
-        }finally {
+        } finally {
             if (inputStream != null) {
                 inputStream.close();
             }
             if (outputStream != null) {
                 outputStream.close();
             }
-
         }
     }
 
@@ -162,36 +158,41 @@ public class SSRF {
 
 
     /**
-     * http://localhost:8080/ssrf/HttpClient?url=http://www.baidu.com
+     * http://localhost:8080/ssrf/HttpClient/sec?url=http://www.baidu.com
      *
      * @return The response of url param.
      */
-    @RequestMapping("/HttpClient")
+    @RequestMapping("/HttpClient/sec")
     @ResponseBody
     public static String ssrf_HttpClient(@RequestParam String url) {
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet(url);
+        StringBuilder result = new StringBuilder();
         try {
+            SecurityUtil.startSSRFHook();
+            CloseableHttpClient client = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(url);
             HttpResponse httpResponse = client.execute(httpGet); // send request
             BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
-            StringBuilder result = new StringBuilder();
-            String line = null;
+
+            String line;
             while ((line = rd.readLine()) != null) {
                 result.append(line);
             }
-            return result.toString();
-        }catch (Exception e) {
-            e.printStackTrace();
-            return "fail";
-        }
 
+            // SecurityUtil.stopSSRFHook();
+            return result.toString();
+
+        } catch (Exception e) {
+            return e.toString();
+        } finally {
+            SecurityUtil.stopSSRFHook();
+        }
     }
 
 
     /**
      * https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient
      * UserAgent: Jakarta Commons-HttpClient/3.1 (2007.08 publish)
-     *
+     * <p>
      * http://localhost:8080/ssrf/commonsHttpClient/sec?url=http://www.baidu.com
      */
     @RequestMapping("/commonsHttpClient/sec")
@@ -230,7 +231,7 @@ public class SSRF {
 
     /**
      * jsoup是一款Java的HTML解析器，可直接解析某个URL地址、HTML文本内容。
-     *
+     * <p>
      * http://localhost:8080/ssrf/Jsoup?url=http://www.baidu.com
      */
     @RequestMapping("/Jsoup")
@@ -279,14 +280,13 @@ public class SSRF {
     /**
      * Safe code.
      * http://localhost:8080/ssrf/ImageIO/sec?url=http://www.baidu.com
-     *
      */
     @RequestMapping("/ImageIO/sec")
     public static String ImageIOSec(@RequestParam String url) {
         try {
             URL u = new URL(url);
             if (!SecurityUtil.checkSSRFWithoutRedirect(url)) {
-                logger.error("[-] SSRF check failed. Original Url: "+ url);
+                logger.error("[-] SSRF check failed. Original Url: " + url);
                 return "SSRF check failed.";
             }
             ImageIO.read(u); // send request

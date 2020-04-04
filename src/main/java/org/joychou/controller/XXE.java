@@ -5,6 +5,7 @@ import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.w3c.dom.Document;
@@ -12,13 +13,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.XMLReader;
+
 import java.io.*;
+
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.parsers.SAXParser;
+
 import org.xml.sax.helpers.DefaultHandler;
 import org.apache.commons.digester3.Digester;
 import org.jdom2.input.SAXBuilder;
@@ -34,7 +38,7 @@ import org.joychou.util.WebUtils;
 @RequestMapping("/xxe")
 public class XXE {
 
-    private static Logger logger= LoggerFactory.getLogger(XXE.class);
+    private static Logger logger = LoggerFactory.getLogger(XXE.class);
     private static String EXCEPT = "xxe except";
 
     @RequestMapping(value = "/xmlReader/vuln", method = RequestMethod.POST)
@@ -235,14 +239,14 @@ public class XXE {
             Document document = db.parse(is);  // parse xml
 
             // 遍历xml节点name和value
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             NodeList rootNodeList = document.getChildNodes();
             for (int i = 0; i < rootNodeList.getLength(); i++) {
                 Node rootNode = rootNodeList.item(i);
                 NodeList child = rootNode.getChildNodes();
                 for (int j = 0; j < child.getLength(); j++) {
                     Node node = child.item(j);
-                    buf.append(node.getNodeName() + ": " + node.getTextContent() + "\n");
+                    buf.append(String.format("%s: %s\n", node.getNodeName(), node.getTextContent()));
                 }
             }
             sr.close();
@@ -268,7 +272,7 @@ public class XXE {
             Document document = db.parse(is);  // parse xml
 
             // 遍历xml节点name和value
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             NodeList rootNodeList = document.getChildNodes();
             for (int i = 0; i < rootNodeList.getLength(); i++) {
                 Node rootNode = rootNodeList.item(i);
@@ -277,8 +281,7 @@ public class XXE {
                     Node node = child.item(j);
                     // 正常解析XML，需要判断是否是ELEMENT_NODE类型。否则会出现多余的的节点。
                     if (child.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                        result.append(node.getNodeName() + ": " +
-                                node.getFirstChild().getNodeValue() + "\n");
+                        result.append(String.format("%s: %s\n", node.getNodeName(), node.getFirstChild()));
                     }
                 }
             }
@@ -329,17 +332,7 @@ public class XXE {
             Document document = db.parse(is);  // parse xml
 
             NodeList rootNodeList = document.getChildNodes();
-
-            for (int i = 0; i < rootNodeList.getLength(); i++) {
-                Node rootNode = rootNodeList.item(i);
-                NodeList xxe = rootNode.getChildNodes();
-                for (int j = 0; j < xxe.getLength(); j++) {
-                    Node xxeNode = xxe.item(j);
-                    // 测试不能blind xxe，所以强行加了一个回显
-                    logger.info("xxeNode: " + xxeNode.getNodeValue());
-                }
-
-            }
+            response(rootNodeList);
 
             sr.close();
             return "DocumentBuilder xinclude xxe vuln code";
@@ -362,23 +355,14 @@ public class XXE {
             dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
             dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
             DocumentBuilder db = dbf.newDocumentBuilder();
             StringReader sr = new StringReader(body);
             InputSource is = new InputSource(sr);
             Document document = db.parse(is);  // parse xml
 
             NodeList rootNodeList = document.getChildNodes();
-
-            for (int i = 0; i < rootNodeList.getLength(); i++) {
-                Node rootNode = rootNodeList.item(i);
-                NodeList xxe = rootNode.getChildNodes();
-                for (int j = 0; j < xxe.getLength(); j++) {
-                    Node xxeNode = xxe.item(j);
-                    // 测试不能blind xxe，所以强行加了一个回显
-                    logger.info("xxeNode: " + xxeNode.getNodeValue());
-                }
-
-            }
+            response(rootNodeList);
 
             sr.close();
         } catch (Exception e) {
@@ -437,7 +421,7 @@ public class XXE {
      */
     @PostMapping("/DocumentHelper/vuln")
     public String DocumentHelper(HttpServletRequest req) {
-        try{
+        try {
             String body = WebUtils.getRequestBody(req);
             DocumentHelper.parseText(body); // parse xml
         } catch (Exception e) {
@@ -448,7 +432,21 @@ public class XXE {
         return "DocumentHelper xxe vuln code";
     }
 
-    public static void main(String[] args) throws Exception {
+
+    private static void response(NodeList rootNodeList){
+        for (int i = 0; i < rootNodeList.getLength(); i++) {
+            Node rootNode = rootNodeList.item(i);
+            NodeList xxe = rootNode.getChildNodes();
+            for (int j = 0; j < xxe.getLength(); j++) {
+                Node xxeNode = xxe.item(j);
+                // 测试不能blind xxe，所以强行加了一个回显
+                logger.info("xxeNode: " + xxeNode.getNodeValue());
+            }
+
+        }
+    }
+
+    public static void main(String[] args)  {
     }
 
 }

@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 public class SafeDomainParser {
 
-    private static Logger logger= LoggerFactory.getLogger(SafeDomainParser.class);
+    private static Logger logger = LoggerFactory.getLogger(SafeDomainParser.class);
 
-    public SafeDomainParser(){
+    public SafeDomainParser() {
 
         String rootTag = "domains";
         String safeDomainTag = "safedomains";
@@ -38,8 +38,8 @@ public class SafeDomainParser {
             NodeList rootNode = doc.getElementsByTagName(rootTag);  // 解析根节点domains
             Node domainsNode = rootNode.item(0);
             NodeList child = domainsNode.getChildNodes();
-            
-            for (int i = 0; i < child.getLength(); i++){
+
+            for (int i = 0; i < child.getLength(); i++) {
                 Node node = child.item(i);
                 // 解析safeDomains节点
                 if (node.getNodeName().equals(safeDomainTag)) {
@@ -51,7 +51,7 @@ public class SafeDomainParser {
                             safeDomains.add(finalTagNode.getTextContent());
                         }
                     }
-                }else if (node.getNodeName().equals(blockDomainTag)) {
+                } else if (node.getNodeName().equals(blockDomainTag)) {
                     NodeList finalTagNode = node.getChildNodes();
                     for (int j = 0; j < finalTagNode.getLength(); j++) {
                         Node tagNode = finalTagNode.item(j);
@@ -62,7 +62,7 @@ public class SafeDomainParser {
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(e.toString());
         }
 
@@ -96,7 +96,7 @@ public class SafeDomainParser {
             Node domainsNode = rootNode.item(0);
             NodeList child = domainsNode.getChildNodes();
 
-            for (int i = 0; i < child.getLength(); i++){
+            for (int i = 0; i < child.getLength(); i++) {
                 Node node = child.item(i);
                 // 解析safeDomains节点
                 if (node.getNodeName().equals(ssrfSafeDomainTag)) {
@@ -107,7 +107,7 @@ public class SafeDomainParser {
                             ssrfSafeDomains.add(tagFinalNode.getTextContent());
                         }
                     }
-                }else if (node.getNodeName().equals(ssrfBlockDomainTag)) {
+                } else if (node.getNodeName().equals(ssrfBlockDomainTag)) {
                     NodeList tagChild = node.getChildNodes();
                     for (int j = 0; j < tagChild.getLength(); j++) {
                         Node tagFinalNode = tagChild.item(j);
@@ -115,7 +115,7 @@ public class SafeDomainParser {
                             ssrfBlockDomains.add(tagFinalNode.getTextContent());
                         }
                     }
-                }else if(node.getNodeName().equals(ssrfBlockIpsTag)){
+                } else if (node.getNodeName().equals(ssrfBlockIpsTag)) {
                     NodeList tagChild = node.getChildNodes();
                     for (int j = 0; j < tagChild.getLength(); j++) {
                         Node tagFinalNode = tagChild.item(j);
@@ -126,7 +126,7 @@ public class SafeDomainParser {
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(e.toString());
         }
 

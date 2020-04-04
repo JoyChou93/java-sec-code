@@ -10,14 +10,15 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
 import org.joychou.security.SecurityUtil;
 
 /**
  * The vulnerability code and security code of Java url redirect.
  * The security code is checking whitelist of url redirect.
  *
- * @author   JoyChou (joychou@joychou.org)
- * @version  2017.12.28
+ * @author JoyChou (joychou@joychou.org)
+ * @version 2017.12.28
  */
 
 @Controller
@@ -38,7 +39,7 @@ public class URLRedirect {
      */
     @RequestMapping("/setHeader")
     @ResponseBody
-    public static void setHeader(HttpServletRequest request, HttpServletResponse response){
+    public static void setHeader(HttpServletRequest request, HttpServletResponse response) {
         String url = request.getParameter("url");
         response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY); // 301 redirect
         response.setHeader("Location", url);
@@ -50,7 +51,7 @@ public class URLRedirect {
      */
     @RequestMapping("/sendRedirect")
     @ResponseBody
-    public static void sendRedirect(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    public static void sendRedirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String url = request.getParameter("url");
         response.sendRedirect(url); // 302 redirect
     }
@@ -64,10 +65,10 @@ public class URLRedirect {
     @ResponseBody
     public static void forward(HttpServletRequest request, HttpServletResponse response) {
         String url = request.getParameter("url");
-        RequestDispatcher rd =request.getRequestDispatcher(url);
-        try{
+        RequestDispatcher rd = request.getRequestDispatcher(url);
+        try {
             rd.forward(request, response);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -80,7 +81,7 @@ public class URLRedirect {
     @RequestMapping("/sendRedirect/sec")
     @ResponseBody
     public void sendRedirect_seccode(HttpServletRequest request, HttpServletResponse response)
-            throws IOException{
+            throws IOException {
         String url = request.getParameter("url");
         if (SecurityUtil.checkURL(url) == null) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);

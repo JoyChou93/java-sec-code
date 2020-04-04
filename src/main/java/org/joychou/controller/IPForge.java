@@ -1,25 +1,23 @@
 package org.joychou.controller;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author  JoyChou (joychou@joychou.org)
- * @date    2017.12.29
- * @desc    Java获取IP安全代码
- * @detail  关于获取IP不安全代码，详情可查看https://joychou.org/web/how-to-get-real-ip.html
+ * Java get real ip. More details: https://joychou.org/web/how-to-get-real-ip.html
+ *
+ * @author JoyChou @ 2017-12-29
  */
-
-@Controller
+@RestController
 @RequestMapping("/ip")
 public class IPForge {
+
     // no any proxy
     @RequestMapping("/noproxy")
-    @ResponseBody
     public static String noProxy(HttpServletRequest request) {
         return request.getRemoteAddr();
     }
@@ -36,7 +34,7 @@ public class IPForge {
         String ip = request.getHeader("X-Real-IP");
         if (StringUtils.isNotBlank(ip)) {
             return ip;
-        }else {
+        } else {
             String remoteAddr = request.getRemoteAddr();
             if (StringUtils.isNotBlank(remoteAddr)) {
                 return remoteAddr;

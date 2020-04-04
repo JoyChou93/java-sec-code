@@ -15,8 +15,8 @@ import java.util.regex.Pattern;
  * The vulnerability code and security code of Java url whitelist.
  * The security code is checking url whitelist.
  *
- * @author    JoyChou (joychou@joychou.org)
- * @version   2018.08.23
+ * @author JoyChou (joychou@joychou.org)
+ * @version 2018.08.23
  */
 
 @RestController
@@ -26,17 +26,17 @@ public class URLWhiteList {
 
     private String domainwhitelist[] = {"joychou.org", "joychou.com"};
     private static final Logger logger = LoggerFactory.getLogger(URLWhiteList.class);
+
     /**
      * bypass poc: bypassjoychou.org
      * http://localhost:8080/url/vuln/endswith?url=http://aaajoychou.org
-     *
      */
     @GetMapping("/vuln/endsWith")
-    public String endsWith(@RequestParam("url") String url) throws Exception{
+    public String endsWith(@RequestParam("url") String url) throws Exception {
         URL u = new URL(url);
         String host = u.getHost().toLowerCase();
 
-        for (String domain: domainwhitelist){
+        for (String domain : domainwhitelist) {
             if (host.endsWith(domain)) {
                 return "Good url.";
             }
@@ -46,17 +46,17 @@ public class URLWhiteList {
 
 
     /**
-     * bypass poc: joychou.org.bypass.com or bypassjoychou.org.
+     * It's the same with <code>indexOf</code>.
+     * <p>
      * http://localhost:8080/url/vuln/contains?url=http://joychou.org.bypass.com
      * http://localhost:8080/url/vuln/contains?url=http://bypassjoychou.org
-     *
      */
     @GetMapping("/vuln/contains")
-    public String contains(@RequestParam("url") String url) throws Exception{
+    public String contains(@RequestParam("url") String url) throws Exception {
         URL u = new URL(url);
         String host = u.getHost().toLowerCase();
 
-        for (String domain: domainwhitelist){
+        for (String domain : domainwhitelist) {
             if (host.contains(domain)) {
                 return "Good url.";
             }
@@ -68,10 +68,9 @@ public class URLWhiteList {
     /**
      * bypass poc: bypassjoychou.org. It's the same with endsWith.
      * http://localhost:8080/url/vuln/regex?url=http://aaajoychou.org
-     *
      */
     @GetMapping("/vuln/regex")
-    public String regex(@RequestParam("url") String url) throws Exception{
+    public String regex(@RequestParam("url") String url) throws Exception {
         URL u = new URL(url);
         String host = u.getHost().toLowerCase();
 
@@ -86,34 +85,16 @@ public class URLWhiteList {
 
 
     /**
-     * bypass poc: joychou.org.bypass.com or bypassjoychou.org. It's the same with contains.
-     * http://localhost:8080/url/vuln/indexOf?url=http://joychou.org.bypass.com http://bypassjoychou.org
-     *
-     */
-    @GetMapping("/vuln/indexOf")
-    public String indexOf(@RequestParam("url") String url) throws Exception{
-        URL u = new URL(url);
-        String host = u.getHost();
-
-        // If indexOf returns -1, it means that no string was found.
-        for (String domain: domainwhitelist){
-            if (host.indexOf(domain) != -1) {
-                return "Good url.";
-            }
-        }
-        return "Bad url.";
-    }
-
-    /**
-     * The bypass of using java.net.URL to getHost.
-     *
+     * The bypass of using <code>java.net.URL</code> to getHost.
+     * <p>
      * Bypass poc1: curl -v 'http://localhost:8080/url/vuln/url_bypass?url=http://evel.com%5c@www.joychou.org/a.html'
      * Bypass poc2: curl -v 'http://localhost:8080/url/vuln/url_bypass?url=http://evil.com%5cwww.joychou.org/a.html'
-     *
-     * Detail: https://github.com/JoyChou93/java-sec-code/wiki/URL-whtielist-Bypass
+     * <p>
+     * More details: https://github.com/JoyChou93/java-sec-code/wiki/URL-whtielist-Bypass
      */
     @GetMapping("/vuln/url_bypass")
-    public String url_bypass(@RequestParam("url") String url) throws Exception{
+    public String url_bypass(String url) throws Exception {
+
         logger.info("url:  " + url);
         URL u = new URL(url);
 
@@ -125,7 +106,7 @@ public class URLWhiteList {
         logger.info("host:  " + host);
 
         // endsWith .
-        for (String domain: domainwhitelist){
+        for (String domain : domainwhitelist) {
             if (host.endsWith("." + domain)) {
                 return "Good url.";
             }
@@ -135,14 +116,12 @@ public class URLWhiteList {
     }
 
 
-
     /**
      * 一级域名白名单 First-level host whitelist.
      * http://localhost:8080/url/sec/endswith?url=http://aa.joychou.org
-     *
      */
     @GetMapping("/sec/endswith")
-    public String sec_endswith(@RequestParam("url") String url) throws Exception{
+    public String sec_endswith(@RequestParam("url") String url) throws Exception {
 
         String whiteDomainlists[] = {"joychou.org", "joychou.com"};
 
@@ -154,7 +133,7 @@ public class URLWhiteList {
         String host = uri.getHost().toLowerCase();
 
         // endsWith .
-        for (String domain: whiteDomainlists){
+        for (String domain : whiteDomainlists) {
             if (host.endsWith("." + domain)) {
                 return "Good url.";
             }
@@ -166,10 +145,9 @@ public class URLWhiteList {
     /**
      * 多级域名白名单 Multi-level host whitelist.
      * http://localhost:8080/url/sec/multi_level_hos?url=http://ccc.bbb.joychou.org
-     *
      */
     @GetMapping("/sec/multi_level_host")
-    public String sec_multi_level_host(@RequestParam("url") String url) throws Exception{
+    public String sec_multi_level_host(@RequestParam("url") String url) throws Exception {
         String whiteDomainlists[] = {"aaa.joychou.org", "ccc.bbb.joychou.org"};
 
         URI uri = new URI(url);
@@ -179,7 +157,7 @@ public class URLWhiteList {
         String host = uri.getHost().toLowerCase();
 
         // equals
-        for (String domain: whiteDomainlists){
+        for (String domain : whiteDomainlists) {
             if (host.equals(domain)) {
                 return "Good url.";
             }
@@ -191,10 +169,9 @@ public class URLWhiteList {
     /**
      * 多级域名白名单 Multi-level host whitelist.
      * http://localhost:8080/url/sec/array_indexOf?url=http://ccc.bbb.joychou.org
-     *
      */
     @GetMapping("/sec/array_indexOf")
-    public String sec_array_indexOf(@RequestParam("url") String url) throws Exception{
+    public String sec_array_indexOf(@RequestParam("url") String url) throws Exception {
 
         // Define muti-level host whitelist.
         ArrayList<String> whiteDomainlists = new ArrayList<>();

@@ -1,6 +1,8 @@
 package org.joychou.security;
 
 import org.joychou.config.WebConfig;
+import org.joychou.security.ssrf.SSRFChecker;
+import org.joychou.security.ssrf.SocketHook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,26 +118,22 @@ public class SecurityUtil {
         if(url == null) {
             return false;
         }
-        return !SSRFChecker.isInnerIPByUrl(url);
+        return !SSRFChecker.isInternalIpByUrl(url);
     }
 
     /**
-     * @Author liergou
-     * @Description 基于Socket hook 进行SSRF检测拦截
-     * @Date 2:15 2020/4/4
-     * @Param []
-     * @return void
-     **/
+     * Check ssrf by hook socket. Start socket hook.
+     *
+     * @author liergou @ 2020-04-04 02:15
+     */
     public static void startSSRFHook() throws NoSuchFieldException, IOException {
         SocketHook.startHook();
     }
 
     /**
-     * @Author liergou
-     * @Description 关闭Socket hook
-     * @Date 2:15 2020/4/4
-     * @Param []
-     * @return void
+     * Close socket hook.
+     *
+     * @author liergou @ 2020-04-04 02:15
      **/
     public static void stopSSRFHook(){
         SocketHook.stopHook();

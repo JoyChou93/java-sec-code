@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Java 1.7/1.8 no CRLF vulns (test in Java 1.7/1.8)
  *
- * @author  JoyChou (joychou@joychou.org) @2018-01-03
+ * @author JoyChou (joychou@joychou.org) @2018-01-03
  */
 @Controller
 @RequestMapping("/crlf")

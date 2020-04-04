@@ -22,19 +22,17 @@ import org.joychou.security.SecurityUtil;
 
 
 /**
- * @author  JoyChou (joychou@joychou.org)
- * @date    2018.08.15
- * @desc    File upload
+ * File upload.
+ *
+ * @author JoyChou @ 2018-08-15
  */
-
 @Controller
 @RequestMapping("/file")
 public class FileUpload {
 
     // Save the uploaded file to this folder
     private static String UPLOADED_FOLDER = "/tmp/";
-    private final Logger logger= LoggerFactory.getLogger(this.getClass());
-    private final String mimeChars = "/abcdefghijklmnopqrstuvwxyz-.0123456789";
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/")
     public String index() {
@@ -77,7 +75,7 @@ public class FileUpload {
     // only upload picture
     @PostMapping("/upload/picture")
     @ResponseBody
-    public String uploadPicture(@RequestParam("file") MultipartFile multifile) throws Exception{
+    public String uploadPicture(@RequestParam("file") MultipartFile multifile) throws Exception {
         if (multifile.isEmpty()) {
             return "Please select a file to upload";
         }
@@ -115,7 +113,7 @@ public class FileUpload {
         };
         for (String blackMimeType : mimeTypeBlackList) {
             // 用contains是为了防止text/html;charset=UTF-8绕过
-            if (SecurityUtil.replaceSpecialStr(mimeType).toLowerCase().contains(blackMimeType) ) {
+            if (SecurityUtil.replaceSpecialStr(mimeType).toLowerCase().contains(blackMimeType)) {
                 logger.error("[-] Mime type error: " + mimeType);
                 deleteFile(excelFile);
                 return "Upload failed. Illeagl picture.";
@@ -125,7 +123,7 @@ public class FileUpload {
         // 判断文件内容是否是图片 校验3
         boolean isImageFlag = isImage(excelFile);
 
-        if( !isImage(excelFile) ){
+        if (!isImageFlag) {
             logger.error("[-] File is not Image");
             deleteFile(excelFile);
             return "Upload failed. Illeagl picture.";
@@ -152,7 +150,10 @@ public class FileUpload {
     private void deleteFile(File... files) {
         for (File file : files) {
             if (file.exists()) {
-                file.delete();
+                boolean ret = file.delete();
+                if (ret) {
+                    logger.debug("File delete successfully!");
+                }
             }
         }
     }
@@ -160,9 +161,6 @@ public class FileUpload {
     /**
      * 不建议使用transferTo，因为原始的MultipartFile会被覆盖
      * https://stackoverflow.com/questions/24339990/how-to-convert-a-multipart-file-to-file
-     *
-     * @param multiFile
-     * @return
      */
     private File convert(MultipartFile multiFile) throws Exception {
         String fileName = multiFile.getOriginalFilename();
@@ -170,7 +168,10 @@ public class FileUpload {
         UUID uuid = Generators.timeBasedGenerator().generate();
 
         File convFile = new File(UPLOADED_FOLDER + uuid + suffix);
-        convFile.createNewFile();
+        boolean ret = convFile.createNewFile();
+        if (!ret) {
+            return null;
+        }
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(multiFile.getBytes());
         fos.close();
@@ -179,15 +180,9 @@ public class FileUpload {
 
     /**
      * Check if the file is a picture.
-     *
-     * @param file
-     * @return
      */
-    public static boolean isImage(File file) throws IOException {
+    private static boolean isImage(File file) throws IOException {
         BufferedImage bi = ImageIO.read(file);
-        if (bi == null) {
-            return false;
-        }
-        return true;
+        return bi == null;
     }
 }

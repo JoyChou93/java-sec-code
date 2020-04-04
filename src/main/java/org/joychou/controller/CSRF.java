@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * check csrf using spring-security
  * Access http://localhost:8080/csrf/ -> click submit
  *
- * @author  JoyChou (joychou@joychou.org) @2019-05-31
+ * @author JoyChou (joychou@joychou.org) @2019-05-31
  */
 @Controller
 @RequestMapping("/csrf")

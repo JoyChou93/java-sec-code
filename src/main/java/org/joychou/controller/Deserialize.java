@@ -31,7 +31,7 @@ public class Deserialize {
     /**
      * java -jar ysoserial.jar CommonsCollections5 "open -a Calculator" | base64
      * Add the result to rememberMe cookie.
-     *
+     * <p>
      * http://localhost:8080/deserialize/rememberMe/vuln
      */
     @RequestMapping("/rememberMe/vuln")
@@ -40,7 +40,7 @@ public class Deserialize {
 
         Cookie cookie = getCookie(request, Constants.REMEMBER_ME_COOKIE);
 
-        if (null == cookie){
+        if (null == cookie) {
             return "No rememberMe cookie. Right?";
         }
 
@@ -57,7 +57,7 @@ public class Deserialize {
 
     /**
      * Check deserialize class using black list.
-     *
+     * <p>
      * http://localhost:8080/deserialize/rememberMe/security
      */
     @RequestMapping("/rememberMe/security")
@@ -66,7 +66,7 @@ public class Deserialize {
 
         Cookie cookie = getCookie(request, Constants.REMEMBER_ME_COOKIE);
 
-        if (null == cookie){
+        if (null == cookie) {
             return "No rememberMe cookie. Right?";
         }
         String rememberMe = cookie.getValue();
@@ -74,7 +74,7 @@ public class Deserialize {
 
         ByteArrayInputStream bytes = new ByteArrayInputStream(decoded);
 
-        try{
+        try {
             AntObjectInputStream in = new AntObjectInputStream(bytes);  // throw InvalidClassException
             in.readObject();
             in.close();

@@ -25,7 +25,7 @@ public class Login {
     }
 
     @GetMapping("/logout")
-    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+    public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
 
         String username = request.getUserPrincipal().getName();
 

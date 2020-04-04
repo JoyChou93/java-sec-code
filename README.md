@@ -190,7 +190,7 @@ Tomcat's default JSESSION session is valid for 30 minutes, so a 30-minute non-op
 
 ## Contributors
 
-Core developers : [JoyChou](https://github.com/JoyChou93).
+Core developers : [JoyChou](https://github.com/JoyChou93), [liergou9981](https://github.com/liergou9981)
 Other developers: [lightless](https://github.com/lightless233),  [Anemone95](https://github.com/Anemone95), [waderwu](https://github.com/waderwu). 
 
 

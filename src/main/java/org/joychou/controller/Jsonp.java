@@ -17,9 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 
-
 /**
- * @author  JoyChou (joychou@joychou.org) @ 2018.10.24
+ * @author JoyChou (joychou@joychou.org) @ 2018.10.24
  * https://github.com/JoyChou93/java-sec-code/wiki/JSONP
  */
 
@@ -75,14 +74,14 @@ public class Jsonp {
      * http://localhost:8080/jsonp/vuln/mappingJackson2JsonView?callback=test
      * Reference: https://p0sec.net/index.php/archives/122/ from p0
      * Affected version:  java-sec-code test case version: 4.3.6
-     *     - Spring Framework 5.0 to 5.0.6
-     *     - Spring Framework 4.1 to 4.3.17
+     * - Spring Framework 5.0 to 5.0.6
+     * - Spring Framework 4.1 to 4.3.17
      */
     @RequestMapping(value = "/vuln/mappingJackson2JsonView", produces = MediaType.APPLICATION_JSON_VALUE)
     public ModelAndView mappingJackson2JsonView(HttpServletRequest req) {
         ModelAndView view = new ModelAndView(new MappingJackson2JsonView());
         Principal principal = req.getUserPrincipal();
-        view.addObject("username", principal.getName() );
+        view.addObject("username", principal.getName());
         return view;
     }
 
@@ -107,7 +106,6 @@ public class Jsonp {
     public CsrfToken getCsrfToken(CsrfToken token) {
         return token;
     }
-
 
 
 }

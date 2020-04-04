@@ -16,7 +16,8 @@ import java.util.List;
 
 /**
  * SQL Injection
- * @author  JoyChou @2018.08.22
+ *
+ * @author JoyChou @2018.08.22
  */
 
 @SuppressWarnings("Duplicates")
@@ -47,39 +48,40 @@ public class SQLI {
      * @param username username
      */
     @RequestMapping("/jdbc/vuln")
-    public String jdbc_sqli_vul(@RequestParam("username") String username){
-        String result = "";
+    public String jdbc_sqli_vul(@RequestParam("username") String username) {
+
+        StringBuilder result = new StringBuilder();
+
         try {
             Class.forName(driver);
             Connection con = DriverManager.getConnection(url, user, password);
 
-            if(!con.isClosed())
-                System.out.println("Connecting to Database successfully.");
+            if (!con.isClosed())
+                System.out.println("Connect to database successfully.");
 
             // sqli vuln code
-             Statement statement = con.createStatement();
-             String sql = "select * from users where username = '" + username + "'";
-             logger.info(sql);
-             ResultSet rs = statement.executeQuery(sql);
+            Statement statement = con.createStatement();
+            String sql = "select * from users where username = '" + username + "'";
+            logger.info(sql);
+            ResultSet rs = statement.executeQuery(sql);
 
-            while(rs.next()){
+            while (rs.next()) {
                 String res_name = rs.getString("username");
                 String res_pwd = rs.getString("password");
-                result +=  res_name + ": " + res_pwd + "\n";
-                logger.info(res_name + ": " + res_pwd);
+                String info = String.format("%s: %s\n", res_name, res_pwd);
+                result.append(info);
+                logger.info(info);
             }
             rs.close();
             con.close();
 
 
-        }catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             logger.error("Sorry,can`t find the Driver!");
-        }catch (SQLException e) {
-            logger.error(e.toString());
-        }catch (Exception e) {
+        } catch (SQLException e) {
             logger.error(e.toString());
         }
-        return result;
+        return result.toString();
     }
 
 
@@ -90,42 +92,42 @@ public class SQLI {
      * @param username username
      */
     @RequestMapping("/jdbc/sec")
-    public String jdbc_sqli_sec(@RequestParam("username") String username){
+    public String jdbc_sqli_sec(@RequestParam("username") String username) {
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
         try {
             Class.forName(driver);
             Connection con = DriverManager.getConnection(url, user, password);
 
-            if(!con.isClosed())
+            if (!con.isClosed())
                 System.out.println("Connecting to Database successfully.");
 
             // fix code
             String sql = "select * from users where username = ?";
             PreparedStatement st = con.prepareStatement(sql);
             st.setString(1, username);
+
             logger.info(st.toString());  // sql after prepare statement
             ResultSet rs = st.executeQuery();
 
-            while(rs.next()){
+            while (rs.next()) {
                 String res_name = rs.getString("username");
                 String res_pwd = rs.getString("password");
-                result +=  res_name + ": " + res_pwd + "\n";
-                logger.info(res_name + ": " + res_pwd);
+                String info = String.format("%s: %s\n", res_name, res_pwd);
+                result.append(info);
+                logger.info(info);
             }
 
             rs.close();
             con.close();
 
-        }catch (ClassNotFoundException e) {
-            logger.error("Sorry,can`t find the Driver!");
+        } catch (ClassNotFoundException e) {
+            logger.error("Sorry, can`t find the Driver!");
             e.printStackTrace();
-        }catch (SQLException e) {
-            logger.error(e.toString());
-        }catch (Exception e) {
+        } catch (SQLException e) {
             logger.error(e.toString());
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -169,7 +171,6 @@ public class SQLI {
     }
 
     /**
-     * security code
      * http://localhost:8080/sqli/mybatis/sec02?id=1
      *
      * @param id id
@@ -181,9 +182,8 @@ public class SQLI {
 
 
     /**
-     * security code
      * http://localhost:8080/sqli/mybatis/sec03
-     **/
+     */
     @GetMapping("/mybatis/sec03")
     public User mybatisSec03() {
         return userMapper.OrderByUsername();

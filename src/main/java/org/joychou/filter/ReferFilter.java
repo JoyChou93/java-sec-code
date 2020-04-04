@@ -18,9 +18,8 @@ import org.springframework.util.PathMatcher;
 /**
  * Check referer for all GET requests with callback parameters.
  * If the check of referer fails, a 403 forbidden error page will be returned.
- *
+ * <p>
  * Still need to add @ServletComponentScan annotation in Application.java.
- *
  */
 @WebFilter(filterName = "referFilter", urlPatterns = "/*")
 public class ReferFilter implements Filter {
@@ -30,7 +29,7 @@ public class ReferFilter implements Filter {
 
     }
 
-    private final Logger logger= LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
@@ -43,8 +42,8 @@ public class ReferFilter implements Filter {
         boolean isMatch = false;
 
         // 获取要校验Referer的Uri
-        for (String uri: WebConfig.getReferUris()) {
-            if ( matcher.match (uri, request.getRequestURI()) ) {
+        for (String uri : WebConfig.getReferUris()) {
+            if (matcher.match(uri, request.getRequestURI())) {
                 isMatch = true;
                 break;
             }
@@ -63,9 +62,9 @@ public class ReferFilter implements Filter {
         // Check referer for all GET requests with callback parameters.
 
         String reqCallback = request.getParameter(WebConfig.getBusinessCallback());
-        if ("GET".equals(request.getMethod()) && StringUtils.isNotBlank(reqCallback) ){
+        if ("GET".equals(request.getMethod()) && StringUtils.isNotBlank(reqCallback)) {
             // If the check of referer fails, a 403 forbidden error page will be returned.
-            if (SecurityUtil.checkURL(refer) == null ){
+            if (SecurityUtil.checkURL(refer) == null) {
                 logger.info("[-] URL: " + request.getRequestURL() + "?" + request.getQueryString() + "\t"
                         + "Referer: " + refer);
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -74,7 +73,6 @@ public class ReferFilter implements Filter {
                 return;
             }
         }
-
 
 
         filterChain.doFilter(req, res);

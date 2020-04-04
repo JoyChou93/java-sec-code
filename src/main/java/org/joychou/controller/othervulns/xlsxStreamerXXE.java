@@ -33,12 +33,12 @@ public class xlsxStreamerXXE {
 
 
     @PostMapping("/readxlsx")
-    public void xllx_streamer_xxe(MultipartFile file)throws IOException {
-        Workbook wb = StreamingReader.builder().open(file.getInputStream());
+    public void xllx_streamer_xxe(MultipartFile file) throws IOException {
+        StreamingReader.builder().open(file.getInputStream());
     }
 
 
     public static void main(String[] args) throws Exception {
-        Workbook wb = StreamingReader.builder().open((new FileInputStream("poc.xlsx")));
+        StreamingReader.builder().open((new FileInputStream("poc.xlsx")));
     }
 }

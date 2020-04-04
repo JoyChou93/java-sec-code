@@ -26,8 +26,7 @@ public class XSS {
      */
     @RequestMapping("/reflect")
     @ResponseBody
-    public static String reflect(String xss)
-    {
+    public static String reflect(String xss) {
         return xss;
     }
 
@@ -40,8 +39,7 @@ public class XSS {
      */
     @RequestMapping("/stored/store")
     @ResponseBody
-    public String store(String xss, HttpServletResponse response)
-    {
+    public String store(String xss, HttpServletResponse response) {
         Cookie cookie = new Cookie("xss", xss);
         response.addCookie(cookie);
         return "Set param into cookie";
@@ -56,19 +54,17 @@ public class XSS {
      */
     @RequestMapping("/stored/show")
     @ResponseBody
-    public String show(@CookieValue("xss") String xss)
-    {
+    public String show(@CookieValue("xss") String xss) {
         return xss;
     }
 
     /**
      * safe Code.
      * http://localhost:8080/xss/safe
-     *
      */
     @RequestMapping("/safe")
     @ResponseBody
-    public static String safe(String xss){
+    public static String safe(String xss) {
         return encode(xss);
     }
 

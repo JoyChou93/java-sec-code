@@ -35,7 +35,6 @@ public class CommandInject {
      * Host Injection
      * Host: hacked by joychou;cat /etc/passwd
      * http://localhost:8080/codeinject/host
-     *
      */
     @GetMapping("/codeinject/host")
     public String codeInjectHost(HttpServletRequest request) throws IOException {

@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 推荐使用该全局方案修复Cors跨域漏洞，因为可以校验一级域名。
- * @author JoyChou @ 2019.12.19
  *
+ * @author JoyChou @ 2019.12.19
  */
 @WebFilter(filterName = "OriginFilter", urlPatterns = "/cors/sec/originFilter")
 public class OriginFilter implements Filter {
@@ -25,20 +25,20 @@ public class OriginFilter implements Filter {
 
     }
 
-    private final Logger logger= LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
             throws IOException, ServletException {
 
-        HttpServletRequest request = (HttpServletRequest)req;
-        HttpServletResponse response = (HttpServletResponse)res;
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
 
         String origin = request.getHeader("Origin");
         logger.info("[+] Origin: " + origin + "\tCurrent url:" + request.getRequestURL());
 
         // 以file协议访问html，origin为字符串的null，所以依然会走安全check逻辑
-        if ( origin != null && SecurityUtil.checkURL(origin) == null) {
+        if (origin != null && SecurityUtil.checkURL(origin) == null) {
             logger.error("[-] Origin check error. " + "Origin: " + origin +
                     "\tCurrent url:" + request.getRequestURL());
             response.setStatus(response.SC_FORBIDDEN);

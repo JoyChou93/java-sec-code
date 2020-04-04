@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+
 import org.joychou.util.WebUtils;
 import org.springframework.web.bind.annotation.RestController;
+
 import static org.springframework.web.util.WebUtils.getCookie;
 
 @RestController
@@ -43,7 +45,7 @@ public class Cookies {
             for (Cookie cookie : cookies) {
                 // key code. Equals can also be equalsIgnoreCase.
                 if (NICK.equals(cookie.getName())) {
-                    nick =  cookie.getValue();
+                    nick = cookie.getValue();
                 }
             }
         }
@@ -58,13 +60,12 @@ public class Cookies {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equalsIgnoreCase(NICK)) {  // key code
-                    nick =  cookie.getValue();
+                    nick = cookie.getValue();
                 }
             }
         }
         return "Cookie nick: " + nick;
     }
-
 
 
     @RequestMapping(value = "/vuln05")

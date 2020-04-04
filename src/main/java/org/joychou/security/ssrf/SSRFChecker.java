@@ -1,25 +1,24 @@
-package org.joychou.security;
+package org.joychou.security.ssrf;
 
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.util.SubnetUtils;
 import org.joychou.config.WebConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class SSRFChecker {
+
+public class SSRFChecker {
 
     private static Logger logger = LoggerFactory.getLogger(SSRFChecker.class);
-    private final static Pattern IP_PATTERN = Pattern.compile("((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)");
 
-    static boolean checkURLFckSSRF(String url) {
-        if (null == url){
+    public static boolean checkURLFckSSRF(String url) {
+        if (null == url) {
             return false;
         }
 
@@ -37,7 +36,7 @@ class SSRFChecker {
                 return true;
             }
             for (String ssrfSafeDomain : ssrfSafeDomains) {
-                if(host.endsWith("." + ssrfSafeDomain)) {
+                if (host.endsWith("." + ssrfSafeDomain)) {
                     return true;
                 }
             }
@@ -53,20 +52,20 @@ class SSRFChecker {
      * url只允许https或者http，并且设置默认连接超时时间。
      * 该修复方案会主动请求重定向后的链接。最好用Hook方式获取到所有url后，进行判断，代码待续…
      *
-     * @param url check的url
+     * @param url        check的url
      * @param checkTimes 设置重定向检测的最大次数，建议设置为10次
      * @return 安全返回true，危险返回false
      */
-    static boolean checkSSRF(String url, int checkTimes) {
+    public static boolean checkSSRF(String url, int checkTimes) {
 
         HttpURLConnection connection;
-        int connectTime = 5*1000;  // 设置连接超时时间5s
+        int connectTime = 5 * 1000;  // 设置连接超时时间5s
         int i = 1;
         String finalUrl = url;
         try {
             do {
                 // 判断当前请求的URL是否是内网ip
-                if (isInnerIPByUrl(finalUrl)) {
+                if (isInternalIpByUrl(finalUrl)) {
                     logger.error("[-] SSRF check failed. Dangerous url: " + finalUrl);
                     return false;  // 内网ip直接return，非内网ip继续判断是否有重定向
                 }
@@ -78,14 +77,14 @@ class SSRFChecker {
                 //connection.setRequestMethod("GET");
                 connection.connect(); // send dns request
                 int responseCode = connection.getResponseCode(); // 发起网络请求
-                if (responseCode >= 300 && responseCode <=307 && responseCode != 304 && responseCode != 306) {
+                if (responseCode >= 300 && responseCode <= 307 && responseCode != 304 && responseCode != 306) {
                     String redirectedUrl = connection.getHeaderField("Location");
                     if (null == redirectedUrl)
                         break;
                     finalUrl = redirectedUrl;
                     i += 1;  // 重定向次数加1
                     logger.info("redirected url: " + finalUrl);
-                    if(i == checkTimes) {
+                    if (i == checkTimes) {
                         return false;
                     }
                 } else
@@ -104,18 +103,19 @@ class SSRFChecker {
      *
      * @return 如果是内网IP，返回true；非内网IP，返回false。
      */
-     static boolean isInnerIPByUrl(String url) {
+    public static boolean isInternalIpByUrl(String url) {
+
         String host = url2host(url);
         if (host.equals("")) {
             return true; // 异常URL当成内网IP等非法URL处理
         }
 
         String ip = host2ip(host);
-        if(ip.equals("")){
+        if (ip.equals("")) {
             return true; // 如果域名转换为IP异常，则认为是非法URL
         }
 
-        return isInnerIp(ip);
+        return isInternalIp(ip);
     }
 
 
@@ -125,14 +125,18 @@ class SSRFChecker {
      * @param strIP ip字符串
      * @return 如果是内网ip，返回true，否则返回false。
      */
-     static boolean isInnerIp(String strIP){
+    static boolean isInternalIp(String strIP) {
+        if (StringUtils.isEmpty(strIP)) {
+            logger.error("[-] SSRF check failed. IP is empty. " + strIP);
+            return true;
+        }
 
-        ArrayList<String> blackSubnets= WebConfig.getSsrfBlockIps();
-
-        for (String subnet: blackSubnets) {
+        ArrayList<String> blackSubnets = WebConfig.getSsrfBlockIps();
+        blackSubnets.add("10.0.0.0/8");
+        for (String subnet : blackSubnets) {
             SubnetUtils utils = new SubnetUtils(subnet);
             if (utils.getInfo().isInRange(strIP)) {
-                logger.error("[-] SSRF check failed. Inner Ip: " + strIP);
+                logger.error("[-] SSRF check failed. Internal IP: " + strIP);
                 return true;
             }
         }
@@ -153,8 +157,7 @@ class SSRFChecker {
         try {
             InetAddress IpAddress = InetAddress.getByName(host); //  send dns request
             return IpAddress.getHostAddress();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return "";
         }
     }
@@ -168,7 +171,7 @@ class SSRFChecker {
         try {
             // 使用URI，而非URL，防止被绕过。
             URI u = new URI(url);
-            if (!url.startsWith("http://") && ! url.startsWith("https://")) {
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
                 return "";
             }
 
@@ -180,13 +183,4 @@ class SSRFChecker {
 
     }
 
-    /**
-     * 匹配ip
-     * @return
-     */
-     static String getIpFromStr(String ipStr){
-        Matcher matcher = IP_PATTERN.matcher(ipStr);
-        System.out.println(matcher.find());
-        return matcher.group();
-    }
 }

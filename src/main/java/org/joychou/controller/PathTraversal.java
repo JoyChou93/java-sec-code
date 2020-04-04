@@ -41,9 +41,9 @@ public class PathTraversal {
         logger.info("File path: " + imgFile);
 
         File f = new File(imgFile);
-        if(f.exists() && !f.isDirectory()) {
-            byte[] data = Files.readAllBytes( Paths.get(imgFile) );
-            return new String( Base64.encodeBase64(data) );
+        if (f.exists() && !f.isDirectory()) {
+            byte[] data = Files.readAllBytes(Paths.get(imgFile));
+            return new String(Base64.encodeBase64(data));
         } else {
             return "File doesn't exist or is not a file.";
         }
