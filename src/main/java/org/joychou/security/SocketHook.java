@@ -9,7 +9,7 @@ import java.net.SocketException;
  * @Description Socket hook开关自如
  * @Date 2:12 2020/4/4
  **/
-class SocketHook {
+public class SocketHook {
     static void startHook() throws NoSuchFieldException, IOException {
         SocketHookFactory.initSocket();
         SocketHookFactory.setHook(true);

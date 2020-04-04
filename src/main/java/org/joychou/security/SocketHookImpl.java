@@ -1,13 +1,12 @@
 package org.joychou.security;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @Author liergou
@@ -18,23 +17,29 @@ import java.util.logging.Logger;
  **/
 public class SocketHookImpl extends SocketImpl implements SocketOptions
 {
+    private static Logger logger = LoggerFactory.getLogger(SocketHookImpl.class);
 
-    private SocketImpl socketImpl = null;
-    private Method createImpl;
-    private Method connectHostImpl;
-    private Method connectInetAddressImpl;
-    private Method connectSocketAddressIMPL;
-    private Method bindImpl;
-    private Method listenImpl;
-    private Method acceptImpl;
-    private Method getInputStreamImpl;
-    private Method getOutputStreamImpl;
-    private Method availableImpl;
-    private Method closeImpl;
-    private Method shutdownInputImpl;
-    private Method shutdownOutputImpl;
-    private Method sendUrgentDataImpl;
+    static Boolean isInit = false;
+    static private SocketImpl socketImpl = null;
+    static private Method createImpl;
+    static private Method connectHostImpl;
+    static private Method connectInetAddressImpl;
+    static private Method connectSocketAddressImpl;
+    static private Method bindImpl;
+    static private Method listenImpl;
+    static private Method acceptImpl;
+    static private Method getInputStreamImpl;
+    static private Method getOutputStreamImpl;
+    static private Method availableImpl;
+    static private Method closeImpl;
+    static private Method shutdownInputImpl;
+    static private Method shutdownOutputImpl;
+    static private Method sendUrgentDataImpl;
 
+
+    SocketHookImpl(Constructor socketConstructor) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        socketImpl = (SocketImpl) socketConstructor.newInstance();
+    }
 
     /**
      * @Author liergou
@@ -43,30 +48,33 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions
      * @Param [initSocketImpl]
      * @return
      **/
-    public SocketHookImpl(SocketImpl initSocketImpl) {
+    public static void initSocketImpl(Class<?> initSocketImpl) throws IllegalAccessException {
 
         if ( initSocketImpl == null){
-            throw new RuntimeException("");
-            //TODO close hook
+            SocketHookFactory.setHook(false);
+            throw new RuntimeException("initSocketImpl failed; hook close!");
         }
 
-        this.socketImpl = initSocketImpl;
-        final Class<?>  clazz = this.socketImpl.getClass();
-        Method[] allMethod = clazz.getDeclaredMethods();
-        createImpl = SocketHookUtils.findMethod( clazz,"create", new Class<?>[]{ boolean.class } );
-        connectHostImpl = SocketHookUtils.findMethod( clazz, "connect", new Class<?>[]{ String.class, int.class } );
-        connectInetAddressImpl = SocketHookUtils.findMethod( clazz, "connect", new Class<?>[]{ InetAddress.class, int.class } );
-        connectSocketAddressIMPL = SocketHookUtils.findMethod( clazz, "connect", new Class<?>[]{ SocketAddress.class, int.class } );
-        bindImpl = SocketHookUtils.findMethod( clazz, "bind", new Class<?>[]{ InetAddress.class, int.class } );
-        listenImpl = SocketHookUtils.findMethod( clazz, "listen", new Class<?>[]{ int.class } );
-        acceptImpl = SocketHookUtils.findMethod( clazz, "accept", new Class<?>[]{ SocketImpl.class } );
-        getInputStreamImpl = SocketHookUtils.findMethod( clazz, "getInputStream", new Class<?>[]{  } );
-        getOutputStreamImpl = SocketHookUtils.findMethod( clazz, "getOutputStream", new Class<?>[]{  } );
-        availableImpl = SocketHookUtils.findMethod( clazz, "available", new Class<?>[]{ } );
-        closeImpl = SocketHookUtils.findMethod( clazz, "close", new Class<?>[]{ } );
-        shutdownInputImpl = SocketHookUtils.findMethod( clazz, "shutdownInput", new Class<?>[]{ } );
-        shutdownOutputImpl = SocketHookUtils.findMethod( clazz, "shutdownOutput", new Class<?>[]{ } );
-        sendUrgentDataImpl = SocketHookUtils.findMethod( clazz, "sendUrgantData", new Class<?>[]{ int.class } );
+        if(!isInit){
+            //
+            final Class<?>  clazz = initSocketImpl;
+            Method[] allMethod = clazz.getDeclaredMethods();
+            createImpl = SocketHookUtils.findMethod( clazz,"create", new Class<?>[]{ boolean.class } );
+            connectHostImpl = SocketHookUtils.findMethod( clazz, "connect", new Class<?>[]{ String.class, int.class } );
+            connectInetAddressImpl = SocketHookUtils.findMethod( clazz, "connect", new Class<?>[]{ InetAddress.class, int.class } );
+            connectSocketAddressImpl = SocketHookUtils.findMethod( clazz, "connect", new Class<?>[]{ SocketAddress.class, int.class } );
+            bindImpl = SocketHookUtils.findMethod( clazz, "bind", new Class<?>[]{ InetAddress.class, int.class } );
+            listenImpl = SocketHookUtils.findMethod( clazz, "listen", new Class<?>[]{ int.class } );
+            acceptImpl = SocketHookUtils.findMethod( clazz, "accept", new Class<?>[]{ SocketImpl.class } );
+            getInputStreamImpl = SocketHookUtils.findMethod( clazz, "getInputStream", new Class<?>[]{  } );
+            getOutputStreamImpl = SocketHookUtils.findMethod( clazz, "getOutputStream", new Class<?>[]{  } );
+            availableImpl = SocketHookUtils.findMethod( clazz, "available", new Class<?>[]{ } );
+            closeImpl = SocketHookUtils.findMethod( clazz, "close", new Class<?>[]{ } );
+            shutdownInputImpl = SocketHookUtils.findMethod( clazz, "shutdownInput", new Class<?>[]{ } );
+            shutdownOutputImpl = SocketHookUtils.findMethod( clazz, "shutdownOutput", new Class<?>[]{ } );
+            sendUrgentDataImpl = SocketHookUtils.findMethod( clazz, "sendUrgantData", new Class<?>[]{ int.class } );
+            isInit = true;
+        }
     }
 
 
@@ -75,119 +83,120 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions
      */
     @Override
     protected void create(boolean stream) throws IOException {
-            try
-            {
-                this.createImpl.invoke( this.socketImpl, stream);
-            }
-            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
-            {
-                Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try
+        {
+            createImpl.invoke(socketImpl, stream);
+
+        }
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
+        {
+            logger.error("createImpl failed："+ ex);
+        }
 
     }
 
     @Override
     protected void connect(String host, int port) throws IOException {
-        Logger.getLogger(SocketHookImpl.class.getName()).log(Level.INFO, "host=" + host + ",port=" + port );
 
-            try
-            {
-                this.connectHostImpl.invoke( this.socketImpl, host, port);
-            }
-            catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException ex)
-            {
-                Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try
+        {
+            connectHostImpl.invoke( socketImpl, host, port);
+        }
+        catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException ex)
+        {
+            logger.error("connectHostImpl failed："+ ex);
+        }
 
     }
 
 
     @Override
     protected void connect(InetAddress address, int port) throws IOException {
-            Logger.getLogger(SocketHookImpl.class.getName()).log(Level.INFO, "InetAddress=" + address.toString());
 
+        try
+        {
             //start check SSRF
             if(SSRFChecker.isInnerIp(SSRFChecker.getIpFromStr(address.toString()))){
                 throw new RuntimeException("Socket SSRF check failed. InetAddress:"+address.toString());
             }
-            try
-            {
-                this.connectInetAddressImpl.invoke( this.socketImpl, address, port);
-            }
-            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
-            {
-                Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+            connectInetAddressImpl.invoke( socketImpl, address, port);
+
+        }
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
+        {
+            logger.error("connectInetAddressImpl failed："+ ex);
+        }
     }
 
     @Override
     protected void connect(SocketAddress address, int timeout) throws IOException {
-            Logger.getLogger(SocketHookImpl.class.getName()).log(Level.INFO, "SocketAddress=" + address.toString());
+
+        //logger.info("connect SocketAddress ："+address.toString());
+        try
+        {
             //start check SSRF
             if(SSRFChecker.isInnerIp(SSRFChecker.getIpFromStr(address.toString()))){
                 throw new RuntimeException("Socket SSRF check failed. SocketAddress:"+address.toString());
             }
 
-            try
-            {
-                this.connectSocketAddressIMPL.invoke( this.socketImpl, address, timeout);
-            }
-            catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException ex)
-            {
-                Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            connectSocketAddressImpl.invoke( socketImpl, address, timeout);
+        }
+        catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException ex)
+        {
+            logger.error("connectSocketAddressImpl failed："+ ex);
+        }
     }
 
     @Override
     protected void bind(InetAddress host, int port) throws IOException {
-            try
-            {
-                this.bindImpl.invoke( this.socketImpl, host, port);
-            }
-            catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException ex)
-            {
-                Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try
+        {
+            bindImpl.invoke( socketImpl, host, port);
+        }
+        catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException ex)
+        {
+            logger.error("bindImpl failed："+ ex);
+        }
     }
 
     @Override
     protected void listen(int backlog) throws IOException {
-
-            try
-            {
-                this.listenImpl.invoke( this.socketImpl, backlog);
-            }
-            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
-            {
-                Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try
+        {
+            listenImpl.invoke( socketImpl, backlog);
+        }
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
+        {
+            logger.error("listenImpl failed："+ ex);
+        }
     }
 
     @Override
     protected void accept(SocketImpl s) throws IOException {
 
-            try
-            {
-                this.acceptImpl.invoke( this.socketImpl, s);
-            }
-            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
-            {
-                Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try
+        {
+            acceptImpl.invoke( socketImpl, s);
+        }
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
+        {
+            logger.error("acceptImpl failed："+ ex);
+        }
     }
 
     @Override
     protected InputStream getInputStream() throws IOException {
         InputStream inStream = null;
 
-            try
-            {
-                inStream = (InputStream)this.getInputStreamImpl.invoke( this.socketImpl);
-            }
-            catch ( ClassCastException | InvocationTargetException | IllegalArgumentException | IllegalAccessException ex )
-            {
-                Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try
+        {
+            inStream = (InputStream) getInputStreamImpl.invoke( socketImpl);
+        }
+        catch ( ClassCastException | InvocationTargetException | IllegalArgumentException | IllegalAccessException ex )
+        {
+            logger.error("getInputStreamImpl failed："+ ex);
+        }
 
         return inStream;
     }
@@ -196,14 +205,14 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions
     protected OutputStream getOutputStream() throws IOException {
         OutputStream outStream = null;
 
-            try
-            {
-                outStream = (OutputStream)this.getOutputStreamImpl.invoke( this.socketImpl);
-            }
-            catch ( ClassCastException | IllegalArgumentException | IllegalAccessException | InvocationTargetException ex )
-            {
-                Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try
+        {
+            outStream = (OutputStream) getOutputStreamImpl.invoke( socketImpl);
+        }
+        catch ( ClassCastException | IllegalArgumentException | IllegalAccessException | InvocationTargetException ex )
+        {
+            logger.error("getOutputStreamImpl failed："+ ex);
+        }
 
         return outStream;
     }
@@ -212,39 +221,39 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions
     protected int available() throws IOException {
         int result = -1;
 
-            try
-            {
-                result = (Integer)this.availableImpl.invoke( this.socketImpl);
-            }
-            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
-            {
-                Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try
+        {
+            result = (Integer) availableImpl.invoke( socketImpl);
+        }
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
+        {
+            logger.error("availableImpl failed："+ ex);
+        }
 
         return result;
     }
 
     @Override
     protected void close() throws IOException {
-            try
-            {
-                this.closeImpl.invoke( this.socketImpl);
-            }
-            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
-            {
-                Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try
+        {
+            closeImpl.invoke( socketImpl);
+        }
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
+        {
+            logger.error("closeImpl failed："+ ex);
+        }
     }
 
     @Override
     protected void shutdownInput() throws IOException {
         try
         {
-            this.shutdownInputImpl.invoke( this.socketImpl);
+            shutdownInputImpl.invoke( socketImpl);
         }
         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
         {
-            Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("shutdownInputImpl failed："+ ex);
         }
 
     }
@@ -253,36 +262,36 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions
     protected void shutdownOutput() throws IOException {
         try
         {
-            this.shutdownOutputImpl.invoke( this.socketImpl);
+            shutdownOutputImpl.invoke( socketImpl);
         }
         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
         {
-            Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("shutdownOutputImpl failed："+ ex);
         }
 
     }
 
     @Override
     protected void sendUrgentData(int data) throws IOException {
-            try
-            {
-                this.sendUrgentDataImpl.invoke( this.socketImpl, data);
-            }
-            catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException ex)
-            {
-                Logger.getLogger(SocketHookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try
+        {
+            sendUrgentDataImpl.invoke( socketImpl, data);
+        }
+        catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException ex)
+        {
+            logger.error("sendUrgentDataImpl failed："+ ex);
+        }
     }
 
     public void setOption(int optID, Object value) throws SocketException {
-        if ( null != this.socketImpl )
+        if ( null != socketImpl )
         {
-            this.socketImpl.setOption( optID, value );
+            socketImpl.setOption( optID, value );
         }
     }
 
     public Object getOption(int optID) throws SocketException {
-        return this.socketImpl.getOption( optID );
+        return socketImpl.getOption( optID );
     }
 
     /**

@@ -34,11 +34,15 @@ import java.net.*;
  * @author JoyChou @2017-12-28
  */
 
+
+
 @RestController
 @RequestMapping("/ssrf")
 public class SSRF {
 
     private static Logger logger = LoggerFactory.getLogger(SSRF.class);
+
+
 
     @RequestMapping("/urlConnection")
     public static String ssrf_URLConnection(@RequestParam String url)
@@ -172,6 +176,7 @@ public class SSRF {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(url);
         try {
+            SecurityUtil.startSSRFHook();
             HttpResponse httpResponse = client.execute(httpGet); // send request
             BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
             StringBuilder result = new StringBuilder();
