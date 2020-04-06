@@ -4,7 +4,6 @@ package org.joychou.security.ssrf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
@@ -21,21 +20,22 @@ import java.net.*;
 public class SocketHookImpl extends SocketImpl implements SocketOptions {
 
     private static Boolean isInit = false;
-    static private SocketImpl socketImpl = null;
-    static private Method createImpl;
-    static private Method connectHostImpl;
-    static private Method connectInetAddressImpl;
-    static private Method connectSocketAddressImpl;
-    static private Method bindImpl;
-    static private Method listenImpl;
-    static private Method acceptImpl;
-    static private Method getInputStreamImpl;
-    static private Method getOutputStreamImpl;
-    static private Method availableImpl;
-    static private Method closeImpl;
-    static private Method shutdownInputImpl;
-    static private Method shutdownOutputImpl;
-    static private Method sendUrgentDataImpl;
+
+    private static SocketImpl socketImpl = null;
+    private static Method createImpl;
+    private static Method connectHostImpl;
+    private static Method connectInetAddressImpl;
+    private static Method connectSocketAddressImpl;
+    private static Method bindImpl;
+    private static Method listenImpl;
+    private static Method acceptImpl;
+    private static Method getInputStreamImpl;
+    private static Method getOutputStreamImpl;
+    private static Method availableImpl;
+    private static Method closeImpl;
+    private static Method shutdownInputImpl;
+    private static Method shutdownOutputImpl;
+    private static Method sendUrgentDataImpl;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -58,8 +58,12 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
             throw new RuntimeException("InitSocketImpl failed! Hook stopped!");
         }
 
+//        try {
+//            initSocketImpl = Class.forName("java.net.SocketImpl");
+//        } catch (ClassNotFoundException e) {
+//            System.out.println(e.getMessage());
+//        }
         if (!isInit) {
-            //
             createImpl = SocketHookUtils.findMethod(initSocketImpl, "create", new Class<?>[]{boolean.class});
             connectHostImpl = SocketHookUtils.findMethod(initSocketImpl, "connect", new Class<?>[]{String.class, int.class});
             connectInetAddressImpl = SocketHookUtils.findMethod(initSocketImpl, "connect", new Class<?>[]{InetAddress.class, int.class});
@@ -83,7 +87,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
      * socket base method impl
      */
     @Override
-    protected void create(boolean stream) throws IOException {
+    protected void create(boolean stream) {
         try {
             createImpl.invoke(socketImpl, stream);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
@@ -94,7 +98,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
 
 
     @Override
-    protected void connect(String host, int port) throws IOException {
+    protected void connect(String host, int port) {
         logger.info("host: " + host + "\tport: " + port);
         try {
             connectHostImpl.invoke(socketImpl, host, port);
@@ -106,7 +110,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
 
 
     @Override
-    protected void connect(InetAddress address, int port) throws IOException {
+    protected void connect(InetAddress address, int port) {
 
         logger.info("InetAddress: " + address.toString());
 
@@ -121,14 +125,14 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
     }
 
     @Override
-    protected void connect(SocketAddress address, int timeout) throws IOException {
+    protected void connect(SocketAddress address, int timeout) {
 
         // convert SocketAddress to InetSocketAddress
         InetSocketAddress addr = (InetSocketAddress) address;
 
         String ip = addr.getAddress().getHostAddress();
         String host = addr.getHostName();
-        logger.info(String.format("[+]SocketAddress address's Hostname: %s IP: %s", host, ip));
+        logger.info(String.format("[+] SocketAddress address's Hostname: %s IP: %s", host, ip));
 
         try {
             if (SSRFChecker.isInternalIp(ip)) {
@@ -143,7 +147,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
     }
 
     @Override
-    protected void bind(InetAddress host, int port) throws IOException {
+    protected void bind(InetAddress host, int port) {
         try {
             bindImpl.invoke(socketImpl, host, port);
         } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException ex) {
@@ -162,7 +166,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
     }
 
     @Override
-    protected void accept(SocketImpl s) throws IOException {
+    protected void accept(SocketImpl s) {
 
         try {
             acceptImpl.invoke(socketImpl, s);
@@ -172,7 +176,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
     }
 
     @Override
-    protected InputStream getInputStream() throws IOException {
+    protected InputStream getInputStream() {
         InputStream inStream = null;
 
         try {
@@ -186,7 +190,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
     }
 
     @Override
-    protected OutputStream getOutputStream() throws IOException {
+    protected OutputStream getOutputStream() {
         OutputStream outStream = null;
 
         try {
@@ -200,7 +204,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
     }
 
     @Override
-    protected int available() throws IOException {
+    protected int available() {
 
         int result = -1;
 
@@ -214,7 +218,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
     }
 
     @Override
-    protected void close() throws IOException {
+    protected void close() {
         try {
             closeImpl.invoke(socketImpl);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
@@ -223,7 +227,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
     }
 
     @Override
-    protected void shutdownInput() throws IOException {
+    protected void shutdownInput() {
         try {
             shutdownInputImpl.invoke(socketImpl);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
@@ -233,7 +237,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
     }
 
     @Override
-    protected void shutdownOutput() throws IOException {
+    protected void shutdownOutput() {
         try {
             shutdownOutputImpl.invoke(socketImpl);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
@@ -243,7 +247,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
     }
 
     @Override
-    protected void sendUrgentData(int data) throws IOException {
+    protected void sendUrgentData(int data) {
         try {
             sendUrgentDataImpl.invoke(socketImpl, data);
         } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException ex) {

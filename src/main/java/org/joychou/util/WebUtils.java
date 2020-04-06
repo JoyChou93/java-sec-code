@@ -17,6 +17,7 @@ public class WebUtils {
         return convertStreamToString(in);
     }
 
+
     // https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
     public static String convertStreamToString(java.io.InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
@@ -33,6 +34,7 @@ public class WebUtils {
         return HtmlUtils.htmlEscape(callback) + "(" + jsonStr + ")";
     }
 
+
     public static String getFileExtension(String fullName) {
         Preconditions.checkNotNull(fullName);
         String fileName = (new File(fullName)).getName();
@@ -40,10 +42,13 @@ public class WebUtils {
         return dotIndex == -1 ? "" : fileName.substring(dotIndex + 1);
     }
 
+
     public static String getNameWithoutExtension(String file) {
         Preconditions.checkNotNull(file);
         String fileName = (new File(file)).getName();
         int dotIndex = fileName.lastIndexOf('.');
         return dotIndex == -1 ? fileName : fileName.substring(0, dotIndex);
     }
+
+
 }

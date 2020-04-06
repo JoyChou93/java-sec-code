@@ -12,7 +12,7 @@ import java.net.SocketException;
  */
 public class SocketHook {
 
-    public static void startHook() throws NoSuchFieldException, IOException {
+    public static void startHook() throws IOException {
         SocketHookFactory.initSocket();
         SocketHookFactory.setHook(true);
         try{

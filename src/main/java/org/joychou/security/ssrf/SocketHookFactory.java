@@ -33,22 +33,23 @@ public class SocketHookFactory implements SocketImplFactory {
     }
 
 
-    /**
-     * initSocket
-     */
     static void initSocket() {
+
         if (socketConstructor != null) {
             return;
         }
 
         Socket socket = new Socket();
         try {
+            // get impl field in Socket class
             Field implField = Socket.class.getDeclaredField("impl");
             implField.setAccessible(true);
             Class<?> clazz = implField.get(socket).getClass();
+
             SocketHookImpl.initSocketImpl(clazz);
             socketConstructor = clazz.getDeclaredConstructor();
             socketConstructor.setAccessible(true);
+
         } catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException e) {
             throw new SSRFException("SocketHookFactory init failed!");
         }

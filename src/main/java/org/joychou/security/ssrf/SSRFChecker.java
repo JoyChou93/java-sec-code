@@ -132,7 +132,6 @@ public class SSRFChecker {
         }
 
         ArrayList<String> blackSubnets = WebConfig.getSsrfBlockIps();
-        blackSubnets.add("10.0.0.0/8");
         for (String subnet : blackSubnets) {
             SubnetUtils utils = new SubnetUtils(subnet);
             if (utils.getInfo().isInRange(strIP)) {

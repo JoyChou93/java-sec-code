@@ -126,7 +126,7 @@ public class SecurityUtil {
      *
      * @author liergou @ 2020-04-04 02:15
      */
-    public static void startSSRFHook() throws NoSuchFieldException, IOException {
+    public static void startSSRFHook() throws IOException {
         SocketHook.startHook();
     }
 
