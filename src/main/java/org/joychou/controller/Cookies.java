@@ -1,6 +1,7 @@
 package org.joychou.controller;
 
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
@@ -17,14 +18,14 @@ public class Cookies {
 
     private static String NICK = "nick";
 
-    @RequestMapping(value = "/vuln01")
+    @GetMapping(value = "/vuln01")
     public String vuln01(HttpServletRequest req) {
         String nick = WebUtils.getCookieValueByName(req, NICK); // key code
         return "Cookie nick: " + nick;
     }
 
 
-    @RequestMapping(value = "/vuln02")
+    @GetMapping(value = "/vuln02")
     public String vuln02(HttpServletRequest req) {
         String nick = null;
         Cookie[] cookie = req.getCookies();
@@ -37,7 +38,7 @@ public class Cookies {
     }
 
 
-    @RequestMapping(value = "/vuln03")
+    @GetMapping(value = "/vuln03")
     public String vuln03(HttpServletRequest req) {
         String nick = null;
         Cookie cookies[] = req.getCookies();
@@ -53,7 +54,7 @@ public class Cookies {
     }
 
 
-    @RequestMapping(value = "/vuln04")
+    @GetMapping(value = "/vuln04")
     public String vuln04(HttpServletRequest req) {
         String nick = null;
         Cookie cookies[] = req.getCookies();
@@ -68,13 +69,13 @@ public class Cookies {
     }
 
 
-    @RequestMapping(value = "/vuln05")
+    @GetMapping(value = "/vuln05")
     public String vuln05(@CookieValue("nick") String nick) {
         return "Cookie nick: " + nick;
     }
 
 
-    @RequestMapping(value = "/vuln06")
+    @GetMapping(value = "/vuln06")
     public String vuln06(@CookieValue(value = "nick") String nick) {
         return "Cookie nick: " + nick;
     }

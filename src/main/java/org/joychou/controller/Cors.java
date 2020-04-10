@@ -4,6 +4,7 @@ import org.joychou.security.SecurityUtil;
 import org.joychou.util.LoginUtils;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,25 +22,25 @@ public class Cors {
 
     private static String info = "{\"name\": \"JoyChou\", \"phone\": \"18200001111\"}";
 
-    @RequestMapping("/vuln/origin")
-    public static String vuls1(HttpServletRequest request, HttpServletResponse response) {
+    @GetMapping("/vuln/origin")
+    public String vuls1(HttpServletRequest request, HttpServletResponse response) {
         String origin = request.getHeader("origin");
         response.setHeader("Access-Control-Allow-Origin", origin); // 设置Origin值为Header中获取到的
         response.setHeader("Access-Control-Allow-Credentials", "true");  // cookie
         return info;
     }
 
-    @RequestMapping("/vuln/setHeader")
-    public static String vuls2(HttpServletResponse response) {
+    @GetMapping("/vuln/setHeader")
+    public String vuls2(HttpServletResponse response) {
         // 后端设置Access-Control-Allow-Origin为*的情况下，跨域的时候前端如果设置withCredentials为true会异常
         response.setHeader("Access-Control-Allow-Origin", "*");
         return info;
     }
 
 
-    @CrossOrigin("*")
+    @GetMapping("*")
     @RequestMapping("/vuln/crossOrigin")
-    public static String vuls3() {
+    public String vuls3() {
         return info;
     }
 
@@ -50,8 +51,8 @@ public class Cors {
      * 代码：org/joychou/security/CustomCorsProcessor
      */
     @CrossOrigin(origins = {"joychou.org", "http://test.joychou.me"})
-    @RequestMapping("/sec/crossOrigin")
-    public static String secCrossOrigin() {
+    @GetMapping("/sec/crossOrigin")
+    public String secCrossOrigin() {
         return info;
     }
 
@@ -61,7 +62,7 @@ public class Cors {
      * 支持自定义checkOrigin
      * 代码：org/joychou/config/CorsConfig.java
      */
-    @RequestMapping("/sec/webMvcConfigurer")
+    @GetMapping("/sec/webMvcConfigurer")
     public CsrfToken getCsrfToken_01(CsrfToken token) {
         return token;
     }
@@ -72,7 +73,7 @@ public class Cors {
      * 不支持自定义checkOrigin，因为spring security优先于setCorsProcessor执行
      * 代码：org/joychou/security/WebSecurityConfig.java
      */
-    @RequestMapping("/sec/httpCors")
+    @GetMapping("/sec/httpCors")
     public CsrfToken getCsrfToken_02(CsrfToken token) {
         return token;
     }
@@ -83,7 +84,7 @@ public class Cors {
      * 支持自定义checkOrigin
      * 代码：org/joychou/filter/OriginFilter.java
      */
-    @RequestMapping("/sec/originFilter")
+    @GetMapping("/sec/originFilter")
     public CsrfToken getCsrfToken_03(CsrfToken token) {
         return token;
     }
@@ -100,7 +101,7 @@ public class Cors {
     }
 
 
-    @RequestMapping("/sec/checkOrigin")
+    @GetMapping("/sec/checkOrigin")
     public String seccode(HttpServletRequest request, HttpServletResponse response) {
         String origin = request.getHeader("Origin");
 

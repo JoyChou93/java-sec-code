@@ -1,7 +1,7 @@
 package org.joychou.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedInputStream;
@@ -17,8 +17,7 @@ import java.io.InputStreamReader;
 @RequestMapping("/rce")
 public class Rce {
 
-    @RequestMapping("/exec")
-    @ResponseBody
+    @GetMapping("/exec")
     public String CommandExec(String cmd) {
         Runtime run = Runtime.getRuntime();
         StringBuilder sb = new StringBuilder();

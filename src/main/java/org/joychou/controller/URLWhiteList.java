@@ -1,12 +1,11 @@
 package org.joychou.controller;
 
 
+import org.joychou.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,9 +31,9 @@ public class URLWhiteList {
      * http://localhost:8080/url/vuln/endswith?url=http://aaajoychou.org
      */
     @GetMapping("/vuln/endsWith")
-    public String endsWith(@RequestParam("url") String url) throws Exception {
-        URL u = new URL(url);
-        String host = u.getHost().toLowerCase();
+    public String endsWith(@RequestParam("url") String url) {
+
+        String host = SecurityUtil.gethost(url);
 
         for (String domain : domainwhitelist) {
             if (host.endsWith(domain)) {
@@ -52,9 +51,9 @@ public class URLWhiteList {
      * http://localhost:8080/url/vuln/contains?url=http://bypassjoychou.org
      */
     @GetMapping("/vuln/contains")
-    public String contains(@RequestParam("url") String url) throws Exception {
-        URL u = new URL(url);
-        String host = u.getHost().toLowerCase();
+    public String contains(@RequestParam("url") String url) {
+
+        String host = SecurityUtil.gethost(url);
 
         for (String domain : domainwhitelist) {
             if (host.contains(domain)) {
@@ -70,12 +69,12 @@ public class URLWhiteList {
      * http://localhost:8080/url/vuln/regex?url=http://aaajoychou.org
      */
     @GetMapping("/vuln/regex")
-    public String regex(@RequestParam("url") String url) throws Exception {
-        URL u = new URL(url);
-        String host = u.getHost().toLowerCase();
+    public String regex(@RequestParam("url") String url) {
 
+        String host = SecurityUtil.gethost(url);
         Pattern p = Pattern.compile("joychou\\.org$");
         Matcher m = p.matcher(host);
+
         if (m.find()) {
             return "Good url.";
         } else {
@@ -93,16 +92,15 @@ public class URLWhiteList {
      * More details: https://github.com/JoyChou93/java-sec-code/wiki/URL-whtielist-Bypass
      */
     @GetMapping("/vuln/url_bypass")
-    public String url_bypass(String url) throws Exception {
+    public String url_bypass(String url) {
 
         logger.info("url:  " + url);
-        URL u = new URL(url);
 
-        if (!u.getProtocol().startsWith("http") && !u.getProtocol().startsWith("https")) {
+        if (!SecurityUtil.isHttp(url)) {
             return "Url is not http or https";
         }
 
-        String host = u.getHost().toLowerCase();
+        String host = SecurityUtil.gethost(url);
         logger.info("host:  " + host);
 
         // endsWith .
@@ -121,16 +119,15 @@ public class URLWhiteList {
      * http://localhost:8080/url/sec/endswith?url=http://aa.joychou.org
      */
     @GetMapping("/sec/endswith")
-    public String sec_endswith(@RequestParam("url") String url) throws Exception {
+    public String sec_endswith(@RequestParam("url") String url) {
 
         String whiteDomainlists[] = {"joychou.org", "joychou.com"};
 
-        URI uri = new URI(url); // 必须用URI
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        if (!SecurityUtil.isHttp(url)) {
             return "SecurityUtil is not http or https";
         }
 
-        String host = uri.getHost().toLowerCase();
+        String host = SecurityUtil.gethost(url);
 
         // endsWith .
         for (String domain : whiteDomainlists) {
@@ -147,14 +144,14 @@ public class URLWhiteList {
      * http://localhost:8080/url/sec/multi_level_hos?url=http://ccc.bbb.joychou.org
      */
     @GetMapping("/sec/multi_level_host")
-    public String sec_multi_level_host(@RequestParam("url") String url) throws Exception {
+    public String sec_multi_level_host(@RequestParam("url") String url) {
         String whiteDomainlists[] = {"aaa.joychou.org", "ccc.bbb.joychou.org"};
 
-        URI uri = new URI(url);
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        if (!SecurityUtil.isHttp(url)) {
             return "SecurityUtil is not http or https";
         }
-        String host = uri.getHost().toLowerCase();
+
+        String host = SecurityUtil.gethost(url);
 
         // equals
         for (String domain : whiteDomainlists) {
@@ -171,19 +168,19 @@ public class URLWhiteList {
      * http://localhost:8080/url/sec/array_indexOf?url=http://ccc.bbb.joychou.org
      */
     @GetMapping("/sec/array_indexOf")
-    public String sec_array_indexOf(@RequestParam("url") String url) throws Exception {
+    public String sec_array_indexOf(@RequestParam("url") String url) {
 
         // Define muti-level host whitelist.
         ArrayList<String> whiteDomainlists = new ArrayList<>();
         whiteDomainlists.add("bbb.joychou.org");
         whiteDomainlists.add("ccc.bbb.joychou.org");
 
-        URI uri = new URI(url);
-
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        if (!SecurityUtil.isHttp(url)) {
             return "SecurityUtil is not http or https";
         }
-        String host = uri.getHost().toLowerCase();
+
+        String host = SecurityUtil.gethost(url);
+
         if (whiteDomainlists.indexOf(host) != -1) {
             return "Good url.";
         }

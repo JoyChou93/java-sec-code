@@ -41,7 +41,7 @@ public class XXE {
     private static Logger logger = LoggerFactory.getLogger(XXE.class);
     private static String EXCEPT = "xxe except";
 
-    @RequestMapping(value = "/xmlReader/vuln", method = RequestMethod.POST)
+    @PostMapping("/xmlReader/vuln")
     public String xmlReaderVuln(HttpServletRequest request) {
         try {
             String body = WebUtils.getRequestBody(request);

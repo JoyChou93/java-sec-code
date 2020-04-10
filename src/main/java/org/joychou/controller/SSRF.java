@@ -6,10 +6,7 @@ import org.joychou.util.HttpUtils;
 import org.joychou.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -29,17 +26,21 @@ public class SSRF {
     private static Logger logger = LoggerFactory.getLogger(SSRF.class);
 
 
-    @RequestMapping("/urlConnection/vuln")
-    public static String URLConnectionVuln(String url) {
+    /**
+     * The default setting of followRedirects is true.
+     * UserAgent is Java/1.8.0_102.
+     */
+    @RequestMapping(value = "/urlConnection/vuln", method = {RequestMethod.POST, RequestMethod.GET})
+    public String URLConnectionVuln(String url) {
         return HttpUtils.URLConnection(url);
     }
 
 
-    @RequestMapping("/urlConnection/sec")
-    public static String URLConnectionSec(String url) {
+    @GetMapping("/urlConnection/sec")
+    public String URLConnectionSec(String url) {
 
         // Decline not http/https protocol
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        if (!SecurityUtil.isHttp(url)) {
             return "[-] SSRF check failed";
         }
 
@@ -55,9 +56,12 @@ public class SSRF {
     }
 
 
-    @RequestMapping("/HttpURLConnection/sec")
-    @ResponseBody
-    public static String httpURLConnection(@RequestParam String url) {
+    /**
+     * The default setting of followRedirects is true.
+     * UserAgent is Java/1.8.0_102.
+     */
+    @GetMapping("/HttpURLConnection/sec")
+    public String httpURLConnection(@RequestParam String url) {
         try {
             SecurityUtil.startSSRFHook();
             return HttpUtils.HTTPURLConnection(url);
@@ -69,10 +73,14 @@ public class SSRF {
     }
 
 
-    // http://localhost:8080/ssrf/request/sec?url=http://www.baidu.com
-    @RequestMapping("/request/sec")
-    @ResponseBody
-    public static String request(@RequestParam String url) {
+    /**
+     * The default setting of followRedirects is true.
+     * UserAgent is <code>Apache-HttpClient/4.5.12 (Java/1.8.0_102)</code>.
+     *
+     * http://localhost:8080/ssrf/request/sec?url=http://test.joychou.org
+     */
+    @GetMapping("/request/sec")
+    public String request(@RequestParam String url) {
         try {
             SecurityUtil.startSSRFHook();
             return HttpUtils.request(url);
@@ -92,9 +100,8 @@ public class SSRF {
      * new URL(String url).openStream()
      * new URL(String url).getContent()
      */
-    @RequestMapping("/openStream")
-    @ResponseBody
-    public static void openStream(@RequestParam String url, HttpServletResponse response) throws IOException {
+    @GetMapping("/openStream")
+    public void openStream(@RequestParam String url, HttpServletResponse response) throws IOException {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
@@ -124,9 +131,12 @@ public class SSRF {
     }
 
 
-    @RequestMapping("/ImageIO/sec")
-    @ResponseBody
-    public static String ImageIO(@RequestParam String url) {
+    /**
+     * The default setting of followRedirects is true.
+     * UserAgent is Java/1.8.0_102.
+     */
+    @GetMapping("/ImageIO/sec")
+    public String ImageIO(@RequestParam String url) {
         try {
             SecurityUtil.startSSRFHook();
             HttpUtils.imageIO(url);
@@ -140,9 +150,12 @@ public class SSRF {
     }
 
 
-    @RequestMapping("/okhttp/sec")
-    @ResponseBody
-    public static String okhttp(@RequestParam String url) {
+    /**
+     * The default setting of followRedirects is true.
+     * UserAgent is <code>okhttp/2.5.0</code>.
+     */
+    @GetMapping("/okhttp/sec")
+    public String okhttp(@RequestParam String url) {
 
         try {
             SecurityUtil.startSSRFHook();
@@ -158,11 +171,13 @@ public class SSRF {
 
 
     /**
+     * The default setting of followRedirects is true.
+     * UserAgent is <code>Apache-HttpClient/4.5.12 (Java/1.8.0_102)</code>.
+     *
      * http://localhost:8080/ssrf/httpclient/sec?url=http://www.baidu.com
      */
-    @RequestMapping("/httpclient/sec")
-    @ResponseBody
-    public static String HttpClient(@RequestParam String url) {
+    @GetMapping("/httpclient/sec")
+    public String HttpClient(@RequestParam String url) {
 
         try {
             SecurityUtil.startSSRFHook();
@@ -177,11 +192,13 @@ public class SSRF {
 
 
     /**
+     * The default setting of followRedirects is true.
+     * UserAgent is <code>Jakarta Commons-HttpClient/3.1</code>.
+     *
      * http://localhost:8080/ssrf/commonsHttpClient/sec?url=http://www.baidu.com
      */
-    @RequestMapping("/commonsHttpClient/sec")
-    @ResponseBody
-    public static String commonsHttpClient(@RequestParam String url) {
+    @GetMapping("/commonsHttpClient/sec")
+    public String commonsHttpClient(@RequestParam String url) {
 
         try {
             SecurityUtil.startSSRFHook();
@@ -195,11 +212,13 @@ public class SSRF {
     }
 
     /**
+     * The default setting of followRedirects is true.
+     * UserAgent is the useragent of browser.
+     *
      * http://localhost:8080/ssrf/Jsoup?url=http://www.baidu.com
      */
-    @RequestMapping("/Jsoup/sec")
-    @ResponseBody
-    public static String Jsoup(@RequestParam String url) {
+    @GetMapping("/Jsoup/sec")
+    public String Jsoup(@RequestParam String url) {
 
         try {
             SecurityUtil.startSSRFHook();
@@ -214,11 +233,13 @@ public class SSRF {
 
 
     /**
+     * The default setting of followRedirects is true.
+     * UserAgent is <code>Java/1.8.0_102</code>.
+     *
      * http://localhost:8080/ssrf/IOUtils/sec?url=http://www.baidu.com
      */
-    @RequestMapping("/IOUtils/sec")
-    public static String IOUtils(String url) {
-
+    @GetMapping("/IOUtils/sec")
+    public String IOUtils(String url) {
         try {
             SecurityUtil.startSSRFHook();
             HttpUtils.IOUtils(url);
@@ -229,6 +250,16 @@ public class SSRF {
         }
 
         return "IOUtils ssrf test";
+    }
+
+
+    /**
+     * The default setting of followRedirects is true.
+     * UserAgent is <code>Apache-HttpAsyncClient/4.1.4 (Java/1.8.0_102)</code>.
+     */
+    @GetMapping("/HttpSyncClients/vuln")
+    public String HttpSyncClients(@RequestParam("url") String url) {
+        return HttpUtils.HttpAsyncClients(url);
     }
 
 

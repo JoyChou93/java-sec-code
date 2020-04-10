@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -18,6 +19,34 @@ public class SecurityUtil {
 
     private static final Pattern FILTER_PATTERN = Pattern.compile("^[a-zA-Z0-9_/\\.-]+$");
     private static Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
+
+
+    /**
+     * Determine if the URL starts with HTTP.
+     *
+     * @param url url
+     * @return true or false
+     */
+    public static boolean isHttp(String url) {
+        return url.startsWith("http://") || url.startsWith("https://");
+    }
+
+
+    /**
+     * Get http url host.
+     *
+     * @param url url
+     * @return host
+     */
+    public static String gethost(String url) {
+        try {
+            URI uri = new URI(url);
+            return uri.getHost().toLowerCase();
+        } catch (URISyntaxException e) {
+            return "";
+        }
+    }
+
 
     /**
      * 同时支持一级域名和多级域名，相关配置在resources目录下url/url_safe_domain.xml文件。
@@ -36,11 +65,10 @@ public class SecurityUtil {
         ArrayList<String> blockDomains = WebConfig.getBlockDomains();
 
         try {
-            URI uri = new URI(url);
-            String host = uri.getHost().toLowerCase();
+            String host = gethost(url);
 
             // 必须http/https
-            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            if (!isHttp(url)) {
                 return null;
             }
 
@@ -66,7 +94,7 @@ public class SecurityUtil {
                 }
             }
             return null;
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             logger.error(e.toString());
             return null;
         }

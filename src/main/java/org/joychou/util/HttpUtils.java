@@ -9,6 +9,9 @@ import org.apache.http.client.fluent.Request;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -22,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.*;
 
 /**
  * @author JoyChou 2020-04-06
@@ -30,14 +34,6 @@ public class HttpUtils {
 
     private static Logger logger = LoggerFactory.getLogger(HttpUtils.class);
 
-
-    /**
-     * https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient
-     * UserAgent is <code>Jakarta Commons-HttpClient/3.1</code>. Last publish at 2007.08.
-     *
-     * @param url http request url
-     * @return response
-     */
     public static String commonHttpClient(String url) {
 
         HttpClient client = new HttpClient();
@@ -138,13 +134,10 @@ public class HttpUtils {
      */
     public static String Jsoup(String url) {
         try {
-            String useragent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) " +
-                    "Chrome/64.0.3282.167 Safari/537.36";
             Document doc = Jsoup.connect(url)
-                    .userAgent(useragent)
+                    //.followRedirects(false)
                     .timeout(3000)
                     .cookie("name", "joychou") // request cookies
-                    //.followRedirects(false)
                     .execute().parse();
             return doc.outerHtml();
         } catch (IOException e) {
@@ -183,6 +176,27 @@ public class HttpUtils {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+
+    public static String HttpAsyncClients(String url) {
+        CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
+        try {
+            httpclient.start();
+            final HttpGet request = new HttpGet(url);
+            Future<HttpResponse> future = httpclient.execute(request, null);
+            HttpResponse response = future.get(6000, TimeUnit.MILLISECONDS);
+            return EntityUtils.toString(response.getEntity());
+        } catch (Exception e) {
+            return e.getMessage();
+        } finally {
+            try {
+                httpclient.close();
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
+        }
+
     }
 
 

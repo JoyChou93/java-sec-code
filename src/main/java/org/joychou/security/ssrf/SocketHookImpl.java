@@ -57,12 +57,7 @@ public class SocketHookImpl extends SocketImpl implements SocketOptions {
             SocketHookFactory.setHook(false);
             throw new RuntimeException("InitSocketImpl failed! Hook stopped!");
         }
-
-//        try {
-//            initSocketImpl = Class.forName("java.net.SocketImpl");
-//        } catch (ClassNotFoundException e) {
-//            System.out.println(e.getMessage());
-//        }
+        
         if (!isInit) {
             createImpl = SocketHookUtils.findMethod(initSocketImpl, "create", new Class<?>[]{boolean.class});
             connectHostImpl = SocketHookUtils.findMethod(initSocketImpl, "connect", new Class<?>[]{String.class, int.class});

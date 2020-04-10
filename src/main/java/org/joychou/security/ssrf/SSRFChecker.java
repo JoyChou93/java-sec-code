@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.util.SubnetUtils;
 import org.joychou.config.WebConfig;
+import org.joychou.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,11 +25,10 @@ public class SSRFChecker {
 
         ArrayList<String> ssrfSafeDomains = WebConfig.getSsrfSafeDomains();
         try {
-            URI uri = new URI(url);
-            String host = uri.getHost().toLowerCase();
+            String host = SecurityUtil.gethost(url);
 
             // 必须http/https
-            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            if (!SecurityUtil.isHttp(url)) {
                 return false;
             }
 
@@ -170,16 +170,13 @@ public class SSRFChecker {
         try {
             // 使用URI，而非URL，防止被绕过。
             URI u = new URI(url);
-            if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                return "";
+            if (SecurityUtil.isHttp(url)) {
+                return u.getHost();
             }
-
-            return u.getHost();
-
+            return "";
         } catch (Exception e) {
             return "";
         }
-
     }
 
 }
