@@ -11,7 +11,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import org.junit.Test;
+
 
 @RestController
 public class PathTraversal {
@@ -47,6 +51,39 @@ public class PathTraversal {
         } else {
             return "File doesn't exist or is not a file.";
         }
+    }
+
+    private boolean testNewFile(String imgFile) {
+        try {
+            byte[] data = Files.readAllBytes(Paths.get(imgFile));
+            return true;
+        } catch (IOException e) {
+            System.out.println("File doesn't exist " + imgFile);
+        }
+        return false;
+    }
+
+    @Test
+    public void securityTest1() {
+        // Files.readAllBytes(Paths.get(imgFile))会验证每一级的目录、文件是否存在
+
+        // 存在/tmp/a文件
+        // 存在/tmp/x目录
+        // 不存在/tmp/xxx目录或者文件
+
+        assert testNewFile("/tmp/x/../a");  // 可以读
+        assert !testNewFile("/tmp/a/../a");  // 文件不存在
+        assert !testNewFile("/tmp/xxxx/../a");  // 文件不存在
+        assert testNewFile("/tmp/../tmp/a");  // 可以读
+        assert testNewFile("/tmp/../../../../etc/passwd");  // 可以读
+    }
+
+    @Test
+    public void securityTest2() {
+        // 由于Paths判断非预期行为，可能导致任意目录、文件操作
+        Path inputPath = Paths.get("/tmp", "../etc/passwd");
+        Path webPath = Paths.get("/", "tmp");
+        assert inputPath.startsWith(webPath);  // 预期是false，实际是true
     }
 
     public static void main(String[] argv) throws IOException {
