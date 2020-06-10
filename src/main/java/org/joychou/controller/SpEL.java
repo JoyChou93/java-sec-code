@@ -5,6 +5,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+//import org.springframework.expression.spel.support.SimpleEvaluationContext;
 
 
 /**
@@ -26,6 +27,15 @@ public class SpEL {
         ExpressionParser parser = new SpelExpressionParser();
         // fix method: SimpleEvaluationContext
         return parser.parseExpression(expression).getValue().toString();
+    }
+
+    @GetMapping("/spel/sec")
+    public String sec(String expression) {
+        // SimpleEvaluationContext was added in 4.3.15.RELEASE so the fact you can't find it in 4.3.14.RELEASE is perfectly normal.
+        // ExpressionParser parser = new SimpleEvaluationContext();
+        // fix method: SimpleEvaluationContext
+        // return parser.parseExpression(expression).getValue().toString();
+        return "test";
     }
 
     public static void main(String[] args) {
