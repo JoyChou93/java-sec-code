@@ -8,6 +8,7 @@
     <p>Hello <span th:text="${user}"></span>.</p>
     <p>Welcome to login java-sec-code application. <a th:href="@{/appInfo}">Application Infomation</a></p>
     <p>
+        <a th:href="@{/swagger-ui.html}">Swagger</a>&nbsp;&nbsp;
         <a th:href="@{/codeinject?filepath=/tmp;cat /etc/passwd}">CmdInject</a>&nbsp;&nbsp;
         <a th:href="@{/jsonp/getToken?_callback=test}">JSONP</a>&nbsp;&nbsp;
         <a th:href="@{/file/pic}">FileUpload</a>&nbsp;&nbsp;

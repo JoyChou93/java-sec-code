@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -92,7 +94,7 @@ public class URLWhiteList {
      * More details: https://github.com/JoyChou93/java-sec-code/wiki/URL-whtielist-Bypass
      */
     @GetMapping("/vuln/url_bypass")
-    public String url_bypass(String url) {
+    public String url_bypass(String url) throws MalformedURLException {
 
         logger.info("url:  " + url);
 
@@ -100,7 +102,8 @@ public class URLWhiteList {
             return "Url is not http or https";
         }
 
-        String host = SecurityUtil.gethost(url);
+        URL u = new URL(url);
+        String host = u.getHost();
         logger.info("host:  " + host);
 
         // endsWith .

@@ -29,11 +29,9 @@ public class SafeDomainParser {
         try {
             // 读取resources目录下的文件
             ClassPathResource resource = new ClassPathResource(safeDomainClassPath);
-            File file = resource.getFile();
-
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(file);  // parse xml
+            Document doc = db.parse(resource.getInputStream());  // parse xml
 
             NodeList rootNode = doc.getElementsByTagName(rootTag);  // 解析根节点domains
             Node domainsNode = rootNode.item(0);
@@ -68,6 +66,7 @@ public class SafeDomainParser {
 
         WebConfig wc = new WebConfig();
         wc.setSafeDomains(safeDomains);
+        logger.info(safeDomains.toString());
         wc.setBlockDomains(blockDomains);
 
         // 解析SSRF配置
@@ -86,11 +85,10 @@ public class SafeDomainParser {
         try {
             // 读取resources目录下的文件
             ClassPathResource resource = new ClassPathResource(ssrfSafeDomainClassPath);
-            File file = resource.getFile();
-
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(file);  // parse xml
+            // 修复打包成jar包运行，不能读取文件的bug
+            Document doc = db.parse(resource.getInputStream());  // parse xml
 
             NodeList rootNode = doc.getElementsByTagName(ssrfRootTag);  // 解析根节点
             Node domainsNode = rootNode.item(0);
@@ -130,6 +128,7 @@ public class SafeDomainParser {
             logger.error(e.toString());
         }
 
+        logger.info(ssrfBlockIps.toString());
         wc.setSsrfBlockDomains(ssrfBlockDomains);
         wc.setSsrfBlockIps(ssrfBlockIps);
         wc.setSsrfSafeDomains(ssrfSafeDomains);

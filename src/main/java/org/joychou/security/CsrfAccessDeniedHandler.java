@@ -7,15 +7,14 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Design csrf access denied page.
+ * Csrf access denied page.
  *
+ * @author JoyChou
  */
 public class CsrfAccessDeniedHandler implements AccessDeniedHandler {
 
@@ -23,7 +22,7 @@ public class CsrfAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
-                       AccessDeniedException accessDeniedException) throws IOException, ServletException {
+                       AccessDeniedException accessDeniedException) throws IOException {
 
         logger.info("[-] URL: " + request.getRequestURL() + "?" + request.getQueryString() + "\t" +
                 "Referer: " + request.getHeader("referer"));

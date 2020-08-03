@@ -50,7 +50,7 @@ public class SSRFChecker {
     /**
      * 解析url的ip，判断ip是否是内网ip，所以TTL设置为0的情况不适用。
      * url只允许https或者http，并且设置默认连接超时时间。
-     * 该修复方案会主动请求重定向后的链接。最好用Hook方式获取到所有url后，进行判断，代码待续…
+     * 该修复方案会主动请求重定向后的链接。
      *
      * @param url        check的url
      * @param checkTimes 设置重定向检测的最大次数，建议设置为10次

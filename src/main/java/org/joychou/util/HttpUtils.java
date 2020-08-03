@@ -146,10 +146,16 @@ public class HttpUtils {
     }
 
 
-    public static void okhttp(String url) throws IOException {
+    /**
+     * The default setting of followRedirects is true. The option of followRedirects is true.
+     *
+     * UserAgent is <code>okhttp/2.5.0</code>.
+     */
+    public static String okhttp(String url) throws IOException {
         OkHttpClient client = new OkHttpClient();
+        // client.setFollowRedirects(false);
         com.squareup.okhttp.Request ok_http = new com.squareup.okhttp.Request.Builder().url(url).build();
-        client.newCall(ok_http).execute();
+        return client.newCall(ok_http).execute().body().string();
     }
 
 

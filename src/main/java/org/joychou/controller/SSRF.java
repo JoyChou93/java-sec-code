@@ -150,23 +150,18 @@ public class SSRF {
     }
 
 
-    /**
-     * The default setting of followRedirects is true.
-     * UserAgent is <code>okhttp/2.5.0</code>.
-     */
     @GetMapping("/okhttp/sec")
     public String okhttp(@RequestParam String url) {
 
         try {
             SecurityUtil.startSSRFHook();
-            HttpUtils.okhttp(url);
+            return HttpUtils.okhttp(url);
         } catch (SSRFException | IOException e) {
             return e.getMessage();
         } finally {
             SecurityUtil.stopSSRFHook();
         }
 
-        return "okhttp ssrf test";
     }
 
 
