@@ -3,11 +3,8 @@ package org.joychou.security;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.DefaultCorsProcessor;
-
-import java.util.List;
 
 public class CustomCorsProcessor extends DefaultCorsProcessor {
 
@@ -29,7 +26,7 @@ public class CustomCorsProcessor extends DefaultCorsProcessor {
         if (result != null) {
             return result;
         }
-        // List<String> allowedOrigins = config.getAllowedOrigins();
+
         if (StringUtils.isBlank(requestOrigin)) {
             return null;
         }
@@ -39,7 +36,7 @@ public class CustomCorsProcessor extends DefaultCorsProcessor {
 
 
     /**
-     * 校验requestOrigin
+     * 自定义校验requestOrigin
      */
     private String customCheckOrigin(String requestOrigin) {
 

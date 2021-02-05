@@ -68,7 +68,7 @@ public class ReferFilter implements Filter {
                 logger.info("[-] URL: " + request.getRequestURL() + "?" + request.getQueryString() + "\t"
                         + "Referer: " + refer);
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                response.getWriter().write("forbidden");
+                response.getWriter().write(" Referer check error.");
                 response.flushBuffer();
                 return;
             }

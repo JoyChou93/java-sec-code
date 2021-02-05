@@ -25,8 +25,8 @@ public class Cors {
     @GetMapping("/vuln/origin")
     public String vuls1(HttpServletRequest request, HttpServletResponse response) {
         String origin = request.getHeader("origin");
-        response.setHeader("Access-Control-Allow-Origin", origin); // 设置Origin值为Header中获取到的
-        response.setHeader("Access-Control-Allow-Credentials", "true");  // cookie
+        response.setHeader("Access-Control-Allow-Origin", origin); // set origin from header
+        response.setHeader("Access-Control-Allow-Credentials", "true");  // allow cookie
         return info;
     }
 

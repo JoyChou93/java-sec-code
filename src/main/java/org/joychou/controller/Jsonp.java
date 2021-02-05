@@ -3,9 +3,14 @@ package org.joychou.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import com.alibaba.fastjson.JSONPObject;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.joychou.security.SecurityUtil;
 import org.joychou.util.LoginUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,6 +19,7 @@ import org.joychou.config.WebConfig;
 import org.joychou.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 
@@ -22,12 +28,15 @@ import java.security.Principal;
  * https://github.com/JoyChou93/java-sec-code/wiki/JSONP
  */
 
+@Slf4j
 @RestController
 @RequestMapping("/jsonp")
 public class Jsonp {
 
     private String callback = WebConfig.getBusinessCallback();
 
+    @Autowired
+    CookieCsrfTokenRepository cookieCsrfTokenRepository;
     /**
      * Set the response content-type to application/javascript.
      * <p>
@@ -57,7 +66,7 @@ public class Jsonp {
     }
 
     /**
-     * Adding callback or cback on parameter can automatically return jsonp data.
+     * Adding callback or _callback on parameter can automatically return jsonp data.
      * http://localhost:8080/jsonp/object2jsonp?callback=test
      * http://localhost:8080/jsonp/object2jsonp?_callback=test
      *
@@ -101,11 +110,33 @@ public class Jsonp {
         return WebUtils.json2Jsonp(callback, LoginUtils.getUserInfo2JsonStr(request));
     }
 
-
+    /**
+     * http://localhost:8080/jsonp/getToken?fastjsonpCallback=aa
+     *
+     * object to jsonp
+     */
     @GetMapping("/getToken")
-    public CsrfToken getCsrfToken(CsrfToken token) {
+    public CsrfToken getCsrfToken1(CsrfToken token) {
         return token;
     }
 
+    /**
+     * http://localhost:8080/jsonp/fastjsonp/getToken?fastjsonpCallback=aa
+     *
+     * fastjsonp to jsonp
+     */
+    @GetMapping(value = "/fastjsonp/getToken", produces = "application/javascript")
+    public String getCsrfToken2(HttpServletRequest request) {
+        CsrfToken csrfToken = cookieCsrfTokenRepository.loadToken(request); // get csrf token
+
+        String callback = request.getParameter("fastjsonpCallback");
+        if (StringUtils.isNotBlank(callback)) {
+            JSONPObject jsonpObj = new JSONPObject(callback);
+            jsonpObj.addParameter(csrfToken);
+            return jsonpObj.toString();
+        } else {
+            return csrfToken.toString();
+        }
+    }
 
 }

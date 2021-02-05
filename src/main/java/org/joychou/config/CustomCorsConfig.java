@@ -38,7 +38,7 @@ public class CustomCorsConfig extends WebMvcRegistrationsAdapter {
 
 
     /**
-     * 自定义Cors处理器
+     * 自定义Cors处理器，重写了checkOrigin
      * 自定义校验origin，支持一级域名校验 && 多级域名
      */
     private static class CustomRequestMappingHandlerMapping extends RequestMappingHandlerMapping {

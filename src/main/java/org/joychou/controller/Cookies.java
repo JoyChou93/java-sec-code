@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.web.util.WebUtils.getCookie;
 
+
+/**
+ * 某些应用获取用户身份信息可能会直接从cookie中直接获取明文的nick或者id，导致越权问题。
+ */
 @RestController
 @RequestMapping("/cookie")
 public class Cookies {

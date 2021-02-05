@@ -1,7 +1,7 @@
-package org.joychou.security;
+package org.joychou.config;
 
 import org.apache.commons.lang.StringUtils;
-import org.joychou.config.WebConfig;
+import org.joychou.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.AbstractJsonpRespon
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 
 /**
@@ -47,7 +48,8 @@ public class Object2Jsonp extends AbstractJsonpResponseBodyAdvice {
         HttpServletResponse response = ((ServletServerHttpResponse)res).getServletResponse();
 
         String realJsonpFunc = getRealJsonpFunc(request);
-        if (StringUtils.isNotBlank(realJsonpFunc)){
+        // 如果url带callback，且校验不安全后
+        if ( StringUtils.isNotBlank(realJsonpFunc) ) {
             jsonpReferHandler(request, response);
         }
         super.beforeBodyWriteInternal(bodyContainer, contentType, returnType, req, res);
@@ -84,9 +86,11 @@ public class Object2Jsonp extends AbstractJsonpResponseBodyAdvice {
         if (SecurityUtil.checkURL(refer) == null ){
             logger.error("[-] URL: " + url + "?" + query + "\t" + "Referer: " + refer);
             try{
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                response.getWriter().write("forbidden");
-                response.flushBuffer();
+                // 使用response.getWriter().write后，后续写入jsonp后还会继续使用response.getWriteer()，导致报错
+//                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//                response.getWriter().write(" Referer check error.");
+//                response.flushBuffer();
+                response.sendRedirect(Constants.ERROR_PAGE);
             } catch (Exception e){
                 logger.error(e.toString());
             }

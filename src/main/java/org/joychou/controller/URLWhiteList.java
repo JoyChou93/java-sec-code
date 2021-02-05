@@ -118,13 +118,13 @@ public class URLWhiteList {
 
 
     /**
-     * 一级域名白名单 First-level host whitelist.
-     * http://localhost:8080/url/sec/endswith?url=http://aa.joychou.org
+     * First-level & Multi-level host whitelist.
+     * http://localhost:8080/url/sec?url=http://aa.joychou.org
      */
-    @GetMapping("/sec/endswith")
-    public String sec_endswith(@RequestParam("url") String url) {
+    @GetMapping("/sec")
+    public String sec(@RequestParam("url") String url) {
 
-        String whiteDomainlists[] = {"joychou.org", "joychou.com"};
+        String whiteDomainlists[] = {"joychou.org", "joychou.com", "test.joychou.me"};
 
         if (!SecurityUtil.isHttp(url)) {
             return "SecurityUtil is not http or https";
@@ -132,42 +132,19 @@ public class URLWhiteList {
 
         String host = SecurityUtil.gethost(url);
 
-        // endsWith .
-        for (String domain : whiteDomainlists) {
-            if (host.endsWith("." + domain)) {
-                return "Good url.";
+        for (String whiteHost: whiteDomainlists){
+            if (whiteHost.startsWith(".") && host.endsWith(whiteHost)) {
+                return url;
+            } else if (!whiteHost.startsWith(".") && host.equals(whiteHost)) {
+                return url;
             }
         }
 
         return "Bad url.";
     }
 
-    /**
-     * 多级域名白名单 Multi-level host whitelist.
-     * http://localhost:8080/url/sec/multi_level_hos?url=http://ccc.bbb.joychou.org
-     */
-    @GetMapping("/sec/multi_level_host")
-    public String sec_multi_level_host(@RequestParam("url") String url) {
-        String whiteDomainlists[] = {"aaa.joychou.org", "ccc.bbb.joychou.org"};
-
-        if (!SecurityUtil.isHttp(url)) {
-            return "SecurityUtil is not http or https";
-        }
-
-        String host = SecurityUtil.gethost(url);
-
-        // equals
-        for (String domain : whiteDomainlists) {
-            if (host.equals(domain)) {
-                return "Good url.";
-            }
-        }
-        return "Bad url.";
-    }
-
 
     /**
-     * 多级域名白名单 Multi-level host whitelist.
      * http://localhost:8080/url/sec/array_indexOf?url=http://ccc.bbb.joychou.org
      */
     @GetMapping("/sec/array_indexOf")

