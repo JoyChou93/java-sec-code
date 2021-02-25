@@ -31,14 +31,17 @@ import org.joychou.security.SecurityUtil;
 public class FileUpload {
 
     // Save the uploaded file to this folder
-    private static String UPLOADED_FOLDER = "/tmp/";
+    private static final String UPLOADED_FOLDER = "/tmp/";
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static String randomFilePath = "";
 
-    @GetMapping("/")
+    // uplaod any file
+    @GetMapping("/any")
     public String index() {
         return "upload"; // return upload.html page
     }
 
+    // only allow to upload pictures
     @GetMapping("/pic")
     public String uploadPic() {
         return "uploadPic"; // return uploadPic.html page
@@ -64,13 +67,16 @@ public class FileUpload {
 
         } catch (IOException e) {
             redirectAttributes.addFlashAttribute("message", "upload failed");
-            e.printStackTrace();
-            return "redirect:/file/status";
+            logger.error(e.toString());
         }
 
         return "redirect:/file/status";
     }
 
+    @GetMapping("/status")
+    public String uploadStatus() {
+        return "uploadStatus";
+    }
 
     // only upload picture
     @PostMapping("/upload/picture")
@@ -83,11 +89,12 @@ public class FileUpload {
         String fileName = multifile.getOriginalFilename();
         String Suffix = fileName.substring(fileName.lastIndexOf(".")); // 获取文件后缀名
         String mimeType = multifile.getContentType(); // 获取MIME类型
+        String filePath = UPLOADED_FOLDER + fileName;
         File excelFile = convert(multifile);
 
 
         // 判断文件后缀名是否在白名单内  校验1
-        String picSuffixList[] = {".jpg", ".png", ".jpeg", ".gif", ".bmp", ".ico"};
+        String[] picSuffixList = {".jpg", ".png", ".jpeg", ".gif", ".bmp", ".ico"};
         boolean suffixFlag = false;
         for (String white_suffix : picSuffixList) {
             if (Suffix.toLowerCase().equals(white_suffix)) {
@@ -97,13 +104,13 @@ public class FileUpload {
         }
         if (!suffixFlag) {
             logger.error("[-] Suffix error: " + Suffix);
-            deleteFile(excelFile);
+            deleteFile(filePath);
             return "Upload failed. Illeagl picture.";
         }
 
 
         // 判断MIME类型是否在黑名单内 校验2
-        String mimeTypeBlackList[] = {
+        String[] mimeTypeBlackList = {
                 "text/html",
                 "text/javascript",
                 "application/javascript",
@@ -115,17 +122,18 @@ public class FileUpload {
             // 用contains是为了防止text/html;charset=UTF-8绕过
             if (SecurityUtil.replaceSpecialStr(mimeType).toLowerCase().contains(blackMimeType)) {
                 logger.error("[-] Mime type error: " + mimeType);
-                deleteFile(excelFile);
+                deleteFile(filePath);
                 return "Upload failed. Illeagl picture.";
             }
         }
 
         // 判断文件内容是否是图片 校验3
         boolean isImageFlag = isImage(excelFile);
+        deleteFile(randomFilePath);
 
         if (!isImageFlag) {
             logger.error("[-] File is not Image");
-            deleteFile(excelFile);
+            deleteFile(filePath);
             return "Upload failed. Illeagl picture.";
         }
 
@@ -137,28 +145,29 @@ public class FileUpload {
             Files.write(path, bytes);
         } catch (IOException e) {
             logger.error(e.toString());
-            deleteFile(excelFile);
+            deleteFile(filePath);
             return "Upload failed";
         }
 
-        deleteFile(excelFile);
         logger.info("[+] Safe file. Suffix: {}, MIME: {}", Suffix, mimeType);
-        logger.info("[+] Successfully uploaded {}{}", UPLOADED_FOLDER, multifile.getOriginalFilename());
-        return "Upload success";
+        logger.info("[+] Successfully uploaded {}", filePath);
+        return String.format("You successfully uploaded '%s'", filePath);
     }
 
-    private void deleteFile(File... files) {
-        for (File file : files) {
-            if (file.exists()) {
-                boolean ret = file.delete();
-                if (ret) {
-                    logger.debug("File delete successfully!");
-                }
+    private void deleteFile(String filePath) {
+        File delFile = new File(filePath);
+        if(delFile.isFile() && delFile.exists()) {
+            if (delFile.delete()) {
+                logger.info("[+] " + filePath + " delete successfully!");
+                return;
             }
         }
+        logger.info(filePath + " delete failed!");
     }
 
     /**
+     * 为了使用ImageIO.read()
+     *
      * 不建议使用transferTo，因为原始的MultipartFile会被覆盖
      * https://stackoverflow.com/questions/24339990/how-to-convert-a-multipart-file-to-file
      */
@@ -166,8 +175,9 @@ public class FileUpload {
         String fileName = multiFile.getOriginalFilename();
         String suffix = fileName.substring(fileName.lastIndexOf("."));
         UUID uuid = Generators.timeBasedGenerator().generate();
-
-        File convFile = new File(UPLOADED_FOLDER + uuid + suffix);
+        randomFilePath = UPLOADED_FOLDER + uuid + suffix;
+        // 随机生成一个同后缀名的文件
+        File convFile = new File(randomFilePath);
         boolean ret = convFile.createNewFile();
         if (!ret) {
             return null;
@@ -183,6 +193,6 @@ public class FileUpload {
      */
     private static boolean isImage(File file) throws IOException {
         BufferedImage bi = ImageIO.read(file);
-        return bi == null;
+        return bi != null;
     }
 }
