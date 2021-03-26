@@ -11,7 +11,7 @@ This project can also be called Java vulnerability code.
 
 Each vulnerability type code has a security vulnerability by default unless there is no vulnerability. The relevant fix code is in the comments or code. Specifically, you can view each vulnerability code and comments.
 
-[Online demo](http://118.25.15.216:8080)
+Due to the server expiration, the online demo site had to go offline.
 
 Login username & password:
 
@@ -40,6 +40,11 @@ Sort by letter.
 - [ooxmlXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/ooxmlXXE.java)
 - [PathTraversal](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/PathTraversal.java)
 - [RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Rce.java)
+  - Runtime
+  - ProcessBuilder
+  - ScriptEngine
+  - Yaml Deserialize  
+  - Groovy
 - [Swagger](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/config/SwaggerConfig.java)
 - [SpEL](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SpEL.java)
 - [SQL Injection](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SQLI.java)
