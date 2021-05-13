@@ -5,7 +5,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -74,11 +73,11 @@ public class HttpUtils {
             // set redirect enable false
             // httpGet.setConfig(RequestConfig.custom().setRedirectsEnabled(false).build());
             HttpResponse httpResponse = client.execute(httpGet); // send request
-            BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
-
-            String line;
-            while ((line = rd.readLine()) != null) {
-                result.append(line);
+            try(BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()))){
+                String line;
+                while ((line = rd.readLine()) != null) {
+                    result.append(line);
+                }
             }
 
             return result.toString();

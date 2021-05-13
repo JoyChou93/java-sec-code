@@ -54,27 +54,28 @@ public class SQLI {
 
         try {
             Class.forName(driver);
-            Connection con = DriverManager.getConnection(url, user, password);
+            try (Connection con = DriverManager.getConnection(url, user, password)) {
 
-            if (!con.isClosed())
-                System.out.println("Connect to database successfully.");
+                if (!con.isClosed()) {
+                    System.out.println("Connect to database successfully.");
+                }
 
-            // sqli vuln code
-            Statement statement = con.createStatement();
-            String sql = "select * from users where username = '" + username + "'";
-            logger.info(sql);
-            ResultSet rs = statement.executeQuery(sql);
+                // sqli vuln code
+                try (Statement statement = con.createStatement()) {
+                    String sql = "select * from users where username = '" + username + "'";
+                    logger.info(sql);
+                    try (ResultSet rs = statement.executeQuery(sql)) {
 
-            while (rs.next()) {
-                String res_name = rs.getString("username");
-                String res_pwd = rs.getString("password");
-                String info = String.format("%s: %s\n", res_name, res_pwd);
-                result.append(info);
-                logger.info(info);
+                        while (rs.next()) {
+                            String res_name = rs.getString("username");
+                            String res_pwd = rs.getString("password");
+                            String info = String.format("%s: %s\n", res_name, res_pwd);
+                            result.append(info);
+                            logger.info(info);
+                        }
+                    }
+                }
             }
-            rs.close();
-            con.close();
-
 
         } catch (ClassNotFoundException e) {
             logger.error("Sorry,can`t find the Driver!");
@@ -97,29 +98,28 @@ public class SQLI {
         StringBuilder result = new StringBuilder();
         try {
             Class.forName(driver);
-            Connection con = DriverManager.getConnection(url, user, password);
+            try (Connection con = DriverManager.getConnection(url, user, password)) {
 
-            if (!con.isClosed())
-                System.out.println("Connecting to Database successfully.");
+                if (!con.isClosed()) {
+                    System.out.println("Connecting to Database successfully.");
+                }
 
-            // fix code
-            String sql = "select * from users where username = ?";
-            PreparedStatement st = con.prepareStatement(sql);
-            st.setString(1, username);
-
-            logger.info(st.toString());  // sql after prepare statement
-            ResultSet rs = st.executeQuery();
-
-            while (rs.next()) {
-                String res_name = rs.getString("username");
-                String res_pwd = rs.getString("password");
-                String info = String.format("%s: %s\n", res_name, res_pwd);
-                result.append(info);
-                logger.info(info);
+                // fix code
+                String sql = "select * from users where username = ?";
+                try (PreparedStatement st = con.prepareStatement(sql)) {
+                    st.setString(1, username);
+                    logger.info(st.toString());  // sql after prepare statement
+                    try (ResultSet rs = st.executeQuery()) {
+                        while (rs.next()) {
+                            String res_name = rs.getString("username");
+                            String res_pwd = rs.getString("password");
+                            String info = String.format("%s: %s\n", res_name, res_pwd);
+                            result.append(info);
+                            logger.info(info);
+                        }
+                    }
+                }
             }
-
-            rs.close();
-            con.close();
 
         } catch (ClassNotFoundException e) {
             logger.error("Sorry, can`t find the Driver!");
