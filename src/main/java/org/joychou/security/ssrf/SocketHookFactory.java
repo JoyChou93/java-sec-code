@@ -39,8 +39,7 @@ public class SocketHookFactory implements SocketImplFactory {
             return;
         }
 
-        Socket socket = new Socket();
-        try {
+        try (Socket socket = new Socket()) {
             // get impl field in Socket class
             Field implField = Socket.class.getDeclaredField("impl");
             implField.setAccessible(true);
@@ -52,12 +51,8 @@ public class SocketHookFactory implements SocketImplFactory {
 
         } catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException e) {
             throw new SSRFException("SocketHookFactory init failed!");
-        }
-
-        try {
-            socket.close();
         } catch (IOException ignored) {
-
+            // Ignored
         }
     }
 

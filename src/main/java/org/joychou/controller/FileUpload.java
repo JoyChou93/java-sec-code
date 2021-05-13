@@ -182,9 +182,9 @@ public class FileUpload {
         if (!ret) {
             return null;
         }
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(multiFile.getBytes());
-        fos.close();
+        try(FileOutputStream fos = new FileOutputStream(convFile)){
+            fos.write(multiFile.getBytes());
+        }
         return convFile;
     }
 
