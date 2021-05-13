@@ -19,7 +19,6 @@ import org.joychou.config.WebConfig;
 import org.joychou.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 
