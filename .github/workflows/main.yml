@@ -1,0 +1,65 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Maven CI4
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+          
+    # Runs special workflow steps for pull requests
+    - name: Black Duck security scan for Pull Request
+      if: ${{github.event_name == 'pull_request'}}
+      uses: matthewb66/blackduck-scan-directguidance@v3
+      with:
+        url: ${{ secrets.BLACKDUCK_URL }}
+        token: ${{ secrets.BLACKDUCK_API_TOKEN }}
+        fix_pr: false
+        comment_on_pr: true
+        upgrade_major: true
+#         detect_opts: detect.detector.buildless=true,detect.maven.buildless.legacy.mode=false
+        output: blackduck-output
+#         debug: 9
+        sarif: blackduck-sarif.json
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    # Runs special workflow steps for push
+    - name: Black Duck security scan for Push
+      if: ${{github.event_name == 'push'}}
+      uses: matthewb66/blackduck-scan-directguidance@v3
+      with:
+        url: ${{ secrets.BLACKDUCK_URL }}
+        token: ${{ secrets.BLACKDUCK_API_TOKEN }}
+        fix_pr: true
+        comment_on_pr: false
+        upgrade_major: true
+#         detect_opts: detect.detector.buildless=true,detect.maven.buildless.legacy.mode=false
+        output: blackduck-output
+#         debug: 9
+        sarif: blackduck-sarif.json  
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: "Check file existence"
+      id: check_files
+      uses: andstor/file-existence-action@v1
+      with:
+        files: "blackduck-sarif.json"
+    - name: Upload SARIF file
+      if: steps.check_files.outputs.files_exists == 'true'
+ #     if: ${{github.event_name == 'pull_request'}}
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        # Path to SARIF file relative to the root of the repository
+        sarif_file: blackduck-sarif.json
