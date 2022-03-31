@@ -5,7 +5,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -21,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -33,7 +33,7 @@ import java.util.concurrent.*;
  */
 public class HttpUtils {
 
-    private static Logger logger = LoggerFactory.getLogger(HttpUtils.class);
+    private final static Logger logger = LoggerFactory.getLogger(HttpUtils.class);
 
     public static String commonHttpClient(String url) {
 
@@ -110,12 +110,14 @@ public class HttpUtils {
     }
 
 
-    public static String HTTPURLConnection(String url) {
+    public static String HttpURLConnection(String url) {
         try {
             URL u = new URL(url);
             URLConnection urlConnection = u.openConnection();
-            HttpURLConnection httpUrl = (HttpURLConnection) urlConnection;
-            BufferedReader in = new BufferedReader(new InputStreamReader(httpUrl.getInputStream())); //send request
+            HttpURLConnection conn = (HttpURLConnection) urlConnection;
+            // Many HttpURLConnection methods can send http request, such as getResponseCode, getHeaderField
+            InputStream is = conn.getInputStream();  // send request
+            BufferedReader in = new BufferedReader(new InputStreamReader(is));
             String inputLine;
             StringBuilder html = new StringBuilder();
 
@@ -206,7 +208,6 @@ public class HttpUtils {
                 logger.error(e.getMessage());
             }
         }
-
     }
 
 }

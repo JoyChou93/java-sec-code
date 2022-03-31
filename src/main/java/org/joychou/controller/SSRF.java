@@ -67,7 +67,7 @@ public class SSRF {
     public String httpURLConnection(@RequestParam String url) {
         try {
             SecurityUtil.startSSRFHook();
-            return HttpUtils.HTTPURLConnection(url);
+            return HttpUtils.HttpURLConnection(url);
         } catch (SSRFException | IOException e) {
             return e.getMessage();
         } finally {

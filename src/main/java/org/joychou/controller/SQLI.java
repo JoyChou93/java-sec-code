@@ -43,7 +43,7 @@ public class SQLI {
 
     /**
      * Vuln Code.
-     * http://localhost:8080/sqli/jdbc/vul?username=joychou
+     * http://localhost:8080/sqli/jdbc/vuln?username=joychou
      *
      * @param username username
      */
