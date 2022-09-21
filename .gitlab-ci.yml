@@ -1,0 +1,26 @@
+build:
+  image: maven:3.6-jdk-8-slim
+  stage: build
+  script:
+    - mvn package -Dmaven.repo.local=./.m2/repository
+  artifacts:
+    paths:
+      - .m2/
+      - target/
+
+include:
+  - template: Auto-DevOps.gitlab-ci.yml
+
+dependency_scanning:
+  variables:
+    DS_JAVA_VERSION: 8
+
+spotbugs-sast:
+  dependencies:
+    - build
+  variables:
+    MAVEN_REPO_PATH: $CI_PROJECT_DIR/.m2/repository
+    COMPILE: "false"
+  artifacts:
+    reports:
+      sast: gl-sast-report.json

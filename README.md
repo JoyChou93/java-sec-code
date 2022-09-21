@@ -195,6 +195,11 @@ joychou/joychou123
 
 Tomcat's default JSESSION session is valid for 30 minutes, so a 30-minute non-operational session will expire. In order to solve this problem, the rememberMe function is introduced, and the default expiration time is 2 weeks.
 
+## Vulnerability Scanning Tools
+
+1. JiHu GitLab Ultimate: [SaaS Demo](https://jihulab.com/ultimate-plan/demo/java-sec-code/-/merge_requests/1)
+
+![JiHu GitLab merge request security widget](https://user-images.githubusercontent.com/4971414/191448861-e3263b67-dc46-443b-8be2-ede41f7d8a0a.png)
 
 ## Contributors
 

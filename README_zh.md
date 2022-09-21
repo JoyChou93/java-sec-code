@@ -187,6 +187,11 @@ joychou/joychou123
 
 Tomcat默认JSESSION会话有效时间为30分钟，所以30分钟不操作会话将过期。为了解决这一问题，引入rememberMe功能，默认过期时间为2周。
 
+## 漏洞扫描工具
+
+1. 极狐 GitLab 旗舰版：[SaaS Demo](https://jihulab.com/ultimate-plan/demo/java-sec-code/-/merge_requests/1)
+
+![极狐 GitLab 合并请求显示漏洞结果](https://user-images.githubusercontent.com/4971414/191448861-e3263b67-dc46-443b-8be2-ede41f7d8a0a.png)
 
 ## 贡献者
 
