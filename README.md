@@ -199,7 +199,7 @@ Tomcat's default JSESSION session is valid for 30 minutes, so a 30-minute non-op
 
 1. JiHu GitLab Ultimate: [SaaS Demo](https://jihulab.com/ultimate-plan/demo/java-sec-code/-/merge_requests/1)
 
-![JiHu GitLab merge request security widget](https://user-images.githubusercontent.com/4971414/191448861-e3263b67-dc46-443b-8be2-ede41f7d8a0a.png)
+![JiHu GitLab merge request security widget](https://user-images.githubusercontent.com/4971414/191453036-db0c8d29-1e8e-438a-8527-e70f259eb80d.png)
 
 ## Contributors
 
