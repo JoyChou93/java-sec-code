@@ -76,6 +76,11 @@ public class SSRF {
     }
 
 
+    @GetMapping("/HttpURLConnection/vuln")
+    public String httpURLConnectionVuln(@RequestParam String url) {
+        return HttpUtils.HttpURLConnection(url);
+    }
+
     /**
      * The default setting of followRedirects is true.
      * UserAgent is <code>Apache-HttpClient/4.5.12 (Java/1.8.0_102)</code>.

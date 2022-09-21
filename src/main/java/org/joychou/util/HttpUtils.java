@@ -110,12 +110,17 @@ public class HttpUtils {
     }
 
 
+    /**
+     * The default setting of followRedirects is true.
+     * UserAgent is Java/1.8.0_102.
+     */
     public static String HttpURLConnection(String url) {
         try {
             URL u = new URL(url);
             URLConnection urlConnection = u.openConnection();
             HttpURLConnection conn = (HttpURLConnection) urlConnection;
-            // Many HttpURLConnection methods can send http request, such as getResponseCode, getHeaderField
+//             conn.setInstanceFollowRedirects(false);
+//             Many HttpURLConnection methods can send http request, such as getResponseCode, getHeaderField
             InputStream is = conn.getInputStream();  // send request
             BufferedReader in = new BufferedReader(new InputStreamReader(is));
             String inputLine;
@@ -165,6 +170,13 @@ public class HttpUtils {
     }
 
 
+    /**
+     * The default setting of followRedirects is true.
+     *
+     * UserAgent is Java/1.8.0_102.
+     *
+     * @param url http request url
+     */
     public static void imageIO(String url) {
         try {
             URL u = new URL(url);

@@ -51,7 +51,7 @@ joychou/joychou123
 - [XSS](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XSS.java)
 - [XStream](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XStreamRce.java)
 - [XXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/XXE.java)
-
+- [JWT](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Jwt.java)
 
 ## 漏洞说明
 
@@ -68,6 +68,7 @@ joychou/joychou123
 - [SSTI](https://github.com/JoyChou93/java-sec-code/wiki/SSTI)
 - [URL whitelist Bypass](https://github.com/JoyChou93/java-sec-code/wiki/URL-whtielist-Bypass)
 - [XXE](https://github.com/JoyChou93/java-sec-code/wiki/XXE)
+- [JWT](https://github.com/JoyChou93/java-sec-code/wiki/JWT)  
 - [Others](https://github.com/JoyChou93/java-sec-code/wiki/others)
 
 

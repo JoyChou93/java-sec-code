@@ -130,6 +130,50 @@ public class SQLI {
         return result.toString();
     }
 
+
+    /**
+     * http://localhost:8080/sqli/jdbc/ps/vuln?username=joychou' or 'a'='a
+     *
+     * Incorrect use of prepareStatement. prepareStatement must use ? as a placeholder.
+     */
+    @RequestMapping("/jdbc/ps/vuln")
+    public String jdbc_ps_vuln(@RequestParam("username") String username) {
+
+        StringBuilder result = new StringBuilder();
+        try {
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(url, user, password);
+
+            if (!con.isClosed())
+                System.out.println("Connecting to Database successfully.");
+
+            String sql = "select * from users where username = '" + username + "'";
+            PreparedStatement st = con.prepareStatement(sql);
+
+            logger.info(st.toString());
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                String res_name = rs.getString("username");
+                String res_pwd = rs.getString("password");
+                String info = String.format("%s: %s\n", res_name, res_pwd);
+                result.append(info);
+                logger.info(info);
+            }
+
+            rs.close();
+            con.close();
+
+        } catch (ClassNotFoundException e) {
+            logger.error("Sorry, can`t find the Driver!");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            logger.error(e.toString());
+        }
+        return result.toString();
+    }
+
+
     /**
      * vuln code
      * http://localhost:8080/sqli/mybatis/vuln01?username=joychou' or '1'='1

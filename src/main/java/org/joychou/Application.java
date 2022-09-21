@@ -8,7 +8,6 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 
-
 @ServletComponentScan // do filter
 @SpringBootApplication
 // @EnableEurekaClient  // 测试Eureka请打开注释，防止控制台一直有warning
