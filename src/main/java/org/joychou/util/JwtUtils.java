@@ -83,6 +83,7 @@ public class JwtUtils {
 
 
     public static String getNicknameByJavaJwt(String token) {
+        // If the signature is not verified, there will be security issues.
         if (!verifyTokenByJavaJwt(token)) {
             log.error("token is invalid");
             return null;

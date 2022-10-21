@@ -2,12 +2,16 @@ package org.joychou.controller;
 
 import org.joychou.security.SecurityUtil;
 import org.joychou.security.ssrf.SSRFException;
+import org.joychou.service.HttpService;
 import org.joychou.util.HttpUtils;
 import org.joychou.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.*;
@@ -23,8 +27,10 @@ import java.net.*;
 @RequestMapping("/ssrf")
 public class SSRF {
 
-    private static Logger logger = LoggerFactory.getLogger(SSRF.class);
+    private static final Logger logger = LoggerFactory.getLogger(SSRF.class);
 
+    @Resource
+    private HttpService httpService;
 
     /**
      * http://localhost:8080/ssrf/urlConnection/vuln?url=file:///etc/passwd
@@ -264,6 +270,29 @@ public class SSRF {
     public String HttpSyncClients(@RequestParam("url") String url) {
         return HttpUtils.HttpAsyncClients(url);
     }
+
+
+    /**
+     * http://127.0.0.1:8080/ssrf/restTemplate/vuln?url=http://www.baidu.com <p>
+     * Only support HTTP protocol. <p>
+     * Redirects: GET HttpMethod follow redirects by default, other HttpMethods do not follow redirects<p>
+     * User-Agent: Java/1.8.0_102 <p>
+     */
+    @GetMapping("/restTemplate/vuln1")
+    public String RestTemplateUrlBanRedirects(String url){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        return httpService.RequestHttpBanRedirects(url, headers);
+    }
+
+
+    @GetMapping("/restTemplate/vuln2")
+    public String RestTemplateUrl(String url){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        return httpService.RequestHttp(url, headers);
+    }
+
 
 
 }
