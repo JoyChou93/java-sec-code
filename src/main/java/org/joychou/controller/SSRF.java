@@ -1,5 +1,6 @@
 package org.joychou.controller;
 
+import cn.hutool.http.HttpUtil;
 import org.joychou.security.SecurityUtil;
 import org.joychou.security.ssrf.SSRFException;
 import org.joychou.service.HttpService;
@@ -273,7 +274,7 @@ public class SSRF {
 
 
     /**
-     * http://127.0.0.1:8080/ssrf/restTemplate/vuln?url=http://www.baidu.com <p>
+     * http://127.0.0.1:8080/ssrf/restTemplate/vuln1?url=http://www.baidu.com <p>
      * Only support HTTP protocol. <p>
      * Redirects: GET HttpMethod follow redirects by default, other HttpMethods do not follow redirects<p>
      * User-Agent: Java/1.8.0_102 <p>
@@ -293,6 +294,19 @@ public class SSRF {
         return httpService.RequestHttp(url, headers);
     }
 
+
+    /**
+     * http://127.0.0.1:8080/ssrf/hutool/vuln?url=http://www.baidu.com <p>
+     * UserAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36 Hutool<p>
+     * Redirects: Do not follow redirects <p>
+     *
+     * @param url url
+     * @return contents of url
+     */
+    @GetMapping("/hutool/vuln")
+    public String hutoolHttp(String url){
+        return HttpUtil.get(url);
+    }
 
 
 }

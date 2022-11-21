@@ -300,6 +300,12 @@
             <version>4.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.10</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>

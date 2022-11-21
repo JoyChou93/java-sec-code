@@ -221,5 +221,6 @@
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.9.4" level="project" />
     <orderEntry type="library" name="Maven: io.jsonwebtoken:jjwt:0.9.1" level="project" />
     <orderEntry type="library" name="Maven: com.auth0:java-jwt:4.0.0" level="project" />
+    <orderEntry type="library" name="Maven: cn.hutool:hutool-all:5.8.10" level="project" />
   </component>
 </module>
