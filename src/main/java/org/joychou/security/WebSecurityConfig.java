@@ -62,13 +62,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .ignoringAntMatchers(csrfExcludeUrl)  // 不进行csrf校验的uri，多个uri使用逗号分隔
                 .csrfTokenRepository(new CookieCsrfTokenRepository());
         http.exceptionHandling().accessDeniedHandler(new CsrfAccessDeniedHandler());
-        // http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());«
+
+        // http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
         http.cors();
 
         // spring security login settings
         http.authorizeRequests()
                 .antMatchers("/css/**", "/js/**").permitAll() // permit static resources
+                // CVE-2022-22978漏洞代码
+                .regexMatchers("/black_path.*").denyAll()    // 如果正则匹配到/black_path，则forbidden
                 .anyRequest().authenticated().and() // any request authenticated except above static resources
                 .formLogin().loginPage("/login").permitAll() // permit all to access /login page
                 .successHandler(new LoginSuccessHandler())
