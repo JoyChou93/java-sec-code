@@ -2,7 +2,7 @@
 
 对于学习Java漏洞代码来说，`Java Sec Code`是一个非常强大且友好的项目。
 
-[英文文档](https://github.com/JoyChou93/java-sec-code/blob/master/README.md)
+[英文文档](https://github.com/JoyChou93/java-sec-code/blob/master/README.md) 😋[阿里集团安全紫军招聘](https://talent.alibaba.com/off-campus-position/937731?trace=qrcode_share)
 
 ## 介绍
 
