@@ -57,7 +57,6 @@
     <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf-spring4:2.1.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf:2.1.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: ognl:ognl:3.0.8" level="project" />
-    <orderEntry type="library" name="Maven: org.javassist:javassist:3.21.0-GA" level="project" />
     <orderEntry type="library" name="Maven: org.unbescape:unbescape:1.1.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:1.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy:2.4.7" level="project" />
@@ -222,5 +221,6 @@
     <orderEntry type="library" name="Maven: io.jsonwebtoken:jjwt:0.9.1" level="project" />
     <orderEntry type="library" name="Maven: com.auth0:java-jwt:4.0.0" level="project" />
     <orderEntry type="library" name="Maven: cn.hutool:hutool-all:5.8.10" level="project" />
+    <orderEntry type="library" name="Maven: org.javassist:javassist:3.27.0-GA" level="project" />
   </component>
 </module>

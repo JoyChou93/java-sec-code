@@ -29,17 +29,14 @@ public class Deserialize {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
-     * java -jar ysoserial.jar CommonsCollections5 "open -a Calculator" | base64
-     * Add the result to rememberMe cookie.
-     * <p>
-     * http://localhost:8080/deserialize/rememberMe/vuln
+     * java -jar ysoserial.jar CommonsCollections5 "open -a Calculator" | base64 <br>
+     * <a href="http://localhost:8080/deserialize/rememberMe/vuln">http://localhost:8080/deserialize/rememberMe/vuln</a>
      */
     @RequestMapping("/rememberMe/vuln")
     public String rememberMeVul(HttpServletRequest request)
             throws IOException, ClassNotFoundException {
 
         Cookie cookie = getCookie(request, Constants.REMEMBER_ME_COOKIE);
-
         if (null == cookie) {
             return "No rememberMe cookie. Right?";
         }
@@ -56,12 +53,9 @@ public class Deserialize {
     }
 
     /**
-     * Check deserialize class using black list.
-     * Or
-     * Update commons-collections to 3.2.2 or above.
-     * Serialization support for org.apache.commons.collections.functors.InvokerTransformer is disabled for security reasons.To enable it set system property 'org.apache.commons.collections.enableUnsafeSerialization' to 'true',but you must ensure that your application does not de-serialize objects from untrusted sources.
-     * <p>
-     * http://localhost:8080/deserialize/rememberMe/security
+     * Check deserialize class using black list. <br>
+     * Or update commons-collections to 3.2.2 or above.Serialization support for org.apache.commons.collections.functors.InvokerTransformer is disabled for security reasons.To enable it set system property 'org.apache.commons.collections.enableUnsafeSerialization' to 'true',but you must ensure that your application does not de-serialize objects from untrusted sources.<br>
+     * <a href="http://localhost:8080/deserialize/rememberMe/security">http://localhost:8080/deserialize/rememberMe/security</a>
      */
     @RequestMapping("/rememberMe/security")
     public String rememberMeBlackClassCheck(HttpServletRequest request)

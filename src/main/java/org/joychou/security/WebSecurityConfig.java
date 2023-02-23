@@ -34,6 +34,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${joychou.security.csrf.exclude.url}")
     private String[] csrfExcludeUrl;
 
+
+    @Value("${joychou.no.need.login.url}")
+    private String[] noNeedLoginUrl;
+
+
     @Value("${joychou.security.csrf.method}")
     private String[] csrfMethod = {"POST"};
 
@@ -69,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // spring security login settings
         http.authorizeRequests()
-                .antMatchers("/css/**", "/js/**").permitAll() // permit static resources
+                .antMatchers(noNeedLoginUrl).permitAll() // no need to login page
                 // CVE-2022-22978漏洞代码
                 .regexMatchers("/black_path.*").denyAll()    // 如果正则匹配到/black_path，则forbidden
                 .anyRequest().authenticated().and() // any request authenticated except above static resources

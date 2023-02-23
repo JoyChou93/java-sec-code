@@ -6,10 +6,10 @@ import org.joychou.dao.User;
 import org.joychou.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.sql.*;
 import java.util.List;
 
@@ -25,8 +25,10 @@ import java.util.List;
 @RequestMapping("/sqli")
 public class SQLI {
 
-    private static Logger logger = LoggerFactory.getLogger(SQLI.class);
-    private static String driver = "com.mysql.jdbc.Driver";
+    private static final Logger logger = LoggerFactory.getLogger(SQLI.class);
+
+    // com.mysql.jdbc.Driver is deprecated. Change to com.mysql.cj.jdbc.Driver.
+    private static final String driver = "com.mysql.cj.jdbc.Driver";
 
     @Value("${spring.datasource.url}")
     private String url;
@@ -37,15 +39,14 @@ public class SQLI {
     @Value("${spring.datasource.password}")
     private String password;
 
-    @Autowired
+    @Resource
     private UserMapper userMapper;
 
 
     /**
-     * Vuln Code.
-     * http://localhost:8080/sqli/jdbc/vuln?username=joychou
+     * <p>Sql injection jbdc vuln code.</p><br>
      *
-     * @param username username
+     * <a href="http://localhost:8080/sqli/jdbc/vuln?username=joychou">http://localhost:8080/sqli/jdbc/vuln?username=joychou</a>
      */
     @RequestMapping("/jdbc/vuln")
     public String jdbc_sqli_vul(@RequestParam("username") String username) {
@@ -77,7 +78,7 @@ public class SQLI {
 
 
         } catch (ClassNotFoundException e) {
-            logger.error("Sorry,can`t find the Driver!");
+            logger.error("Sorry, can't find the Driver!");
         } catch (SQLException e) {
             logger.error(e.toString());
         }
@@ -86,10 +87,9 @@ public class SQLI {
 
 
     /**
-     * Security Code.
-     * http://localhost:8080/sqli/jdbc/sec?username=joychou
+     * <p>Sql injection jbdc security code by using {@link PreparedStatement}.</p><br>
      *
-     * @param username username
+     * <a href="http://localhost:8080/sqli/jdbc/sec?username=joychou">http://localhost:8080/sqli/jdbc/sec?username=joychou</a>
      */
     @RequestMapping("/jdbc/sec")
     public String jdbc_sqli_sec(@RequestParam("username") String username) {
@@ -100,7 +100,7 @@ public class SQLI {
             Connection con = DriverManager.getConnection(url, user, password);
 
             if (!con.isClosed())
-                System.out.println("Connecting to Database successfully.");
+                System.out.println("Connect to database successfully.");
 
             // fix code
             String sql = "select * from users where username = ?";
@@ -122,7 +122,7 @@ public class SQLI {
             con.close();
 
         } catch (ClassNotFoundException e) {
-            logger.error("Sorry, can`t find the Driver!");
+            logger.error("Sorry, can't find the Driver!");
             e.printStackTrace();
         } catch (SQLException e) {
             logger.error(e.toString());
@@ -132,9 +132,8 @@ public class SQLI {
 
 
     /**
-     * http://localhost:8080/sqli/jdbc/ps/vuln?username=joychou' or 'a'='a
-     *
-     * Incorrect use of prepareStatement. prepareStatement must use ? as a placeholder.
+     * <p>Incorrect use of prepareStatement. PrepareStatement must use ? as a placeholder.</p>
+     * <a href="http://localhost:8080/sqli/jdbc/ps/vuln?username=joychou' or 'a'='a">http://localhost:8080/sqli/jdbc/ps/vuln?username=joychou' or 'a'='a</a>
      */
     @RequestMapping("/jdbc/ps/vuln")
     public String jdbc_ps_vuln(@RequestParam("username") String username) {
@@ -165,7 +164,7 @@ public class SQLI {
             con.close();
 
         } catch (ClassNotFoundException e) {
-            logger.error("Sorry, can`t find the Driver!");
+            logger.error("Sorry, can't find the Driver!");
             e.printStackTrace();
         } catch (SQLException e) {
             logger.error(e.toString());
@@ -175,10 +174,9 @@ public class SQLI {
 
 
     /**
-     * vuln code
-     * http://localhost:8080/sqli/mybatis/vuln01?username=joychou' or '1'='1
-     *
-     * @param username username
+     * <p>Sql injection of mybatis vuln code.</p>
+     * <a href="http://localhost:8080/sqli/mybatis/vuln01?username=joychou' or '1'='1">http://localhost:8080/sqli/mybatis/vuln01?username=joychou' or '1'='1</a>
+     * <p>select * from users where username = 'joychou' or '1'='1' </p>
      */
     @GetMapping("/mybatis/vuln01")
     public List<User> mybatisVuln01(@RequestParam("username") String username) {
@@ -186,17 +184,20 @@ public class SQLI {
     }
 
     /**
-     * vul code
-     * http://localhost:8080/sqli/mybatis/vuln02?username=joychou' or '1'='1' %23
-     *
-     * @param username username
+     * <p>Sql injection of mybatis vuln code.</p>
+     * <a href="http://localhost:8080/sqli/mybatis/vuln02?username=joychou' or '1'='1">http://localhost:8080/sqli/mybatis/vuln02?username=joychou' or '1'='1</a>
+     * <p>select * from users where username like '%joychou' or '1'='1%' </p>
      */
     @GetMapping("/mybatis/vuln02")
     public List<User> mybatisVuln02(@RequestParam("username") String username) {
         return userMapper.findByUserNameVuln02(username);
     }
 
-    // http://localhost:8080/sqli/mybatis/orderby/vuln03?sort=1 desc%23
+    /**
+     * <p>Sql injection of mybatis vuln code.</p>
+     * <a href="http://localhost:8080/sqli/mybatis/orderby/vuln03?sort=id desc--">http://localhost:8080/sqli/mybatis/orderby/vuln03?sort=id desc--</a>
+     * <p> select * from users order by id desc-- asc</p>
+     */
     @GetMapping("/mybatis/orderby/vuln03")
     public List<User> mybatisVuln03(@RequestParam("sort") String sort) {
         return userMapper.findByUserNameVuln03(sort);
@@ -204,10 +205,8 @@ public class SQLI {
 
 
     /**
-     * security code
-     * http://localhost:8080/sqli/mybatis/sec01?username=joychou
-     *
-     * @param username username
+     * <p>Sql injection mybatis security code.</p>
+     * <a href="http://localhost:8080/sqli/mybatis/sec01?username=joychou">http://localhost:8080/sqli/mybatis/sec01?username=joychou</a>
      */
     @GetMapping("/mybatis/sec01")
     public User mybatisSec01(@RequestParam("username") String username) {
@@ -215,9 +214,8 @@ public class SQLI {
     }
 
     /**
-     * http://localhost:8080/sqli/mybatis/sec02?id=1
-     *
-     * @param id id
+     * <p>Sql injection mybatis security code.</p>
+     * <a href="http://localhost:8080/sqli/mybatis/sec02?id=1">http://localhost:8080/sqli/mybatis/sec02?id=1</a>
      */
     @GetMapping("/mybatis/sec02")
     public User mybatisSec02(@RequestParam("id") Integer id) {
@@ -226,14 +224,19 @@ public class SQLI {
 
 
     /**
-     * http://localhost:8080/sqli/mybatis/sec03
+     * <p>Sql injection mybatis security code.</p>
+     * <a href="http://localhost:8080/sqli/mybatis/sec03">http://localhost:8080/sqli/mybatis/sec03</a>
      */
     @GetMapping("/mybatis/sec03")
     public User mybatisSec03() {
         return userMapper.OrderByUsername();
     }
 
-
+    /**
+     * <p>Order by sql injection mybatis security code by using sql filter.</p>
+     * <a href="http://localhost:8080/sqli/mybatis/orderby/sec04?sort=id">http://localhost:8080/sqli/mybatis/orderby/sec04?sort=id</a>
+     * <p>select * from users order by id asc </p>
+     */
     @GetMapping("/mybatis/orderby/sec04")
     public List<User> mybatisOrderBySec04(@RequestParam("sort") String sort) {
         return userMapper.findByUserNameVuln03(SecurityUtil.sqlFilter(sort));

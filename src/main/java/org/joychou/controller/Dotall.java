@@ -18,7 +18,6 @@ public class Dotall {
 
     /**
      * <a href="https://github.com/spring-projects/spring-security/compare/5.5.6..5.5.7">官方spring-security修复commit记录</a>
-     * 漏洞描述：h
      */
     public static void main(String[] args) throws Exception{
         Pattern vuln_pattern = Pattern.compile("/black_path.*");

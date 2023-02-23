@@ -16,7 +16,8 @@ import org.slf4j.LoggerFactory;
 
 public class SSRFChecker {
 
-    private static Logger logger = LoggerFactory.getLogger(SSRFChecker.class);
+    private static final Logger logger = LoggerFactory.getLogger(SSRFChecker.class);
+    private static String decimalIp;
 
     public static boolean checkURLFckSSRF(String url) {
         if (null == url) {
@@ -125,7 +126,7 @@ public class SSRFChecker {
      * @param strIP ip字符串
      * @return 如果是内网ip，返回true，否则返回false。
      */
-    static boolean isInternalIp(String strIP) {
+    public static boolean isInternalIp(String strIP) {
         if (StringUtils.isEmpty(strIP)) {
             logger.error("[-] SSRF check failed. IP is empty. " + strIP);
             return true;
@@ -144,15 +145,43 @@ public class SSRFChecker {
 
     }
 
+
     /**
-     * host转换为IP
-     * 会将各种进制的ip转为正常ip
-     * 167772161 转换为  10.0.0.1
-     * 127.0.0.1.xip.io 转换为 127.0.0.1
+     * Convert host to decimal ip.
+     * Since there is a bypass in octal using {@link InetAddress#getHostAddress()},
+     * the function of converting octal to decimal is added.
+     * If it still can be bypassed, please submit
+     * <a href="https://github.com/JoyChou93/java-sec-code/pulls">PullRequests</a> or
+     * <a href="https://github.com/JoyChou93/java-sec-code/issues">Issues</a>.<br>
      *
-     * @param host 域名host
+     * <p>Normal:</p>
+     * <ul>
+     *    <li>69299689 to 10.23.78.233</li>
+     *    <li>69299689 to 10.23.78.233 </li>
+     *    <li>012.0x17.78.233 to 10.23.78.233 </li>
+     *    <li>012.027.0116.0351 to 10.23.78.233</li>
+     *    <li>127.0.0.1.xip.io to 127.0.0.1</li>
+     *    <li>127.0.0.1.nip.io to 127.0.0.1</li>
+     * </ul>
+
+     * <p>Bypass: </p>
+     * <ul>
+     *     <li>01205647351 to 71.220.183.247, actually 10.23.78.233</li>
+     *     <li>012.23.78.233 to 12.23.78.233, actually 10.23.78.233</li>
+     * </ul>
+     * @return decimal ip
      */
-    private static String host2ip(String host) {
+    public static String host2ip(String host) {
+
+        if (null == host) {
+            return "";
+        }
+
+        // convert octal to decimal
+         if(isOctalIP(host)) {
+             host = decimalIp;
+         }
+
         try {
             InetAddress IpAddress = InetAddress.getByName(host); //  send dns request
             return IpAddress.getHostAddress();
@@ -161,14 +190,90 @@ public class SSRFChecker {
         }
     }
 
+
     /**
-     * 从URL中获取host，限制为http/https协议。只支持http:// 和 https://，不支持//的http协议。
-     *
-     * @param url http的url
+     * Check whether the host is an octal IP, if so, convert it to decimal.
+     * @return Octal ip returns true, others return false. 012.23.78.233 return true. 012.0x17.78.233 return false.
+     */
+    public static boolean isOctalIP(String host) {
+        String[] ipParts = host.split("\\.");
+        StringBuilder newDecimalIP = new StringBuilder();
+        boolean is_octal = false;
+
+        // Octal ip only has number and dot character.
+        if (isNumberOrDot(host)) {
+
+            if (ipParts.length != 1 && ipParts.length != 4) {
+                return false;
+            }
+
+            // 000000001205647351
+            if( ipParts.length == 1 && host.startsWith("0") ) {
+                decimalIp = Integer.valueOf(host, 8).toString();
+                return true;
+            }
+
+            // 0000012.23.78.233
+            for(String ip : ipParts) {
+                if (!isNumber(ip)){
+                    throw new SSRFException("Illegal host: " + host + ".");
+                }
+                if (ip.startsWith("0")) {
+                    if (Integer.valueOf(ip, 8) >= 256){
+                        throw new SSRFException("Illegal host: " + host + ".\t" + ip + " is above 255.");
+                    }
+                    newDecimalIP.append(Integer.valueOf(ip, 8)).append(".");
+                    is_octal = true;
+                }else{
+                    if (Integer.valueOf(ip, 10) >= 256) {
+                        throw new SSRFException("Illegal host: " + host + ".\t" + ip + " is above 255.");
+                    }
+                    newDecimalIP.append(ip).append(".");
+                }
+            }
+            decimalIp = newDecimalIP.substring(0, newDecimalIP.lastIndexOf("."));
+        }
+        return is_octal;
+    }
+
+    /**
+     * Check string is a number.
+     * @return If string is a number 0-9, return true. Otherwise, return false.
+     */
+    private static boolean isNumber(String str) {
+        if (null == str || "".equals(str)) {
+            return false;
+        }
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (ch < 48 || ch > 57) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Check string is a number or dot.
+     * @return If string is a number or a dot, return true. Otherwise, return false.
+     */
+    private static boolean isNumberOrDot(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if ((ch < 48 || ch > 57) && ch != 46){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Get host from URL which the protocol must be http:// or https:// and not be //.
      */
     private static String url2host(String url) {
         try {
-            // 使用URI，而非URL，防止被绕过。
+            // use URI instead of URL
             URI u = new URI(url);
             if (SecurityUtil.isHttp(url)) {
                 return u.getHost();
