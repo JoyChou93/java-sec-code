@@ -1,9 +1,11 @@
-version : '2'
+version : '3'
 services:
     jsc:
         image: joychou/jsc:latest
+        command: ["java", "-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8000", "-jar", "jsc.jar"]
         ports:
             - "8080:8080"
+            - "8000:8000"
         links:
             - j_mysql
 

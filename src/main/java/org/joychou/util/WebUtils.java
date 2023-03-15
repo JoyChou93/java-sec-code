@@ -2,9 +2,7 @@ package org.joychou.util;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 import com.google.common.base.Preconditions;
 import org.springframework.web.util.HtmlUtils;
@@ -16,7 +14,6 @@ public class WebUtils {
         InputStream in = request.getInputStream();
         return convertStreamToString(in);
     }
-
 
     // https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
     public static String convertStreamToString(java.io.InputStream is) {

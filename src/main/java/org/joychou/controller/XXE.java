@@ -4,6 +4,9 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.web.ProjectedPayload;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +30,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.apache.commons.digester3.Digester;
 import org.jdom2.input.SAXBuilder;
 import org.joychou.util.WebUtils;
+import org.xmlbeam.annotation.XBRead;
 
 /**
  * Java xxe vuln and security code.
@@ -38,8 +42,8 @@ import org.joychou.util.WebUtils;
 @RequestMapping("/xxe")
 public class XXE {
 
-    private static Logger logger = LoggerFactory.getLogger(XXE.class);
-    private static String EXCEPT = "xxe except";
+    private static final Logger logger = LoggerFactory.getLogger(XXE.class);
+    private static final String EXCEPT = "xxe except";
 
     @PostMapping("/xmlReader/vuln")
     public String xmlReaderVuln(HttpServletRequest request) {
@@ -226,16 +230,15 @@ public class XXE {
     }
 
 
-    // 有回显
-    @RequestMapping(value = "/DocumentBuilder/vuln01", method = RequestMethod.POST)
+    /**
+     * Use request.getInputStream to support UTF16 encoding.
+     */
+    @RequestMapping(value = "/DocumentBuilder/vuln", method = RequestMethod.POST)
     public String DocumentBuilderVuln01(HttpServletRequest request) {
         try {
-            String body = WebUtils.getRequestBody(request);
-            logger.info(body);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            StringReader sr = new StringReader(body);
-            InputSource is = new InputSource(sr);
+            InputSource is = new InputSource(request.getInputStream());
             Document document = db.parse(is);  // parse xml
 
             // 遍历xml节点name和value
@@ -249,7 +252,6 @@ public class XXE {
                     buf.append(String.format("%s: %s\n", node.getNodeName(), node.getTextContent()));
                 }
             }
-            sr.close();
             return buf.toString();
         } catch (Exception e) {
             e.printStackTrace();
@@ -257,43 +259,6 @@ public class XXE {
             return e.toString();
         }
     }
-
-
-    // 有回显
-    @RequestMapping(value = "/DocumentBuilder/vuln02", method = RequestMethod.POST)
-    public String DocumentBuilderVuln02(HttpServletRequest request) {
-        try {
-            String body = WebUtils.getRequestBody(request);
-            logger.info(body);
-
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            StringReader sr = new StringReader(body);
-            InputSource is = new InputSource(sr);
-            Document document = db.parse(is);  // parse xml
-
-            // 遍历xml节点name和value
-            StringBuilder result = new StringBuilder();
-            NodeList rootNodeList = document.getChildNodes();
-            for (int i = 0; i < rootNodeList.getLength(); i++) {
-                Node rootNode = rootNodeList.item(i);
-                NodeList child = rootNode.getChildNodes();
-                for (int j = 0; j < child.getLength(); j++) {
-                    Node node = child.item(j);
-                    // 正常解析XML，需要判断是否是ELEMENT_NODE类型。否则会出现多余的的节点。
-                    if (child.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                        result.append(String.format("%s: %s\n", node.getNodeName(), node.getFirstChild()));
-                    }
-                }
-            }
-            sr.close();
-            return result.toString();
-        } catch (Exception e) {
-            logger.error(e.toString());
-            return EXCEPT;
-        }
-    }
-
 
     @RequestMapping(value = "/DocumentBuilder/Sec", method = RequestMethod.POST)
     public String DocumentBuilderSec(HttpServletRequest request) {
@@ -446,6 +411,31 @@ public class XXE {
 
         }
     }
+
+        /**
+         * Receiving POST requests supporting both JSON and XML.
+         * CVE-2018-1259
+         */
+        @PostMapping(value = "/xmlbeam/vuln")
+        HttpEntity<String> post(@RequestBody UserPayload user) {
+            try {
+                logger.info(user.toString());
+                return ResponseEntity.ok(String.format("hello, %s!", user.getUserName()));
+            }catch (Exception e){
+                e.printStackTrace();
+                return ResponseEntity.ok("error");
+            }
+        }
+
+        /**
+         * The projection interface using XPath and JSON Path expression to selectively pick elements from the payload.
+         */
+        @ProjectedPayload
+        public interface UserPayload {
+            @XBRead("//userName")
+            String getUserName();
+        }
+
 
     public static void main(String[] args)  {
     }

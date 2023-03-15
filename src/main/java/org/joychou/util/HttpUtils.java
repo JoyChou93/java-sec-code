@@ -94,7 +94,6 @@ public class HttpUtils {
             URL u = new URL(url);
             URLConnection urlConnection = u.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream())); //send request
-            // BufferedReader in = new BufferedReader(new InputStreamReader(u.openConnection().getInputStream()));
             String inputLine;
             StringBuilder html = new StringBuilder();
 

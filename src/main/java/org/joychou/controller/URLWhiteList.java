@@ -6,7 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.MalformedURLException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -86,20 +87,21 @@ public class URLWhiteList {
 
 
     /**
-     * The bypass of using <code>java.net.URL</code> to getHost.
+     * The bypass of using {@link java.net.URL} to getHost.
      * <p>
-     * Bypass poc1: curl -v 'http://localhost:8080/url/vuln/url_bypass?url=http://evel.com%5c@www.joychou.org/a.html'
-     * Bypass poc2: curl -v 'http://localhost:8080/url/vuln/url_bypass?url=http://evil.com%5cwww.joychou.org/a.html'
+     * <a href="http://localhost:8080/url/vuln/url_bypass?url=http://evil.com%5c@www.joychou.org/a.html">bypass 1</a>
+     * <a href="http://localhost:8080/url/vuln/url_bypass?url=http://evil.com%5cwww.joychou.org/a.html">bypass 2</a>
+     *
      * <p>
-     * More details: https://github.com/JoyChou93/java-sec-code/wiki/URL-whtielist-Bypass
+     * <a href="https://github.com/JoyChou93/java-sec-code/wiki/URL-whtielist-Bypass">More details</a>
      */
     @GetMapping("/vuln/url_bypass")
-    public String url_bypass(String url) throws MalformedURLException {
+    public void url_bypass(String url, HttpServletResponse res) throws IOException {
 
         logger.info("url:  " + url);
 
         if (!SecurityUtil.isHttp(url)) {
-            return "Url is not http or https";
+            return;
         }
 
         URL u = new URL(url);
@@ -109,11 +111,10 @@ public class URLWhiteList {
         // endsWith .
         for (String domain : domainwhitelist) {
             if (host.endsWith("." + domain)) {
-                return "Good url.";
+                res.sendRedirect(url);
             }
         }
 
-        return "Bad url.";
     }
 
 
