@@ -1,6 +1,7 @@
 package org.joychou.controller;
 
 import groovy.lang.GroovyShell;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import javax.script.ScriptEngineManager;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.sql.DriverManager;
 
 
 /**
@@ -21,6 +23,7 @@ import java.io.InputStreamReader;
  *
  * @author JoyChou @ 2018-05-24
  */
+@Slf4j
 @RestController
 @RequestMapping("/rce")
 public class Rce {
@@ -126,6 +129,17 @@ public class Rce {
     public void groovyshell(String content) {
         GroovyShell groovyShell = new GroovyShell();
         groovyShell.evaluate(content);
+    }
+
+    /**
+     * <a href="https://github.com/JoyChou93/java-sec-code/wiki/CVE-2022-21724">CVE-2022-21724</a>
+     */
+    @RequestMapping("/postgresql")
+    public void postgresql(String jdbcUrlBase64) throws Exception{
+        byte[] b = java.util.Base64.getDecoder().decode(jdbcUrlBase64);
+        String jdbcUrl = new String(b);
+        log.info(jdbcUrl);
+        DriverManager.getConnection(jdbcUrl);
     }
 
 }

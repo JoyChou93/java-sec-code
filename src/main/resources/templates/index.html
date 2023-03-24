@@ -5,29 +5,29 @@
     <title>Home Page</title>
 </head>
 <body>
-    <p>Hello <span th:text="${user}"></span>.</p>
-    <p>Welcome to login java-sec-code application. <a th:href="@{/appInfo}">Application Infomation</a></p>
-    <p>
-        <a th:href="@{/swagger-ui.html}">Swagger</a>&nbsp;&nbsp;
-        <a th:href="@{/codeinject?filepath=/tmp;cat /etc/passwd}">CmdInject</a>&nbsp;&nbsp;
-        <a th:href="@{/jsonp/getToken?_callback=test}">JSONP</a>&nbsp;&nbsp;
-        <a th:href="@{/file/pic}">Picture Upload</a>&nbsp;&nbsp;
-        <a th:href="@{/file/any}">File Upload</a>&nbsp;&nbsp;
-        <a th:href="@{cors/sec/originFilter}">Cors</a>&nbsp;&nbsp;
-        <a th:href="@{/path_traversal/vul?filepath=../../../../../etc/passwd}">PathTraversal</a>&nbsp;&nbsp;
-        <a th:href="@{sqli/mybatis/vuln01?username=joychou' or '1'='1}">SqlInject</a>&nbsp;&nbsp;
-        <a th:href="@{/ssrf/urlConnection/vuln?url=file:///etc/passwd}">SSRF</a>&nbsp;&nbsp;
-        <a th:href="@{/rce/exec?cmd=whoami}">RCE</a>&nbsp;&nbsp;
-        <a th:href="@{/ooxml/upload}">ooxml XXE</a>&nbsp;&nbsp;
-        <a th:href="@{/xlsx-streamer/upload}">xlsx-streamer XXE</a>
-    </p>
+<p>Hello <span th:text="${user}"></span>.</p>
+<p>Welcome to login java-sec-code application. <a th:href="@{/appInfo}">Application Infomation</a></p>
+<p>
+    <a th:href="@{/swagger-ui.html}">Swagger</a>&nbsp;&nbsp;
+    <a th:href="@{/codeinject?filepath=/tmp;cat /etc/passwd}">CmdInject</a>&nbsp;&nbsp;
+    <a th:href="@{/jsonp/getToken?_callback=test}">JSONP</a>&nbsp;&nbsp;
+    <a th:href="@{/file/pic}">Picture Upload</a>&nbsp;&nbsp;
+    <a th:href="@{/file/any}">File Upload</a>&nbsp;&nbsp;
+    <a th:href="@{cors/sec/originFilter}">Cors</a>&nbsp;&nbsp;
+    <a th:href="@{/path_traversal/vul?filepath=../../../../../etc/passwd}">PathTraversal</a>&nbsp;&nbsp;
+    <a th:href="@{sqli/mybatis/vuln01?username=joychou' or '1'='1}">SqlInject</a>&nbsp;&nbsp;
+    <a th:href="@{/ssrf/urlConnection/vuln?url=file:///etc/passwd}">SSRF</a>&nbsp;&nbsp;
+    <a th:href="@{/rce/exec?cmd=whoami}">RCE</a>&nbsp;&nbsp;
+    <a th:href="@{/ooxml/upload}">ooxml XXE</a>&nbsp;&nbsp;
+    <a th:href="@{/xlsx-streamer/upload}">xlsx-streamer XXE</a>
+</p>
 
-    <P>
-        <a th:href="@{/jwt/createToken}">JWTCreateToken</a>
-        <a th:href="@{/jwt/getName}">GetUserFromJWTToken</a>
-    </P>
-    <p>...</p>
-    <a th:href="@{/logout}">logout</a>
+<P>
+    <a th:href="@{/jwt/createToken}">JWTCreateToken</a>
+    <a th:href="@{/jwt/getName}">GetUserFromJWTToken</a>
+</P>
+<p>...</p>
+<a th:href="@{/logout}">logout</a>
 
 </body>
 </html>

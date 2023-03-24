@@ -234,7 +234,7 @@ public class XXE {
      * Use request.getInputStream to support UTF16 encoding.
      */
     @RequestMapping(value = "/DocumentBuilder/vuln", method = RequestMethod.POST)
-    public String DocumentBuilderVuln01(HttpServletRequest request) {
+    public String DocumentBuilderVuln(HttpServletRequest request) {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
