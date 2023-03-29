@@ -7,7 +7,7 @@
     <groupId>sec</groupId>
     <artifactId>java-sec-code</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source> <!-- mvn clean package-->
