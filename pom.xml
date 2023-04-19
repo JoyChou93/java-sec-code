@@ -72,6 +72,24 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>23.0</version>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>j2objc-annotations</artifactId>
+                   <groupId>com.google.j2objc</groupId>
+                 </exclusion>
+                 <exclusion>
+                   <artifactId>error_prone_annotations</artifactId>
+                   <groupId>com.google.errorprone</groupId>
+                 </exclusion>
+                 <exclusion>
+                   <artifactId>animal-sniffer-annotations</artifactId>
+                   <groupId>org.codehaus.mojo</groupId>
+                 </exclusion>
+                 <exclusion>
+                   <artifactId>jsr305</artifactId>
+                   <groupId>com.google.code.findbugs</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -89,6 +107,12 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.12</version>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>commons-logging</artifactId>
+                   <groupId>commons-logging</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -141,6 +165,12 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
             <version>1.4.0.RELEASE</version>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>jsr305</artifactId>
+                   <groupId>com.google.code.findbugs</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- 生成uuid -->
@@ -215,12 +245,28 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>3.9</version> <!-- 3.10-FINAL -->
+            <exclusions>
+                 <exclusion>
+                   <artifactId>xml-apis</artifactId>
+                   <groupId>xml-apis</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>com.monitorjbl</groupId>
             <artifactId>xlsx-streamer</artifactId>
             <version>2.0.0</version>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>xml-apis</artifactId>
+                   <groupId>xml-apis</groupId>
+                 </exclusion>
+                 <exclusion>
+                   <artifactId>icu4j</artifactId>
+                   <groupId>com.ibm.icu</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- ssrf -->
@@ -242,12 +288,28 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
             <version>4.1.4</version>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>commons-logging</artifactId>
+                   <groupId>commons-logging</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>2.9.2</version>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>mapstruct</artifactId>
+                   <groupId>org.mapstruct</groupId>
+                 </exclusion>
+                 <exclusion>
+                   <artifactId>byte-buddy</artifactId>
+                   <groupId>net.bytebuddy</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -285,6 +347,12 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.4</version>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>commons-logging</artifactId>
+                   <groupId>commons-logging</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
