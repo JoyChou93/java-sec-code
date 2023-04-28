@@ -188,6 +188,7 @@ public class SSRFChecker {
             InetAddress IpAddress = InetAddress.getByName(host);
             return IpAddress.getHostAddress();
         } catch (Exception e) {
+            logger.error("host2ip exception " + e.getMessage());
             return "";
         }
     }
@@ -198,45 +199,57 @@ public class SSRFChecker {
      * @return Octal ip returns true, others return false. 012.23.78.233 return true. 012.0x17.78.233 return false.
      */
     public static boolean isOctalIP(String host) {
-        String[] ipParts = host.split("\\.");
-        StringBuilder newDecimalIP = new StringBuilder();
-        boolean is_octal = false;
+        try{
+            String[] ipParts = host.split("\\.");
+            StringBuilder newDecimalIP = new StringBuilder();
+            boolean is_octal = false;
 
-        // Octal ip only has number and dot character.
-        if (isNumberOrDot(host)) {
+            // Octal ip only has number and dot character.
+            if (isNumberOrDot(host)) {
 
-            // not support ipv6
-            if (ipParts.length > 4) {
-                throw new SSRFException("Illegal ipv4: " + host);
-            }
-
-            // 01205647351
-            if( ipParts.length == 1 && host.startsWith("0") ) {
-                decimalIp = Integer.valueOf(host, 8).toString();
-                return true;
-            }
-
-            // 012.23.78.233
-            for(String ip : ipParts) {
-                if (!isNumber(ip)){
-                    throw new SSRFException("Illegal ipv4: " + host);
+                // not support ipv6
+                if (ipParts.length > 4) {
+                    logger.error("Illegal ipv4: " + host);
+                    return false;
                 }
-                if (ip.startsWith("0")) {
-                    if (Integer.valueOf(ip, 8) >= 256){
-                        throw new SSRFException("Illegal ipv4: " + host);
-                    }
-                    newDecimalIP.append(Integer.valueOf(ip, 8)).append(".");
-                    is_octal = true;
-                }else{
-                    if (Integer.valueOf(ip, 10) >= 256) {
-                        throw new SSRFException("Illegal ipv4: " + host);
-                    }
-                    newDecimalIP.append(ip).append(".");
+
+                // 01205647351
+                if( ipParts.length == 1 && host.startsWith("0") ) {
+                    decimalIp = Integer.valueOf(host, 8).toString();
+                    return true;
                 }
+
+                // 012.23.78.233
+                for(String ip : ipParts) {
+                    if (!isNumber(ip)){
+                        logger.error("Illegal ipv4: " + host);
+                        return false;
+                    }
+                    // start with "0", but not "0"
+                    if (ip.startsWith("0") && !ip.equals("0")) {
+                        if (Integer.valueOf(ip, 8) >= 256){
+                            logger.error("Illegal ipv4: " + host);
+                            return false;
+                        }
+                        newDecimalIP.append(Integer.valueOf(ip, 8)).append(".");
+                        is_octal = true;
+                    }else{
+                        if (Integer.valueOf(ip, 10) >= 256) {
+                            logger.error("Illegal ipv4: " + host);
+                            return false;
+                        }
+                        newDecimalIP.append(ip).append(".");
+                    }
+                }
+                // delete last char .
+                decimalIp = newDecimalIP.substring(0, newDecimalIP.lastIndexOf("."));
             }
-            decimalIp = newDecimalIP.substring(0, newDecimalIP.lastIndexOf("."));
+            return is_octal;
+        } catch (Exception e){
+            logger.error("SSRFChecker isOctalIP exception: " + e.getMessage());
+            return false;
         }
-        return is_octal;
+
     }
 
     /**

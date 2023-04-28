@@ -58,8 +58,7 @@ public class Rce {
 
 
     /**
-     * http://localhost:8080/rce/ProcessBuilder?cmd=whoami
-     * @param cmd cmd
+     * <a href="http://localhost:8080/rce/ProcessBuilder?cmd=whoami">POC</a>
      */
     @GetMapping("/ProcessBuilder")
     public String processBuilder(String cmd) {
@@ -131,16 +130,10 @@ public class Rce {
         groovyShell.evaluate(content);
     }
 
-    /**
-     * <a href="https://github.com/JoyChou93/java-sec-code/wiki/CVE-2022-21724">CVE-2022-21724</a>
-     */
-    @RequestMapping("/postgresql")
-    public void postgresql(String jdbcUrlBase64) throws Exception{
-        byte[] b = java.util.Base64.getDecoder().decode(jdbcUrlBase64);
-        String jdbcUrl = new String(b);
-        log.info(jdbcUrl);
-        DriverManager.getConnection(jdbcUrl);
-    }
 
+
+    public static void main(String[] args) throws Exception{
+        Runtime.getRuntime().exec("touch /tmp/x");
+    }
 }
 
