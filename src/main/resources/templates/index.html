@@ -17,7 +17,7 @@
     <a th:href="@{/path_traversal/vul?filepath=../../../../../etc/passwd}">PathTraversal</a>&nbsp;&nbsp;
     <a th:href="@{sqli/mybatis/vuln01?username=joychou' or '1'='1}">SqlInject</a>&nbsp;&nbsp;
     <a th:href="@{/ssrf/urlConnection/vuln?url=file:///etc/passwd}">SSRF</a>&nbsp;&nbsp;
-    <a th:href="@{/rce/exec?cmd=whoami}">RCE</a>&nbsp;&nbsp;
+    <a th:href="@{/rce/runtime/exec?cmd=whoami}">RCE</a>&nbsp;&nbsp;
     <a th:href="@{/ooxml/upload}">ooxml XXE</a>&nbsp;&nbsp;
     <a th:href="@{/xlsx-streamer/upload}">xlsx-streamer XXE</a>
     <a th:href="@{/env}">actuator env</a>
