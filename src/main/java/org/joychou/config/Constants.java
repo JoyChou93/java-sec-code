@@ -1,4 +1,5 @@
 package org.joychou.config;
+//data//
 
 public class Constants {
 
