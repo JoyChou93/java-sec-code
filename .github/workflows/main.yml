@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Synopsys Action
-        uses: synopsys-sig/synopsys-action@v1.1.0
+        uses: synopsys-sig/synopsys-action@v1.2.0
         with:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
@@ -35,3 +35,5 @@ jobs:
           # blackduck_scan_failure_severities: "ALL"
           # multiple parameters
           # blackduck_scan_failure_severities: "BLOCKER,CRITICAL,TRIVIAL"
+          include_diagnostics: true
+          
