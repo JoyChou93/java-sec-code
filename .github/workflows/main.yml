@@ -43,7 +43,7 @@ jobs:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_scan_full: false
           ### Below configuration is used to enable automatic pull request comment based on Black Duck scan result
-          blackduck_automation_prcomment: true
+          blackduck_automation_prcomment: false
           github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_prcomment is set to 'true'
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true
