@@ -13,6 +13,14 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v3
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: microsoft
+          cache: maven
+      - name: Maven Build
+        run: mvn -B -DskipTests package
 
       - name: Black Duck Full Scan
         if: ${{ github.event_name != 'pull_request' }}
