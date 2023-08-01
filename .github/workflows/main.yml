@@ -48,3 +48,4 @@ jobs:
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true
           # bridge.break: false
+          blackduck_automation_fixpr: false
