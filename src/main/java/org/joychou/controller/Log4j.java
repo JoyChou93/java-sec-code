@@ -21,7 +21,7 @@ public class Log4j {
         if(token.equals("java-sec-code")) {
             return "java sec code";
         } else {
-            logger.error(token);
+            logger.error("Invalid token detected");
             return "error";
         }
     }
