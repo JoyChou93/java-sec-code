@@ -42,6 +42,7 @@ joychou/joychou123
     - ScriptEngine
     - Yaml Deserialize
     - Groovy
+- [Shiro](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Shiro.java)
 - [SpEL](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SpEL.java)
 - [SQL Injection](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SQLI.java)
 - [SSRF](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SSRF.java)

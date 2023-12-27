@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class SecurityUtil {
 
     private static final Pattern FILTER_PATTERN = Pattern.compile("^[a-zA-Z0-9_/\\.-]+$");
-    private static Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
+    private final static Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
 
 
     /**
@@ -116,7 +116,6 @@ public class SecurityUtil {
 
     /**
      * 解析URL的IP，判断IP是否是内网IP。如果有重定向跳转，循环解析重定向跳转的IP。不建议使用该方案。
-     *
      * 存在的问题：
      *   1、会主动发起请求，可能会有性能问题
      *   2、设置重定向跳转为第一次302不跳转，第二次302跳转到内网IP 即可绕过该防御方案
@@ -134,7 +133,6 @@ public class SecurityUtil {
 
     /**
      * 不能使用白名单的情况下建议使用该方案。前提是禁用重定向并且TTL默认不为0。
-     *
      * 存在问题：
      *  1、TTL为0会被绕过
      *  2、使用重定向可绕过

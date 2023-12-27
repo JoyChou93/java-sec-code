@@ -47,6 +47,7 @@ Sort by letter.
   - ScriptEngine
   - Yaml Deserialize  
   - Groovy
+- [Shiro](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Shiro.java)
 - [Swagger](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/config/SwaggerConfig.java)
 - [SpEL](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SpEL.java)
 - [SQL Injection](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/SQLI.java)

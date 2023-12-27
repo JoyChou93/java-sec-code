@@ -33,7 +33,9 @@ public class Jwt {
         String loginUser = request.getUserPrincipal().getName();
         log.info("Current login user is " + loginUser);
 
-        CookieUtils.deleteCookie(response, COOKIE_NAME);
+        if (!CookieUtils.deleteCookie(response, COOKIE_NAME)){
+            return String.format("%s cookie delete failed", COOKIE_NAME);
+        }
         String token = JwtUtils.generateTokenByJavaJwt(loginUser);
         Cookie cookie = new Cookie(COOKIE_NAME, token);
 

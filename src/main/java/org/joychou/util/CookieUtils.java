@@ -21,4 +21,17 @@ public class CookieUtils {
             return false;
         }
     }
+
+    public static boolean addCookie(HttpServletResponse res, String cookieName, String cookieValue) {
+        try {
+            Cookie cookie = new Cookie(cookieName, cookieValue);
+            cookie.setMaxAge(1000);
+            cookie.setPath("/");
+            res.addCookie(cookie);
+            return true;
+        } catch (Exception e) {
+            log.error(e.toString());
+            return false;
+        }
+    }
 }

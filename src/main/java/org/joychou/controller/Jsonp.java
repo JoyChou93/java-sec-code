@@ -6,8 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.joychou.security.SecurityUtil;
 import org.joychou.util.LoginUtils;
+import org.joychou.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -19,7 +19,6 @@ import org.joychou.config.WebConfig;
 import org.joychou.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 
