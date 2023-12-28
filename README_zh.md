@@ -2,7 +2,7 @@
 
 对于学习Java漏洞代码来说，`Java Sec Code`是一个非常强大且友好的项目。
 
-[英文文档](https://github.com/JoyChou93/java-sec-code/blob/master/README.md) 😋[阿里集团安全紫军招聘](https://talent.alibaba.com/off-campus-position/937731?trace=qrcode_share)
+[英文文档](https://github.com/JoyChou93/java-sec-code/blob/master/README.md) 😋
 
 ## 介绍
 
@@ -36,6 +36,7 @@ joychou/joychou123
 - [Log4j](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Log4j.java)
 - [ooxmlXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/ooxmlXXE.java)
 - [PathTraversal](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/PathTraversal.java)
+- [QLExpress](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/QLExpress.java)
 - [RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Rce.java)
     - Runtime
     - ProcessBuilder  
@@ -138,7 +139,7 @@ Viarus
 例子：
 
 ```
-http://localhost:8080/java-sec-code-1.0.0/rce/exec?cmd=whoami
+http://localhost:8080/java-sec-code-1.0.0/rce/runtime/exec?cmd=whoami
 ```
  
 返回：

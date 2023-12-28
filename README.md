@@ -3,7 +3,7 @@
 
 Java sec code is a very powerful and friendly project for learning Java vulnerability code.
 
-[中文文档](https://github.com/JoyChou93/java-sec-code/blob/master/README_zh.md) 😋[Alibaba Security Purple Team Recruitment](https://talent.alibaba.com/off-campus-position/937731?trace=qrcode_share)
+[中文文档](https://github.com/JoyChou93/java-sec-code/blob/master/README_zh.md) 😋
 
 ## Introduce
 
@@ -41,6 +41,7 @@ Sort by letter.
 - [Log4j](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Log4j.java)
 - [ooxmlXXE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/othervulns/ooxmlXXE.java)
 - [PathTraversal](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/PathTraversal.java)
+- [QLExpress](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/QLExpress.java)
 - [RCE](https://github.com/JoyChou93/java-sec-code/blob/master/src/main/java/org/joychou/controller/Rce.java)
   - Runtime
   - ProcessBuilder
@@ -146,7 +147,7 @@ Viarus
 Example:
 
 ```
-http://localhost:8080/java-sec-code-1.0.0/rce/exec?cmd=whoami
+http://localhost:8080/java-sec-code-1.0.0/rce/runtime/exec?cmd=whoami
 ```
 
 return:
