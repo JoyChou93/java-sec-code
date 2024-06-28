@@ -4,6 +4,10 @@
 
 [英文文档](https://github.com/JoyChou93/java-sec-code/blob/master/README.md) 😋
 
+## 招聘
+
+[Alibaba招聘-安全攻防/研究（P5-P7）](https://github.com/JoyChou93/java-sec-code/wiki/Alibaba-Purple-Team-Job-Description)
+
 ## 介绍
 
 该项目也可以叫做Java Vulnerability Code(Java漏洞代码)。
@@ -195,12 +199,7 @@ Tomcat默认JSESSION会话有效时间为30分钟，所以30分钟不操作会�
 
 核心开发者： [JoyChou](https://github.com/JoyChou93).其他开发者：[lightless](https://github.com/lightless233),  [Anemone95](https://github.com/Anemone95)。欢迎各位提交PR。
 
-## 捐赠
+## 支持
 
-如果你喜欢这个项目，你可以捐款来支持我。 有了你的支持，我将能够更好地制作`Java sec code`项目。
+如果你喜欢这个项目，你可以star该项目支持我。 有了你的支持，我将能够更好地制作`Java sec code`项目。
 
-### Alipay
-
-扫描支付宝二维码支持`Java sec code`。
-
-<img title="Alipay QRcode" src="https://aliyun-testaaa.oss-cn-shanghai.aliyuncs.com/alipay_qr.png" width="200">

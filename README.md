@@ -205,12 +205,6 @@ Core developers : [JoyChou](https://github.com/JoyChou93), [liergou9981](https:/
 Other developers: [lightless](https://github.com/lightless233),  [Anemone95](https://github.com/Anemone95), [waderwu](https://github.com/waderwu). 
 
 
-## Donate
+## Support
 
-If you like the poject, you can donate to support me. With your support, I will be able to make `Java sec code` better 😎.
-
-### Alipay
-
-Scan the QRcode to support `Java sec code`.
-
-<img title="Alipay QRcode" src="https://aliyun-testaaa.oss-cn-shanghai.aliyuncs.com/alipay_qr.png" width="200">
+If you like the poject, you can star java-sec-code project to support me. With your support, I will be able to make `Java sec code` better 😎.
