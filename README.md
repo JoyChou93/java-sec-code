@@ -5,6 +5,11 @@ Java sec code is a very powerful and friendly project for learning Java vulnerab
 
 [中文文档](https://github.com/JoyChou93/java-sec-code/blob/master/README_zh.md) 😋
 
+## Recruitment
+
+[Alibaba-Security attack and defense/research（P5-P7）](https://github.com/JoyChou93/java-sec-code/wiki/Alibaba-Purple-Team-Job-Description)
+
+
 ## Introduce
 
 This project can also be called Java vulnerability code. 
